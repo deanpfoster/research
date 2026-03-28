@@ -8,3 +8,4 @@
 - Merged the initial distributed bumps paper draft to master.
 - Author asked me to add a section to the distributed bumps paper explaining the X-shaped case, where orthogonal worker disagreement should be treated as useful exploratory diversity rather than immediate consensus error.
 - Merged the X-shaped disagreement section into the distributed bumps paper on master after resolving a concurrent edit conflict.
+- Author asked me to define effectively independent draws using MCMC/spectral-gap intuition and use that to set the consensus speed in the distributed bumps paper.

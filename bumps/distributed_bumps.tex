@@ -248,6 +248,110 @@ can remain irrelevantly different in orthogonal directions for long
 enough that the system can decide whether the disagreement is merely
 noise or the signature of multiple bumps.
 
+\section{Independent Draws and Consensus Speed}
+
+The X-shaped discussion suggests a more quantitative design rule. The
+consensus force should be strong enough to transmit genuine discoveries,
+but weak enough that worker-specific motion in irrelevant directions is
+treated like noise rather than immediate evidence for agreement. To make
+that precise, we need a notion of when a worker has produced a new
+\emph{effectively independent draw} in the irrelevant subspace.
+
+Fix a worker near a ridge or bump and decompose its local coordinates
+into a signal direction and an irrelevant orthogonal complement:
+\[
+\theta = (\theta_{\parallel}, \theta_{\perp}).
+\]
+The coordinate $\theta_{\parallel}$ is the part that carries the
+discovery we want to preserve. The coordinate $\theta_{\perp}$ is the
+part that should randomize quickly and behave like noise. Near a fixed
+ridge, the stochastic dynamics of $\theta_{\perp}$ define a local Markov
+process with transition operator $P_{\perp}$. Let
+$1 = \lambda_1 > \lambda_2 \geq \lambda_3 \geq \cdots$ be its
+eigenvalues. The second eigenvalue $\lambda_2$ controls the slowest
+nontrivial mode of decorrelation.
+
+A standard MCMC definition of the correlation time is
+\[
+\tau_{\mathrm{corr}} \asymp \frac{1}{1-\lambda_2},
+\]
+up to constants and logarithmic accuracy conventions. Equivalently, if
+one wants an $\varepsilon$-accurate mixing time, one may write
+\[
+\tau_{\mathrm{mix}}(\varepsilon)
+\asymp \frac{\log(1/\varepsilon)}{1-\lambda_2}.
+\]
+For the present paper, the exact convention is less important than the
+timescale separation: the irrelevant coordinates become effectively
+fresh after about $\tau_{\mathrm{ind}}$ steps, where
+$\tau_{\mathrm{ind}}$ is any draw-spacing comparable to this mixing or
+decorrelation time.
+
+Now compare that with the consensus contraction. If the center were held
+fixed for $\tau$ steps, the displacement of worker $i$ from that center
+would shrink approximately like
+\[
+\theta_i^{t+\tau} - c \;\approx\; (1-\gamma)^{\tau}(\theta_i^t-c),
+\]
+ignoring the local SGD term for the moment. Thus the natural consensus
+timescale is of order $1/\gamma$.
+
+The design principle is then simple: do not let consensus erase worker
+diversity faster than the irrelevant coordinates can produce a fresh
+draw. If the worker-specific motion in $\theta_{\perp}$ has already
+decorrelated after $\tau_{\mathrm{ind}}$ steps, then pulling on those
+directions more slowly than that just averages noise. But if the signal
+direction $\theta_{\parallel}$ remains coherent over that same window,
+then averaging over $\tau_{\mathrm{ind}}$ steps keeps the signal while
+washing out the irrelevant fluctuation.
+
+This gives a concrete tuning rule. We would like the consensus to move a
+worker only a moderate fraction of the way toward the shared center over
+one independent-draw time. Your suggested target, ``move about halfway
+toward the goal in the time it takes to get a new draw,'' corresponds to
+\[
+(1-\gamma)^{\tau_{\mathrm{ind}}} \approx \frac{1}{2}.
+\]
+For small $\gamma$, this yields
+\[
+\gamma \approx \frac{\log 2}{\tau_{\mathrm{ind}}}
+\approx (\log 2)\,(1-\lambda_2).
+\]
+This is the right order of magnitude for the coupling strength. Larger
+values force collapse before the irrelevant directions have randomized.
+Much smaller values fail to propagate discoveries on the timescale at
+which fresh exploratory information is being generated.
+
+The same logic applies to the filtered center
+\[
+c_{t+1} = (1-\beta)c_t + \beta \bar{\theta}^t.
+\]
+If $1/\beta \ll \tau_{\mathrm{ind}}$, then the center tracks
+instantaneous worker motion and mistakes noise for signal. If
+$1/\beta \gg \tau_{\mathrm{ind}}$, the center becomes so sluggish that
+real discoveries are communicated too late. Thus $\beta$ should also be
+chosen on the scale of the independent-draw time, typically
+\[
+\beta \asymp \frac{1}{\tau_{\mathrm{ind}}},
+\]
+with a smaller constant than $\gamma$ when extra conservatism is
+desired.
+
+In the X-shaped case this is exactly the behavior we want. Orthogonal
+motion along the irrelevant directions should decorrelate quickly, so it
+looks like noise on the timescale $\tau_{\mathrm{ind}}$. But persistent
+occupation of one ridge versus another should remain coherent across many
+such windows. The filtered center then ignores the first kind of
+disagreement and amplifies the second.
+
+The broader lesson is that collapse should not be defined by raw worker
+distance alone. It should be defined relative to a mixing time. Workers
+have collapsed only when consensus contracts them together on a
+timescale shorter than the time required for the irrelevant directions
+to produce effectively independent draws. The spectral gap
+$1-\lambda_2$ gives the right control knob for expressing that
+comparison.
+
 \section{Design Principles}
 
 The bump picture suggests several operational principles.
@@ -279,6 +383,15 @@ than the raw instantaneous mean. This is the simplest way to let
 durable discoveries influence the ensemble while treating fast
 worker-specific fluctuations as noise.
 
+\paragraph{Match consensus to mixing.}
+The contraction rate $\gamma$ and center-tracking rate $\beta$ should be
+chosen relative to the independent-draw time of the irrelevant
+directions. A useful first rule is
+$\gamma \approx (\log 2)/\tau_{\mathrm{ind}}$ and
+$\beta \asymp 1/\tau_{\mathrm{ind}}$, where
+$\tau_{\mathrm{ind}}$ is set by the decorrelation time or the inverse
+spectral gap $1/(1-\lambda_2)$ of the local orthogonal dynamics.
+
 \section{Predictions}
 
 This view makes several qualitative predictions.
@@ -299,6 +412,10 @@ This view makes several qualitative predictions.
 \item In X-shaped or multi-ridge landscapes, a filtered center should
   preserve orthogonal worker discoveries longer than raw mean coupling
   and should reach the shared intersection more reliably.
+\item The collapse threshold should be governed not only by worker
+  distance but by the ratio between consensus time $1/\gamma$ and the
+  independent-draw time $\tau_{\mathrm{ind}}$ of the irrelevant
+  directions.
 \end{itemize}
 
 \section{Open Questions}
@@ -309,6 +426,8 @@ system.
 \begin{itemize}
 \item What schedules for $\gamma$ best balance exploration and
   consolidation?
+\item How should one estimate the local spectral gap or decorrelation
+  time online from worker trajectories?
 \item Should communication use the full mean $\bar{\theta}$, a robust
   average, or only a low-rank summary of the discovered directions?
 \item Can one measure worker diversity and use it as a control signal
