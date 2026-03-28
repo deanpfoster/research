@@ -149,6 +149,16 @@ features. One worker may discover a side ridge, another may locate an
 intersection, and the average can relay both discoveries back to the
 rest of the system.
 
+\section{The Averaging Trap and Soft Consensus}
+
+To understand why this weak coupling is strictly necessary, consider the geometry of two workers discovering distinct features. We can simplify the problem by looking only at the 2D span connecting the centers of two separated bumps.
+
+Suppose Worker A has successfully descended into the basin of Bump 1, and Worker B has descended into Bump 2. If the system uses standard synchronization (as in Federated Averaging or fully synchronous SGD), it forces both workers to jump directly to the grand average, $\bar{\theta} = \frac{1}{2}(\theta_A + \theta_B)$. Geometrically, this midpoint lies in the vast, empty plateau between the two bumps. By jumping to the average, the system instantly ejects both workers from their respective basins of attraction, destroying both discoveries simultaneously.
+
+This ``averaging trap'' is why a soft consensus field is required. In our update rule~\eqref{eq:update}, workers do not jump to the average; they merely take a small gradient step towards it. This creates an elastic tension. The consensus term $-\gamma(\theta_i - \bar{\theta})$ pulls Worker A toward the empty plateau, but the local loss gradient $-\eta \nabla L(\theta_A)$ pulls it back down into the basin of Bump 1. 
+
+As long as the coupling $\gamma$ is appropriately tuned, the local curvature of the bump will overpower the consensus pull. Worker A remains safely anchored in its basin, contributing its discovery to the shared memory $\bar{\theta}$, without being violently yanked into the void. This explains why consensus-coupled SGD can aggregate disjoint discoveries across a landscape where strict averaging would fail catastrophically.
+
 \section{Related Work: Elastic Averaging SGD}
 
 The update rule proposed in~\eqref{eq:update} is mathematically equivalent to
