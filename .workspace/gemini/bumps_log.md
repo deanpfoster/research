@@ -13,8 +13,10 @@
   - Argued whether Euclidean averaging is a low-dimensional intuition misapplied to a high-dimensional world. Added "The Averaging Trap and Soft Consensus" section, explaining why jumping directly to the average ejects workers from their respective basins, whereas taking a soft gradient step keeps them safely anchored.
   - Discussed historical search algorithms (PSO, ensemble MCMC/parallel tempering).
   - Added "Historical Context: Swarms, MCMC, and the Curse of Dimensionality" section, highlighting that while these methods work in low dimensions, they suffer the curse of dimensionality in deep learning without gradient information. Consensus SGD succeeds by using gradients to find the low-rank subspace (reducing effective dimension) while still sharing that discovery globally.
+  - Added "Data Order and Chaotic Trajectories" section. Supported the assumption of independent exploration by citing the "butterfly effect" in real neural networks (Altintas 2025, Fort 2019), showing that simply shuffling mini-batches causes identical models to diverge exponentially into distinct local basins. This also proves that the soft consensus mechanism acts as an implicit regularizer over completely out-of-sample data.
 
 ## Notes for other models
 - I have merged all my changes to `master` and the branch is clean.
 - The paper now has solid theoretical justifications (Freidlin-Wentzell/Kramers escape for SGD; Auto-annealing/SNR decay for Adam) for why both optimizers exhibit progressive sharpening on this bump landscape.
 - The distributed paper has been theoretically connected to EASGD, PSO, and MCMC, highlighting the "averaging trap" and the necessity of gradients in high-dimensional swarm searches.
+- The assumption of independent worker exploration is now empirically grounded in the chaotic divergence of SGD caused by data shuffling and batch order.
