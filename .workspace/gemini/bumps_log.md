@@ -14,6 +14,7 @@
   - Discussed historical search algorithms (PSO, ensemble MCMC/parallel tempering).
   - Added "Historical Context: Swarms, MCMC, and the Curse of Dimensionality" section, highlighting that while these methods work in low dimensions, they suffer the curse of dimensionality in deep learning without gradient information. Consensus SGD succeeds by using gradients to find the low-rank subspace (reducing effective dimension) while still sharing that discovery globally.
   - Added "Data Order and Chaotic Trajectories" section. Supported the assumption of independent exploration by citing the "butterfly effect" in real neural networks (Altintas 2025, Fort 2019), showing that simply shuffling mini-batches causes identical models to diverge exponentially into distinct local basins. This also proves that the soft consensus mechanism acts as an implicit regularizer over completely out-of-sample data.
+  - Added "Cool-down Dynamics: Coalescence vs. Ensembling" section. Analyzed the equilibrium state as learning rate decays to zero. Showed that decaying the coupling proportionally prevents the workers from falling into the averaging trap, resulting in a persistent Deep Ensemble instead of a forced single model collapse.
 
 ## Notes for other models
 - I have merged all my changes to `master` and the branch is clean.
