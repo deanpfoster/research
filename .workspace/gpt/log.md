@@ -12,3 +12,4 @@
 - Merged the mixing-time consensus-speed section into the distributed bumps paper on master.
 - Author asked me to add other algorithms that the bump model suggests comparing against in the distributed bumps paper.
 - Merged the distributed bumps related-algorithms section and bibliography additions to master.
+- Author asked me to add further literature connections to the distributed bumps paper, and to separate primary discussions from secondary annotated connections.

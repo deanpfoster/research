@@ -234,6 +234,64 @@ consensus. A good experimental program should vary these ingredients one
 at a time rather than treating distributed optimization as a single
 monolithic design choice.
 
+\section{Further Connections to the Literature}
+
+\subsection*{Primary discussion}
+
+\paragraph{FedAvg, local SGD, and post-local SGD.}
+The most immediate connection is to communication-efficient distributed
+training. Federated averaging (FedAvg) \cite{mcmahan2017communication}
+and local SGD \cite{stich2019local} reduce synchronization by allowing
+workers to take multiple local steps before averaging. Post-local SGD
+\cite{lin2020dont} is especially close in spirit to our story because it
+already separates training into phases: a more coupled early regime and
+a more local later regime. SlowMo \cite{wang2020slowmo} goes further by
+adding a slow outer momentum to periodic synchronization. These papers
+should be part of the primary discussion because our proposal is not
+just an abstract particle system; it is a claim about how distributed
+SGD should be run when discovery of multiple structures matters.
+
+\paragraph{Consensus-based optimization.}
+Consensus-based optimization (CBO) \cite{pinnau2017consensus} provides
+the closest mathematical relative outside deep-learning practice. CBO
+studies interacting particles that contract toward a consensus point
+while stochastic exploration resists premature collapse. It should be a
+primary discussion because it offers mean-field language, particle
+interpretations, and convergence questions that are directly relevant to
+our consensus field. The main distinction is that the distributed bump
+proposal is first-order and feature-directed, whereas standard CBO is
+largely zero-order.
+
+\subsection*{Annotated secondary connections}
+
+\paragraph{Deep ensembles.}
+Deep ensembles \cite{lakshminarayanan2017simple} are worth citing
+because they validate the value of maintaining multiple distinct
+solutions, but they are not a primary discussion because they focus on
+prediction quality and uncertainty after training, not on coupled
+exploration during training.
+
+\paragraph{Stochastic weight averaging and model soups.}
+SWA \cite{izmailov2018averaging} and model soups
+\cite{wortsman2022model} matter because they describe when weight-space
+averaging is beneficial, but they are secondary here because they are
+mainly late-stage consolidation methods rather than mechanisms for
+discovering separated bumps.
+
+\paragraph{Entropy-SGD and SAM.}
+Entropy-SGD \cite{chaudhari2017entropy} and sharpness-aware
+minimization \cite{foret2021sharpness} connect to our broad-versus-sharp
+story, but they are not the primary comparison because they reshape a
+single trajectory rather than coordinating a population of separated
+workers.
+
+\paragraph{Mode connectivity.}
+Mode connectivity \cite{garipov2018loss} is relevant because it helps
+explain when averaging or interpolation between solutions is safe, but
+it is a secondary discussion because it says more about the geometry
+after multiple solutions have been found than about the discovery
+mechanism itself.
+
 \section{The X-Shaped Case}
 
 The simplest test case is the X-shaped landscape formed by two rank-1
@@ -411,7 +469,7 @@ comparison.
 
 \subsection{Analytic Estimate of the Spectral Gap}
 
-Because our data generating process~\eqref{eq:dgp} has a closed-form geometric definition, we can analytically estimate this spectral gap $1-\lambda_2$ and derive a concrete tuning rule for the coupling strength $\gamma$.
+Because the bump data-generating process has a closed-form geometric definition, we can analytically estimate this spectral gap $1-\lambda_2$ and derive a concrete tuning rule for the coupling strength $\gamma$.
 
 When a worker has successfully anchored onto the ridge of a bump with height $b$ and center $c=0$ (without loss of generality), it has found the optimal coordinate for the signal directions. We are interested in the dynamics of the orthogonal, irrelevant directions $\theta_{\perp}$. By definition, in these irrelevant directions, the shape matrix $A_i$ has zero eigenvalues. Therefore, the local loss function $f$ simplifies to the global decay term:
 \[
