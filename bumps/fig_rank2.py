@@ -6,11 +6,8 @@ import matplotlib.pyplot as plt
 
 b = 5.0
 c = np.array([1.0, -0.5])
-theta = np.pi / 6
-R = np.array([[np.cos(theta), -np.sin(theta)],
-              [np.sin(theta),  np.cos(theta)]])
-D = np.diag([6.0, 1.0])
-A = R @ D @ R.T
+a = 4.0
+A = a * np.eye(2)
 
 def f(xy):
     d = xy - c
