@@ -1,5 +1,6 @@
 \documentclass{article}
 \usepackage{amsmath,amssymb}
+\usepackage{graphicx}
 
 \title{Progressive Sharpening via Bump Functions}
 \author{}
@@ -21,5 +22,100 @@ where for each bump $i = 1, \dots, k$:
   \item $A_i \in \mathbb{R}^{d \times d}$ is a positive semi-definite shape matrix,
 \end{itemize}
 and $\|x\|^2 = x^\top x$ provides global decay away from the origin.
+
+\subsection{Rank-1 bumps}
+
+When $A_i$ has rank one, the quadratic form $(x - c_i)^\top A_i\,(x - c_i)$
+varies along a single direction. Restricted to that direction the bump is a
+univariate rational function; in every orthogonal direction the only
+$x$-dependence comes from the $\|x\|^2$ term, which provides slow global
+decay. The bump is therefore effectively one-dimensional.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.7\textwidth]{fig_rank1.pdf}
+  \caption{A single rank-1 bump with $b=3$, $c=1$, and scalar shape $a=4$.}
+  \label{fig:rank1}
+\end{figure}
+
+\subsection{Rank-2 bumps}
+
+When $A_i$ has rank two, the bump lives on a two-dimensional subspace.
+Figure~\ref{fig:rank2} shows a contour plot for a single such bump in
+$\mathbb{R}^2$, where the eigenvalues of $A_i$ control the eccentricity
+of the elliptical level sets.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.7\textwidth]{fig_rank2.pdf}
+  \caption{Contour plot of a rank-2 bump. The red cross marks the center
+    $c_i$; the elongation reflects the eigenstructure of $A_i$.}
+  \label{fig:rank2}
+\end{figure}
+
+\section{Finding Bumps in High Dimensions}
+
+When the rank of $A_i$ exceeds roughly five, locating the center $c_i$
+from data becomes substantially harder. The core difficulty is geometric:
+a rank-$r$ bump concentrates its signal in an $r$-dimensional subspace of
+$\mathbb{R}^d$, and the volume of the region where $f$ is appreciably
+above the background shrinks exponentially in $r$.
+
+Concretely, consider drawing $x$ uniformly from a ball of radius $R$.
+The fraction of samples that land within a distance $\epsilon$ of the
+$r$-dimensional ridge scales as $(\epsilon/R)^{d-r}$. For moderate $r$
+this fraction is already negligible, meaning most observations carry
+almost no information about the bump's location. Standard nonparametric
+estimators inherit this curse: their convergence rates depend on the
+\emph{intrinsic} dimension $r$, not just the ambient dimension $d$.
+
+This motivates an iterative strategy: first detect the low-rank bumps
+(which are easy to find), subtract them, and then search for
+progressively higher-rank structure in the residual. Whether such a
+strategy can outperform a global fit is one of the central questions
+of this paper.
+
+\section{Sharpness and SGD}
+
+Recent work in the optimization of deep neural networks has drawn
+attention to the \emph{sharpness} of minima in the loss landscape.
+Informally, a minimum is \emph{sharp} if the loss increases rapidly in
+some direction, and \emph{flat} if the loss varies slowly in a
+neighborhood. Several lines of evidence suggest that stochastic gradient
+descent (SGD) implicitly favors flat minima, and that flat minima
+generalize better than sharp ones.
+
+\subsection{Definitions of sharpness}
+
+Let $L(\theta)$ denote the training loss at parameters $\theta$, and let
+$\theta^*$ be a local minimum. Common measures of sharpness include:
+\begin{itemize}
+  \item \textbf{Spectral sharpness:} the largest eigenvalue
+    $\lambda_{\max}(\nabla^2 L(\theta^*))$ of the Hessian.
+  \item \textbf{Trace sharpness:} $\operatorname{tr}(\nabla^2 L(\theta^*))$,
+    which captures average curvature across all directions.
+  \item \textbf{Worst-case sharpness} \cite{keskar2017large}: the maximum
+    increase $\max_{\|\epsilon\| \le \rho} L(\theta^* + \epsilon) - L(\theta^*)$
+    over a ball of radius $\rho$.
+\end{itemize}
+
+\subsection{Progressive sharpening}
+
+The \emph{progressive sharpening} phenomenon, documented empirically by
+several groups, refers to the observation that the top eigenvalue of the
+Hessian tends to increase during training, sometimes reaching the
+threshold $2/\eta$ (where $\eta$ is the learning rate) at which point
+training enters the \emph{edge of stability} regime.
+
+Our bump model provides a clean setting in which to study this: each
+bump in~\eqref{eq:dgp} has curvature controlled by $A_i$ and $b_i$.
+A learner that first captures the broad, low-rank bumps and only later
+resolves the sharp, high-rank bumps will exhibit progressive sharpening
+by construction. This gives a concrete data-generating mechanism for
+the phenomenon, rather than relying on implicit properties of the
+optimizer.
+
+\bibliographystyle{plain}
+\bibliography{bumps}
 
 \end{document}
