@@ -21,11 +21,12 @@ def grad_f(xy):
     denom = 1 + d @ A @ d + xy @ xy
     return -b * (2 * A @ d + 2 * xy) / denom**2
 
-# SGD: gradient ascent with noise
+# SGD: gradient ascent with noise and mild decay
 np.random.seed(7)
-eta = 0.25
-path = [np.array([-3.0, 2.5])]
-for _ in range(60):
+eta0 = 0.8
+path = [np.array([-2.0, 2.5])]
+for t in range(200):
+    eta = eta0 / (1 + t / 100)
     g = grad_f(path[-1]) + np.random.normal(0, 0.03, size=2)
     path.append(path[-1] + eta * g)
 path = np.array(path)
