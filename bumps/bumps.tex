@@ -203,6 +203,24 @@ by construction. This gives a concrete data-generating mechanism for
 the phenomenon, rather than relying on implicit properties of the
 optimizer.
 
+\section{Adaptive Optimizers and Coordinate Alignment}
+
+The behavior of adaptive optimizers, particularly Adam, diverges significantly from standard SGD within this framework. Because Adam scales updates inversely by the root-mean-square of recent gradients, its dynamics depend heavily on whether the shape matrices $A_i$ are aligned with the standard coordinate axes.
+
+\subsection{Behavior in Flat Regions}
+
+Far from the bump's center, where the true gradient is vanishingly small, SGD takes a slow random walk driven by mini-batch noise. Adam, however, normalizes this noise. The denominator $\sqrt{v_t}$ shrinks to match the tiny gradient magnitude, causing the effective step size to blow up to the base learning rate $\eta$. Consequently, Adam takes large, rapid jumps ($\approx \pm \eta$ per coordinate) through the flat regions. While this amplified noise might help it stumble upon a bump's basin of attraction faster than SGD, it is essentially performing an undirected, high-temperature search.
+
+\subsection{The Importance of Coordinate Alignment}
+
+Once the optimizer finds the slope of a bump, Adam's efficiency is dictated by the eigenvectors of the shape matrix $A_i$.
+
+\textbf{Unaligned Bumps:} If the bump is not coordinate-aligned (i.e., $A_i$ has significant off-diagonal elements), Adam's diagonal preconditioner fails to capture the true geometry. The update vector, roughly proportional to $\text{sign}(\nabla f)$, forces the optimizer to move along the diagonals of the hypercube. For a narrow, oblique ridge, Adam will violently bounce back and forth across the ridge rather than smoothly ascending it, making it exceptionally poor at resolving oblique high-rank structure.
+
+\textbf{Coordinate-Aligned Bumps:} If the bumps are coordinate-aligned (which is a reasonable model for independent neurons or layers in a neural network), Adam can adapt perfectly to the scale of each coordinate. In this regime, Adam essentially decouples the problem. 
+
+How many such bumps can Adam handle simultaneously? If we have a superposition of $k$ bumps, each aligned to \emph{distinct} coordinate axes, Adam can optimize all of them simultaneously without penalty. Because the updates are computed coordinate-wise, the presence of a sharp bump on axis $x_1$ does not suppress the learning rate for a broad bump on axis $x_2$. However, if multiple bumps overlap within the same coordinate subspace, interference occurs. The running variance $v_t$ for those shared coordinates will be dominated by the gradients of the sharpest feature, potentially hindering the discovery or resolution of overlapping broader structures.
+
 \appendix
 
 \section{Annotated Bibliography}
