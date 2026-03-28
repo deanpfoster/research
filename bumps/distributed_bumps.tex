@@ -177,6 +177,59 @@ Elastic Averaging SGD (EASGD), introduced by Zhang, Choromanska, and LeCun \cite
 Empirically, EASGD and its decentralized counterparts (e.g., D-PSGD \cite{lian2017can}) successfully reduce communication overhead and often achieve lower test error than fully synchronized methods like Downpour or standard All-Reduce SGD in non-convex landscapes. The original authors attributed this to the fact that the elastic force allows workers to fluctuate and explore different local optima rather than collapsing prematurely. However, in environments with fast interconnects or for tasks like speech recognition, highly synchronized methods or blockwise model-update filtering (BMUF) \cite{chen2016scalable} often remain competitive or superior in final accuracy.
 
 The bump model provides a new geometric justification for \emph{why} EASGD works, and critically, suggests how it might be tuned to work better. Standard EASGD typically uses a fixed coupling constant $\alpha$. However, our bump analysis indicates that optimal discovery requires a phase transition: $\gamma$ must be extremely weak (or zero) early on to allow independent exploration of broad bumps, and then actively \emph{increased} (annealed upwards) to recruit the ensemble into sharper, high-rank structures discovered by individual pioneers. This schedule---weak early coupling followed by late consolidation---differs from the stationary elastic force typically employed.
+
+\section{Other Algorithms}
+
+The bump model also points to several nearby algorithms that should be
+studied side by side with consensus-coupled SGD.
+
+\paragraph{Stochastic Gradient Langevin Dynamics.}
+SGLD \cite{welling2011bayesian} adds explicit injected noise to
+stochastic gradient descent. In the bump landscape, this gives a direct
+way to test the thermodynamic story from the original paper: broad bumps
+should retain mass while sharp bumps should lose it more easily as the
+noise level rises. SGLD is therefore a natural baseline for asking
+whether our consensus mechanism is doing something beyond simple
+temperature control.
+
+\paragraph{Parallel tempering and replica exchange.}
+Parallel tempering \cite{earl2005parallel} attacks multimodality by
+running replicas at different temperatures and occasionally swapping
+states. This is conceptually close to our setting because it also uses a
+population of coupled trajectories to move between separated basins. The
+key difference is that replica exchange communicates through occasional
+state swaps across temperatures, while our method communicates through a
+continuous consensus field at one temperature. The bump model should let
+us compare these mechanisms directly on the same multimodal geometry.
+
+\paragraph{Randomized gossip and local consensus.}
+Randomized gossip algorithms \cite{boyd2006randomized} replace the
+global average with repeated local averaging on a communication graph.
+This may be a better fit than a single global center when the ensemble
+should preserve several semi-independent subpopulations. In the bump
+model, gossip would let us test whether discoveries should propagate
+through local neighborhoods first rather than being broadcast through one
+global mean. It also makes the spectral-gap control explicit, since the
+mixing of the communication graph determines the speed of consensus.
+
+\paragraph{Particle swarm optimization as a foil.}
+Particle swarm optimization \cite{kennedy1995particle} is the classic
+population method for multimodal search. It is worth including not
+because it is likely to dominate in high-dimensional bump landscapes,
+but because it isolates what the gradient contributes. PSO has the
+population-level communication and attraction mechanisms, but lacks the
+first-order directional information that lets SGD slide rapidly along a
+low-rank ridge. On the bump model, that difference should be unusually
+clean.
+
+These algorithms are not replacements for the present proposal; they are
+comparison points. The bump model is useful precisely because it can
+separate several distinct ingredients: gradient guidance, explicit
+thermal noise, pairwise or graph-based communication, and global
+consensus. A good experimental program should vary these ingredients one
+at a time rather than treating distributed optimization as a single
+monolithic design choice.
+
 \section{The X-Shaped Case}
 
 The simplest test case is the X-shaped landscape formed by two rank-1
