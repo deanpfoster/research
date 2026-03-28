@@ -169,6 +169,18 @@ it, so the optimizer oscillates within the edge-of-stability boundary.
   \label{fig:tworank1}
 \end{figure}
 
+\subsection{Intractability of the Global Optimum}
+
+Even if an oracle provided the exact parameters ($b_i, c_i, A_i$) for all $k$ bumps, finding the global maximum of $f(x)$ remains fundamentally intractable. 
+
+Consider the overparameterized regime where the ambient dimension $d$ is much larger than the number of features $k$ ($d \gg k$), and assume for simplicity that all bumps are rank-1 (ridges). The peak of the landscape occurs where these ridges intersect constructively to pool their heights.
+
+Because $d \gg k$, the intersection of any subset of these $k$ ridges forms an under-constrained linear system. Finding the point on this intersection closest to the origin (to minimize the global $\|x\|^2$ penalty in the denominator) is a simple linear algebra problem, solvable via the Moore-Penrose pseudo-inverse in polynomial time ($O(k^2 d)$).
+
+However, the global optimum is not necessarily the intersection of \emph{all} $k$ ridges. The global $\|x\|^2$ regularizer creates a strict combinatorial trade-off: intersecting all $k$ ridges maximizes the numerator ($\sum b_i$), but if the ridges are awkwardly aligned, this exact intersection might lie extremely far from the origin, causing the denominator ($1 + \|x\|^2$) to blow up. 
+
+It is often optimal to ignore some bumps. Intersecting a smaller subset of $k' < k$ ridges reduces the collected height in the numerator, but the resulting intersection may be significantly closer to the origin, yielding a higher overall function value. Consequently, finding the global maximum requires evaluating the origin-distance trade-off for every possible subset of the $k$ bumps. For a realistic network learning $k=1000$ distinct features, this poses a $2^{1000}$ combinatorial search. Thus, the global optimization of this landscape is NP-Hard, driven by a feature-selection trade-off rather than the local geometry of the features themselves.
+
 \section{Finding Bumps in High Dimensions}
 
 When the rank of $A_i$ exceeds roughly five, locating the center $c_i$

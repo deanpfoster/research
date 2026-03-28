@@ -110,6 +110,10 @@ grand average is not meant to be the one true model at every moment. It
 is a communication channel that accumulates weak evidence from all
 workers.
 
+\section{Intractability of the Global Optimum}
+
+Even with a perfect oracle that provides the exact geometry of all $k$ bumps, calculating the global optimum directly is an NP-Hard combinatorial subset selection problem (requiring a search over all $2^k$ possible subsets of intersecting ridges to minimize the global weight-decay penalty). For the full mathematical derivation of this overparameterized trade-off, we direct the reader to the corresponding section in the companion paper on the bump data-generating process. This fundamental intractability further motivates the need for a distributed, swarm-like search to dynamically explore promising subsets of bump intersections.
+
 \section{Qualitative Dynamics in a Bump Landscape}
 
 The bump model gives a concrete picture for how the system should work.
