@@ -223,7 +223,158 @@ How many such bumps can Adam handle simultaneously? If we have a superposition o
 
 \appendix
 
-\section{Annotated Bibliography}
+\section{Empirical SGD Phenomena and the Bump Model}
+
+This appendix surveys well-documented empirical regularities of SGD
+training in modern neural networks and assesses which can be replicated
+or illuminated by the bump model~\eqref{eq:dgp}. For each phenomenon we
+note the key references, the empirical claim, and whether the bump model
+offers a tractable analog. Phenomena are grouped by how naturally they
+fit the model: \S\ref{sec:direct} (direct analogs),
+\S\ref{sec:partial} (partial analogs), and \S\ref{sec:outside}
+(outside scope).
+
+\subsection{Direct analogs}\label{sec:direct}
+
+\paragraph{Progressive sharpening and the edge of stability.}
+During gradient descent on neural networks, the largest eigenvalue of
+the Hessian increases steadily (\emph{progressive sharpening}) until it
+reaches $2/\eta$, after which the loss oscillates non-monotonically but
+continues to decrease on long timescales (\emph{edge of stability})
+\cite{cohen2021gradient}. Theoretical analyses confirm that gradient
+descent self-stabilizes at this threshold
+\cite{arora2022understanding,damian2023selfstabilization}.
+
+\textbf{Bump analog.} This is the primary motivation of the paper. Each
+bump has curvature controlled by $A_i$ and $b_i$, so a learner
+discovering bumps in order of increasing rank exhibits progressive
+sharpening by construction. Our figures directly show SGD trajectories
+confined to the EoS boundary (Figures~\ref{fig:rank1}--\ref{fig:tworank1}).
+
+\paragraph{Simplicity bias and spectral bias.}
+Neural networks learn simple features first: linearly separable
+patterns before complex ones \cite{shah2020simplicity}, low-degree
+polynomials before high-degree \cite{kalimeris2019sgd}, and
+low-frequency components before high-frequency
+\cite{rahaman2019spectral}. This is sometimes called the
+\emph{F-principle}.
+
+\textbf{Bump analog.} Low-rank bumps are the ``simple'' features of our
+model: a rank-$r$ bump concentrates its signal in $r$ directions, and
+the gradient from a distant rank-$r$ bump is visible in fewer
+dimensions. SGD should discover rank-1 bumps before rank-5 bumps, giving
+a clean complexity hierarchy indexed by rank.
+
+\paragraph{Implicit regularization toward flat minima.}
+SGD with small batches and large learning rates implicitly favors flat
+minima \cite{hochreiter1997flat,keskar2017large}. Theoretical work
+explains this via the noise structure of SGD: the gradient covariance
+penalizes the trace of the Hessian
+\cite{blanc2020implicit,damian2021label}, and the effective temperature
+$\eta/B$ controls the width of the implicit posterior
+\cite{smith2018bayesian}.
+
+\textbf{Bump analog.} Bumps of varying sharpness (eigenvalues of $A_i$)
+coexist. With a fixed learning rate, the EoS boundary excludes the
+sharpest bumps entirely. One can directly verify whether SGD with
+different $\eta/B$ ratios preferentially finds flatter bumps, with
+closed-form Hessians providing exact sharpness measurements.
+
+\paragraph{Sharpness reduction at learning rate drops.}
+When the learning rate is decreased by a step schedule, the sharpness
+$\lambda_{\max}(\nabla^2 L)$ initially drops, then the optimizer finds
+a new, sharper minimum within the now-accessible low-loss region
+\cite{lewkowycz2020large,cohen2021gradient}.
+
+\textbf{Bump analog.} Reducing $\eta$ raises the EoS threshold to
+$2/\eta_{\text{new}}$, expanding the region the optimizer can explore.
+Previously inaccessible sharp bumps become resolvable, and the
+trajectory should exhibit the drop-then-rise sharpness signature.
+
+\paragraph{Batch size effects.}
+The ratio $\eta/B$ is a key control parameter. There is a critical batch
+size below which increasing $B$ is compute-efficient and above which
+returns diminish \cite{mccandlish2018empirical}. Increasing the batch
+size is equivalent to decaying the learning rate
+\cite{goyal2017accurate}.
+
+\textbf{Bump analog.} The bump model has analytic gradients, so the
+gradient noise covariance can be computed exactly as a function of $B$.
+This gives a clean testbed for the critical-batch-size theory.
+
+\paragraph{Learning rate warmup.}
+Warmup (gradually increasing $\eta$ from zero) is essential for stable
+training of large models \cite{goyal2017accurate}. Without warmup,
+large initial learning rates cause instabilities.
+
+\textbf{Bump analog.} Without warmup, a large $\eta$ may catapult the
+optimizer past narrow bumps. With warmup, the optimizer first resolves
+nearby bumps at low $\eta$ (low EoS threshold), then progressively
+accesses sharper bumps as $\eta$ increases. The order of bump discovery
+should differ measurably.
+
+\subsection{Partial analogs}\label{sec:partial}
+
+\paragraph{Catapult phase.}
+With large learning rates, the loss initially spikes before rapidly
+decreasing to a better region than small learning rates would reach
+\cite{lewkowycz2020large,gilmer2022loss}. This beneficial instability
+helps escape poor initialization basins.
+
+\textbf{Bump analog (partial).} If initialized far from any bump, a
+large step could overshoot local structure and land near a more
+prominent bump. The effect should be observable but less dramatic than in
+deep networks.
+
+\paragraph{Gradient starvation.}
+In classification, once one feature becomes sufficiently predictive, the
+gradients for other features are suppressed
+\cite{pezeshki2021gradient}. This explains why networks fail to learn
+redundant features.
+
+\textbf{Bump analog (partial).} Fitting a dominant bump reduces the
+residual signal from smaller bumps, suppressing their gradients. The
+mechanism differs (signal magnitude vs.\ cross-entropy saturation) but
+the qualitative effect---dominant features starve subordinate ones---is
+the same.
+
+\paragraph{Double descent.}
+Test error follows a U-shaped ``double descent'' curve: it first
+decreases, spikes at the interpolation threshold, then decreases again
+in the overparameterized regime
+\cite{belkin2019reconciling,nakkiran2020deep}.
+
+\textbf{Bump analog (partial).} Requires pairing the bump data with a
+learner of varying capacity (e.g., varying the number of basis functions).
+At the interpolation threshold the learner must use high-curvature
+solutions; overparameterized learners can select flat ones. The bump
+model's multi-scale structure should produce a clear threshold effect.
+
+\paragraph{Mode connectivity.}
+Distinct trained networks are connected by low-loss paths
+\cite{draxler2018essentially}. Solutions from the same initialization
+are often \emph{linearly} mode connected.
+
+\textbf{Bump analog (partial).} Two solutions fitting the same set of
+bumps with slightly different parameters should be linearly connected.
+Solutions fitting different subsets would not. The bump model lacks the
+neuron-permutation symmetries that enrich mode connectivity in neural
+networks.
+
+\subsection{Outside scope}\label{sec:outside}
+
+\paragraph{Grokking.} Delayed generalization long after memorization
+\cite{power2022grokking} requires a mismatch between memorization and
+generalization strategies, typically arising in discrete/algorithmic tasks.
+The bump model's continuous regression structure does not support this.
+
+\paragraph{Neural collapse, lottery tickets, loss of plasticity.}
+These phenomena are specific to classification architectures (neural
+collapse), network sparsity (lottery tickets), or sequential task
+structure (plasticity loss), none of which have natural analogs in the
+bump data-generating process.
+
+\section{Earlier Annotated Bibliography}
 
 \subsection*{Sharpness and Generalization}
 \begin{itemize}
