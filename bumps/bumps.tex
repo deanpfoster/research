@@ -203,6 +203,18 @@ by construction. This gives a concrete data-generating mechanism for
 the phenomenon, rather than relying on implicit properties of the
 optimizer.
 
+\subsection{Thermodynamics of Escape (Freidlin-Wentzell)}
+
+To understand \emph{why} SGD resolves broad bumps before sharp ones, we can appeal to Freidlin-Wentzell theory and Large Deviation principles, which model SGD as a stochastic diffusion process.
+
+When SGD falls into a basin of attraction (one of our bumps), the mini-batch noise acts as a thermal bath. The probability of escaping this minimum is governed by the Kramers escape rate $\tau \propto \exp(\Delta V / D)$, where $\Delta V$ is the depth (the ``barrier'' or ``action'' required to escape) and $D \propto \eta \sigma^2$ is the effective temperature (proportional to learning rate and noise variance). Crucially, the pre-factor of this escape time depends strongly on the sharpness (the Hessian eigenvalues). 
+
+If a bump is high-rank and \emph{sharp}, the noise is heavily amplified by the steep walls, and the escape time is exceedingly short. Early in training, when the residual error (and thus the gradient noise $\sigma^2$) is large, the effective temperature is too high for the optimizer to stay trapped in these sharp, high-rank features; it gets rapidly ejected. 
+
+Conversely, if a bump is low-rank and \emph{broad}, the barrier is massive and the curvature is low. The Freidlin-Wentzell escape time is exponentially long. The optimizer gets trapped here first, smoothly descending the broad valley and fitting that component of the data. 
+
+This creates a strict temporal ordering: as the optimizer fits the broad bumps, the residual error shrinks, causing the effective temperature $D$ to cool. This cooling finally allows SGD to stably ``freeze'' into the narrower, sharper basins of the high-rank bumps without being kicked out. This thermodynamic annealing process provides a rigorous physical justification for why we observe progressive sharpening.
+
 \section{Adaptive Optimizers and Coordinate Alignment}
 
 The behavior of adaptive optimizers, particularly Adam, diverges significantly from standard SGD within this framework. Because Adam scales updates inversely by the root-mean-square of recent gradients, its dynamics depend heavily on whether the shape matrices $A_i$ are aligned with the standard coordinate axes.
@@ -382,6 +394,7 @@ bump data-generating process.
     \item \textbf{\cite{keskar2017large} Keskar et al.\ (2017) ``On Large-Batch Training for Deep Learning'':} Empirically demonstrates the generalization gap between small-batch and large-batch SGD, concluding that large-batch training tends to get trapped in sharper minima, whereas the inherent noise of small-batch SGD drives the optimization towards flatter, more robust minima.
     \item \textbf{\cite{foret2021sharpnessaware} Foret et al.\ (2021) ``Sharpness-Aware Minimization (SAM)'':} Introduces an optimization procedure that explicitly seeks out flat minima by minimizing a worst-case loss within a local neighborhood (loss sharpness), rather than optimizing only the point estimate. This approach significantly improves generalization across various models.
     \item \textbf{\cite{cohen2021gradient} Cohen et al.\ (2021) ``Gradient Descent on Neural Networks Typically Occurs at the Edge of Stability'':} Analyzes the ``progressive sharpening'' phenomenon. The authors show that during training, the maximum eigenvalue of the Hessian increases until it reaches the theoretical stability limit $2/\eta$. After this point, the optimizer enters the ``Edge of Stability'' (EoS) regime, marked by oscillating, non-monotonic loss but continuous long-term convergence.
+    \item \textbf{\cite{xie2020diffusion} Xie et al.\ (2021) ``A Diffusion Theory For Deep Learning Dynamics'':} Applies Kramers' escape rate and Freidlin-Wentzell theory to prove that SGD exponentially favors flat minima over sharp ones. This provides the physical mechanism for why noise ejects the optimizer from sharp, high-rank bumps early in training.
 \end{itemize}
 
 \subsection*{Convergence Rates for Low-Rank Structures}
