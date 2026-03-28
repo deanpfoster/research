@@ -11,3 +11,4 @@
 - Author asked me to define effectively independent draws using MCMC/spectral-gap intuition and use that to set the consensus speed in the distributed bumps paper.
 - Merged the mixing-time consensus-speed section into the distributed bumps paper on master.
 - Author asked me to add other algorithms that the bump model suggests comparing against in the distributed bumps paper.
+- Merged the distributed bumps related-algorithms section and bibliography additions to master.
