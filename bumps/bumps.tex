@@ -310,9 +310,70 @@ While modern training regimes often avoid explicit learning rate decay schedules
 
 The update rule for Adam is proportional to the Signal-to-Noise Ratio (SNR) of the gradients: $\Delta \theta \approx \eta \cdot \frac{\mathbb{E}[g]}{\sqrt{\mathbb{E}[g^2]}}$ \cite{kingma2014adam}. Early in training, or when traversing the slope of a broad bump, the gradient is consistent across mini-batches (high SNR). The denominator scales with the numerator, resulting in a large effective step size near $\pm \eta$. As discussed in the Freidlin-Wentzell analysis, this large step size combined with high curvature acts as a high effective temperature $D$, violently ejecting Adam from sharp, high-rank bumps.
 
-However, as Adam settles into the broad bumps, the mean gradient (the signal) approaches zero, but the mini-batch variance (the noise) remains. The SNR drops precipitously. Because the denominator $\sqrt{v_t}$ is dominated by this variance, the \emph{effective} step size $\Delta \theta$ automatically shrinks \cite{orvieto2025adam}, even though the global learning rate $\eta$ remains fixed. 
+However, as Adam settles into the broad bumps, the mean gradient (the signal) approaches zero, but the mini-batch variance (the noise) remains. The SNR drops precipitously. Because the denominator $\sqrt{v_t}$ is dominated by this variance, the \emph{effective} step size $\Delta \theta$ automatically shrinks \cite{orvieto2025adam}, even though the global learning rate $\eta$ remains fixed.
 
 This noise-induced annealing is functionally equivalent to decaying the learning rate in SGD. It cools the effective temperature $D$ of the system. Once the broad bumps are fit and the effective step size has decayed sufficiently, Adam can finally enter and stably remain inside the narrower basins of the sharp bumps. Thus, Adam still exhibits progressive sharpening, but the ``decay'' that allows it to resolve sharp features is driven autonomously by the local geometry and noise profile rather than a global schedule.
+
+\section{Related Work}
+
+\paragraph{Optimization benchmarks.}
+The functional form~\eqref{eq:dgp} is a direct generalization of the
+\emph{Shekel function} \cite{shekel1971test}, a classical benchmark
+$f(x) = \sum_i 1/(c_i + \|x - a_i\|^2)$ used to test global
+optimizers \cite{jamil2013literature,naser2025review}. The Shekel
+function is isotropic ($A_i = I$), has no global decay term, and has
+only been used to benchmark evolutionary and swarm algorithms, never as
+a data-generating process for studying gradient-based learning dynamics.
+Our model generalizes it in three ways: anisotropic and rank-deficient
+shape matrices $A_i$, a global $\|x\|^2$ decay, and a focus on SGD
+dynamics rather than global optimization.
+
+\paragraph{Radial basis functions.}
+The inverse quadratic kernel $\phi(r) = 1/(1 + \varepsilon^2 r^2)$ is a
+standard choice in RBF interpolation
+\cite{hardy1971multiquadric,buhmann2003radial}, and recent work studies
+data-driven shape parameter selection \cite{hanveiga2024robust}. However,
+RBF shape parameters are always scalars (isotropic); the idea of a
+matrix-valued, rank-deficient shape parameter controlling the anisotropy
+and intrinsic dimensionality of each basis function appears to be new.
+
+\paragraph{Single-index and multi-index models.}
+A rank-1 bump, restricted to its active direction, is a single-index
+model with a Cauchy-like link function. The \emph{information exponent}
+framework \cite{bietti2022single,damian2023multiindex} characterizes the
+sample complexity of learning such models, and has been extended to
+multi-index settings
+\cite{ren2024orthogonal,damian2025generativeleap,bruna2025survey}.
+Our bump model provides a concrete parametric family where the
+information exponent can be computed exactly as a function of the rank
+and eigenvalues of $A_i$.
+
+\paragraph{Staircase property and saddle-to-saddle dynamics.}
+Abbe et al.\ \cite{abbe2021staircase,abbe2023leap} showed that SGD
+on neural networks learns target functions by sequentially escaping
+saddle points of increasing complexity, with the \emph{leap complexity}
+governing the time scale. Recent work extends this to general
+architectures \cite{zhang2025saddlesimplicity} and deep ReLU networks
+\cite{bantzis2025deeprelu}. Our rank hierarchy---low-rank bumps
+discovered before high-rank ones---is a concrete geometric instance of
+the staircase mechanism, with closed-form Hessians making the saddle
+structure analytically tractable.
+
+\paragraph{Progressive sharpening theory.}
+Agarwala et al.\ \cite{agarwala2023secondorder} showed that progressive
+sharpening and edge-of-stability are generic properties of any model
+quadratic in its parameters, not specific to deep networks. Our work is
+complementary: rather than showing PS is generic in the \emph{learner},
+we construct a \emph{data-generating process} that produces PS by
+design through the rank hierarchy of the target function.
+
+\paragraph{Lorentzian peaks in spectroscopy and physics.}
+Sums of Lorentzians $1/(1 + ((x-x_0)/\gamma)^2)$ are the standard
+model for overlapping resonance peaks \cite{breitwigner1936}, fitted by
+Levenberg--Marquardt in one dimension. Our model can be viewed as a
+high-dimensional, anisotropic generalization of multi-peak Lorentzian
+fitting, but with the very different goal of understanding SGD dynamics
+rather than spectral deconvolution.
 
 \appendix
 
