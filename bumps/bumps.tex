@@ -431,6 +431,16 @@ Conversely, if a bump is low-rank and \emph{broad}, the barrier is massive and t
 
 This creates a strict temporal ordering: as the optimizer fits the broad bumps, the residual error shrinks, causing the effective temperature $D$ to cool. This cooling finally allows SGD to stably ``freeze'' into the narrower, sharper basins of the high-rank bumps without being kicked out. This thermodynamic annealing process provides a rigorous physical justification for why we observe progressive sharpening.
 
+\subsection{Edge of Stability: 3rd vs.\ 4th Derivatives and Drift}
+
+Theoretical analyses of the Edge of Stability (EoS) often rely on higher-order Taylor expansions of the loss landscape \cite{damian2023selfstabilization}. In standard, asymmetric neural network landscapes, the third derivative $\nabla^3 f$ is non-zero. When SGD oscillates across an asymmetric valley, it requires two steps to complete a cycle. Because one wall is steeper than the other, the two-step cycle does not return the optimizer exactly to its starting point. This asymmetry creates a slow, higher-order \emph{drift} along the valley floor, which is proportional to $\eta^2 \nabla^3 f \cdot \nabla f$. Since this drift requires two bounces and squares the learning rate, it manifests as a very slow $O(\eta^2)$ motion.
+
+Our bump model provides a unique, elegant contrast. Because our rational bump $f(x) \propto b / (1 + x^\top A x)$ is perfectly symmetric around its center, all odd derivatives at the peak are exactly zero (e.g., $\nabla^3 f = 0$). Consequently, there is zero 3rd-order drift. An optimizer oscillating across our bump perfectly bounces back and forth in place. 
+
+Without 3rd-order drift, the stabilization mechanism is purely a 4th-derivative effect. As the optimizer is repelled from the sharp peak, the amplitude $x$ of its bounces grows. Because our bump is sub-quadratic (the walls get flatter as one moves away from the center), the fourth derivative $\nabla^4 f$ is strictly negative. Thus, the local sharpness $H(x)$ experienced by the optimizer drops as the amplitude increases: $H(x) \approx H(0) + \frac{1}{2} \nabla^4 f \cdot x^2$. 
+
+The system acts as a perfect shock absorber, naturally expanding its bounce amplitude until the sharpness exactly drops to the $2/\eta$ stability limit. This isolates the EoS amplitude-stabilization mechanism (driven by the negative 4th derivative) from the EoS drift mechanism (driven by the 3rd derivative), demonstrating exactly how symmetry simplifies the dynamics. If we were to break this symmetry---for example, by adding a global linear slope or traversing a rank-2 valley---the standard first-order gradient descent along the sloped valley would produce an $O(\eta)$ motion, which would overwhelmingly dominate the slow $O(\eta^2)$ 3rd-order EoS drift.
+
 \section{Adaptive Optimizers and Coordinate Alignment}
 
 The behavior of adaptive optimizers, particularly Adam, diverges significantly from standard SGD within this framework. Because Adam scales updates inversely by the root-mean-square of recent gradients, its dynamics depend heavily on whether the shape matrices $A_i$ are aligned with the standard coordinate axes.
