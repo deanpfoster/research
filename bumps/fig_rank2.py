@@ -32,12 +32,11 @@ def max_curvature(xy):
     H = hessian_f(xy)
     return np.max(np.linalg.eigvalsh(-H))
 
-# SGD: gradient ascent with noise and mild decay
+# SGD: gradient ascent with noise, fixed learning rate
 np.random.seed(7)
-eta0 = 0.8
+eta = 0.8
 path = [np.array([-2.0, 2.5])]
-for t in range(200):
-    eta = eta0 / (1 + t / 100)
+for _ in range(200):
     g = grad_f(path[-1]) + np.random.normal(0, 0.03, size=2)
     path.append(path[-1] + eta * g)
 path = np.array(path)
@@ -56,7 +55,7 @@ for i in range(len(grid)):
     for j in range(len(grid)):
         curv[i, j] = max_curvature(np.array([grid[j], grid[i]]))
 
-eos_threshold = 2 / eta0
+eos_threshold = 2 / eta
 
 fig, ax = plt.subplots(figsize=(5, 4.5))
 cs = ax.contourf(X, Y, F, levels=20, cmap='viridis')

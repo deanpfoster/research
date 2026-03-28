@@ -41,7 +41,7 @@ configs = [
 
 grid = np.linspace(-4, 4, 150)
 X, Y = np.meshgrid(grid, grid)
-eta0 = 0.8
+eta = 0.8
 
 fig, axes = plt.subplots(3, 3, figsize=(12, 11))
 
@@ -62,13 +62,12 @@ for idx, (angle, center, height, eig1, eig2) in enumerate(configs):
     np.random.seed(7 + idx)
     start = np.array([-2.5, 2.5]) if idx % 2 == 0 else np.array([2.5, -2.0])
     path = [start.copy()]
-    for t in range(200):
-        eta = eta0 / (1 + t / 100)
+    for _ in range(200):
         g = grad_f(path[-1], A, c, b) + np.random.normal(0, 0.03, size=2)
         path.append(path[-1] + eta * g)
     path = np.array(path)
 
-    eos = 2 / eta0
+    eos = 2 / eta
 
     ax.contourf(X, Y, F, levels=15, cmap='viridis')
     ax.contour(X, Y, F, levels=15, colors='k', linewidths=0.2)
