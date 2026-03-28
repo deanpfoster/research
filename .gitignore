@@ -1,0 +1,6 @@
+bumps/*.aux
+bumps/*.log
+bumps/*.out
+bumps/*.pdf
+bumps/*.bbl
+bumps/*.blg
