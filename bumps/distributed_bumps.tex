@@ -159,6 +159,16 @@ This ``averaging trap'' is why a soft consensus field is required. In our update
 
 As long as the coupling $\gamma$ is appropriately tuned, the local curvature of the bump will overpower the consensus pull. Worker A remains safely anchored in its basin, contributing its discovery to the shared memory $\bar{\theta}$, without being violently yanked into the void. This explains why consensus-coupled SGD can aggregate disjoint discoveries across a landscape where strict averaging would fail catastrophically.
 
+\section{Historical Context: Swarms, MCMC, and the Curse of Dimensionality}
+
+The idea of using a population of workers that explore independently and periodically share information is not new. It is the defining characteristic of several highly successful optimization and sampling families, most notably Particle Swarm Optimization (PSO) and Ensemble Markov Chain Monte Carlo (e.g., Parallel Tempering or Replica Exchange). In these algorithms, "particles" or "replicas" traverse the landscape, communicating their current fitness or state to the rest of the ensemble to prevent any single worker from becoming permanently trapped in a local minimum.
+
+For decades, these methods have been the gold standard for complex, multimodal problems in physics and engineering. However, they are notoriously difficult to scale to the high-dimensional spaces of modern deep learning ($d \sim 10^6$ to $10^9$). The failure mode is geometric: both PSO and standard MCMC rely heavily on zero-order exploration (scalar fitness feedback) or random-walk proposals. In a million-dimensional space, the volume is so vast that randomly probing for a better state has an acceptance probability approaching zero. The "curse of dimensionality" guarantees that these swarms will wander aimlessly in the flat regions of the landscape, completely blind to narrow, high-rank structures.
+
+Consensus-coupled SGD circumvents this curse by marrying the population-based communication of swarms with the directed, first-order efficiency of gradients. The local SGD step ($-\eta \nabla L$) is crucial: it provides an $n$-dimensional vector pointing directly into the basin of a bump. In the context of our model, the gradient step effectively collapses the million-dimensional search problem down to the intrinsic rank $r$ of the local bump. The worker easily slides down the $r$-dimensional ridge, solving the high-dimensional needle-in-a-haystack problem that defeats PSO.
+
+Once the local gradient has anchored the worker in the low-dimensional structure, the consensus term ($-\gamma(\theta_i - \bar{\theta})$) acts as the swarm communication channel. It allows the ensemble to share the discovery of this $r$-dimensional subspace globally. Therefore, the success of EASGD and related methods on deep neural networks can be understood as a hybrid strategy: using gradients to defeat the curse of dimensionality locally, and using soft consensus to defeat local minima globally.
+
 \section{Related Work: Elastic Averaging SGD}
 
 The update rule proposed in~\eqref{eq:update} is mathematically equivalent to
