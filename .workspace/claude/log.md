@@ -16,3 +16,10 @@
 - Added EASGD (Zhang/Choromanska/LeCun 2015), GRAWA (Dimlioglu/Choromanska 2024), Vincent function (Li et al. CEC2013) to bib and related work
 - Connected distributed SGD literature to bump model: GRAWA's gradient-norm weighting as soft repulsion from already-discovered basins
 - d=3 regime identified as where parallelism genuinely helps (mild hierarchy, luck dominates)
+- Author corrected DGP: λ||x||² regularizer should be OUTSIDE the sum, not inside each bump's denominator
+- New DGP: f(x) = Σ b_i/(1 + (x-c_i)'A_i(x-c_i)) - λ||x||²
+- Author requested λ parameter be explicit (for annealing discussion)
+- Refactored all 6 figure scripts, paper equation, and README
+- λ=0.1, learning rates adjusted: rank-1 η=0.5, rank-2 η=0.3, X-shape η=0.08
+- Made GitHub repo public, set default branch to master, added README
+- GPT contributing in parallel: intractability of global optimum subsection (NP-hard subset selection)
