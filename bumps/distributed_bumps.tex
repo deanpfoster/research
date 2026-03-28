@@ -512,6 +512,28 @@ Plugging this spectral gap back into our design rule from the previous section (
 \]
 This is a highly practical result. It demonstrates that the optimal consensus coupling $\gamma$ should be strictly proportional to the local learning rate $\eta$ and the height of the bump $b$. Importantly, because we are analyzing the orthogonal directions, the condition number or sharpest eigenvalues of the shape matrix $A_i$ do not enter this equation. The required coupling strength is dictated entirely by the global geometric ``gravity'' ($\|x\|^2$) holding the worker to the ridge, independent of how sharp the ridge itself is.
 
+\section{Cool-down Dynamics: Coalescence vs.\ Ensembling}
+
+A critical question for any distributed optimization algorithm is what happens at the end of training during the ``cool-down'' phase, when the learning rate $\eta$ is decayed toward zero to reduce mini-batch noise and achieve convergence. Does the ensemble collapse into a single unified model, or does it remain diverse?
+
+We can answer this by examining the deterministic equilibrium state of the workers. As the mini-batch noise vanishes, a worker comes to rest when its expected update is zero:
+\[
+\Delta \theta_i = -\eta \nabla L(\theta_i) - \gamma(\theta_i - \bar{\theta}) = 0
+\]
+Rearranging this yields the steady-state displacement of worker $i$ from the grand average:
+\[
+\theta_i - \bar{\theta} = -\frac{\eta}{\gamma} \nabla L(\theta_i)
+\]
+This equilibrium equation reveals a fundamental choice in how the algorithm is tuned during the cool-down phase:
+
+\textbf{Scenario A: Forced Coalescence (The Averaging Trap).} If one decays the learning rate ($\eta \to 0$) but holds the consensus coupling constant ($\gamma > 0$), the ratio $\frac{\eta}{\gamma} \to 0$. The equilibrium equation dictates that $\theta_i - \bar{\theta} \to 0$. The system forces all workers to perfectly coalesce into a single point. If the workers are situated in distinct, parallel bumps, this forced collapse will violently yank them out of their respective basins and deposit them in the empty, high-loss plateau at the true mathematical average. The system falls into the Averaging Trap precisely at the end of training.
+
+\textbf{Scenario B: Persistent Diversity (Proportional Annealing).} However, our analytic derivation in the previous section established that the optimal tuning rule is $\gamma \propto \eta b$. If we follow this geometric principle, then as we decay the learning rate $\eta \to 0$, we must \emph{simultaneously and proportionally} decay the consensus coupling $\gamma \to 0$. 
+
+Under proportional annealing, the ratio $\frac{\eta}{\gamma}$ remains strictly constant. The equilibrium displacement $\theta_i - \bar{\theta}$ therefore remains finite. As the ``temperature'' of the system drops to zero, the workers will never coalesce. Because the consensus spring $\gamma$ weakens at the exact same rate as the local gradient step $\eta$, the local gradients continue to overpower the shrinking consensus pull. The workers stay safely anchored in the distinct parallel bumps they discovered, simply freezing in place slightly offset toward the center of mass. 
+
+This guarantees that the local optimization process is never derailed by the global consensus. The final output of the distributed system is not a single collapsed model, but rather a geometrically robust Deep Ensemble of distinct models, each occupying a different meaningful feature of the landscape.
+
 \section{Design Principles}
 
 The bump picture suggests several operational principles.
