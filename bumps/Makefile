@@ -3,7 +3,9 @@ FIGS  = fig_rank1.pdf fig_rank2.pdf
 
 all: $(PAPER).pdf
 
-$(PAPER).pdf: $(PAPER).tex $(FIGS)
+$(PAPER).pdf: $(PAPER).tex $(PAPER).bib $(FIGS)
+	pdflatex -interaction=nonstopmode $(PAPER).tex
+	bibtex $(PAPER)
 	pdflatex -interaction=nonstopmode $(PAPER).tex
 	pdflatex -interaction=nonstopmode $(PAPER).tex
 
