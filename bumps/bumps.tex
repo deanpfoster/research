@@ -54,7 +54,11 @@ follow, while sharp directions push the trajectory to the
 edge-of-stability boundary. Progressive sharpening is thus not an extra
 phenomenon layered on top of feature learning; it is what feature
 learning looks like when the unresolved structure becomes successively
-sharper.
+sharper. In the dynamical picture developed later, mini-batch noise
+plays the role of an effective temperature: early on it ejects the
+optimizer from sharp, high-rank structure but leaves it trapped in
+broad, low-rank structure, and as the residual shrinks this temperature
+cools enough for sharper features to become stable.
 
 This perspective also clarifies why optimizer choice matters. For plain
 SGD, the relevant notion of difficulty is geometric and global: can the
@@ -62,7 +66,9 @@ trajectory find the bump at all, and once found can it resolve the local
 curvature without becoming unstable? For Adam, an additional issue
 appears: whether the feature geometry is aligned with the optimizer's
 coordinate-wise preconditioner. The bump family lets us separate these
-effects cleanly.
+effects cleanly, including the possibility that Adam exhibits its own
+form of progressive sharpening through an internally shrinking effective
+step size as the local signal-to-noise ratio falls.
 
 The rest of the paper develops this picture concretely. We define the
 data-generating process and visualize its low-rank components, then
