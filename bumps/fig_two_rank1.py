@@ -12,6 +12,7 @@ from matplotlib.colors import Normalize
 # Ridge 2: sharper but shorter -> found second at the crossing
 center = np.array([0.5, 0.0])
 b1, b2 = 5.0, 3.0  # taller ridge found first
+lam = 0.1  # global regularizer
 
 angle1, angle2 = np.pi / 4, -np.pi / 4
 v1 = np.array([np.cos(angle1), np.sin(angle1)])
@@ -22,24 +23,25 @@ A2 = a2 * np.outer(v2, v2)
 
 def f(xy):
     d = xy - center
-    g1 = 1 + d @ A1 @ d + xy @ xy
-    g2 = 1 + d @ A2 @ d + xy @ xy
-    return b1 / g1 + b2 / g2
+    q1 = 1 + d @ A1 @ d
+    q2 = 1 + d @ A2 @ d
+    return b1 / q1 + b2 / q2 - lam * (xy @ xy)
 
 def grad_f(xy):
     d = xy - center
-    g1 = 1 + d @ A1 @ d + xy @ xy
-    g2 = 1 + d @ A2 @ d + xy @ xy
-    return (-b1 * (2 * A1 @ d + 2 * xy) / g1**2
-            - b2 * (2 * A2 @ d + 2 * xy) / g2**2)
+    q1 = 1 + d @ A1 @ d
+    q2 = 1 + d @ A2 @ d
+    return (-b1 * 2 * A1 @ d / q1**2
+            - b2 * 2 * A2 @ d / q2**2
+            - 2 * lam * xy)
 
 def hessian_f(xy):
     d = xy - center
-    H = np.zeros((2, 2))
+    H = -2 * lam * np.eye(2)
     for Ai, bi in [(A1, b1), (A2, b2)]:
-        g = 1 + d @ Ai @ d + xy @ xy
-        grad_g = 2 * Ai @ d + 2 * xy
-        H += (bi / g**2) * (2 / g * np.outer(grad_g, grad_g) - 2 * (Ai + np.eye(2)))
+        q = 1 + d @ Ai @ d
+        grad_q = 2 * Ai @ d
+        H += (bi / q**2) * (2 / q * np.outer(grad_q, grad_q) - 2 * Ai)
     return H
 
 def max_curvature(xy):
@@ -56,9 +58,9 @@ for i in range(len(grid)):
         F[i, j] = f(xy)
         curv[i, j] = max_curvature(xy)
 
-eta = 0.25
+eta = 0.08
 eos = 2 / eta
-nsteps = 600
+nsteps = 1500
 
 # 9 starting points — mostly along the broad ridge's axis so they
 # absorb into it naturally before sliding to the center

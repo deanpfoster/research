@@ -93,7 +93,8 @@ testable story.
 
 We consider the regression function $f \colon \mathbb{R}^d \to \mathbb{R}$ defined by
 \begin{equation}\label{eq:dgp}
-  f(x) \;=\; \sum_{i=1}^{k} \frac{b_i}{1 + (x - c_i)^\top A_i\,(x - c_i) \;+\; \|x\|^2},
+  f(x) \;=\; \sum_{i=1}^{k} \frac{b_i}{1 + (x - c_i)^\top A_i\,(x - c_i)}
+  \;-\; \lambda\,\|x\|^2,
 \end{equation}
 where for each bump $i = 1, \dots, k$:
 \begin{itemize}
@@ -101,15 +102,18 @@ where for each bump $i = 1, \dots, k$:
   \item $c_i \in \mathbb{R}^d$ is the center,
   \item $A_i \in \mathbb{R}^{d \times d}$ is a positive semi-definite shape matrix,
 \end{itemize}
-and $\|x\|^2 = x^\top x$ provides global decay away from the origin.
+and $\lambda > 0$ is a global regularization strength.  The
+$\lambda\|x\|^2$ term penalizes solutions far from the origin and
+ensures $f(x) \to -\infty$ as $\|x\| \to \infty$; its strength can be
+annealed during optimization.
 
 \subsection{Rank-1 bumps}
 
 When $A_i$ has rank one, the quadratic form $(x - c_i)^\top A_i\,(x - c_i)$
 varies along a single direction. Restricted to that direction the bump is a
-univariate rational function; in every orthogonal direction the only
-$x$-dependence comes from the $\|x\|^2$ term, which provides slow global
-decay. The bump is therefore effectively one-dimensional.
+univariate rational function; in every orthogonal direction the bump is
+constant, decaying only through the global $\lambda\|x\|^2$ regularizer.
+The bump is therefore effectively one-dimensional.
 
 \begin{figure}[ht]
   \centering
@@ -202,9 +206,9 @@ Even if an oracle provided the exact parameters ($b_i, c_i, A_i$) for all $k$ bu
 
 Consider the overparameterized regime where the ambient dimension $d$ is much larger than the number of features $k$ ($d \gg k$), and assume for simplicity that all bumps are rank-1 (ridges). The peak of the landscape occurs where these ridges intersect constructively to pool their heights.
 
-Because $d \gg k$, the intersection of any subset of these $k$ ridges forms an under-constrained linear system. Finding the point on this intersection closest to the origin (to minimize the global $\|x\|^2$ penalty in the denominator) is a simple linear algebra problem, solvable via the Moore-Penrose pseudo-inverse in polynomial time ($O(k^2 d)$).
+Because $d \gg k$, the intersection of any subset of these $k$ ridges forms an under-constrained linear system. Finding the point on this intersection closest to the origin (to minimize the $\lambda\|x\|^2$ regularizer) is a simple linear algebra problem, solvable via the Moore-Penrose pseudo-inverse in polynomial time ($O(k^2 d)$).
 
-However, the global optimum is not necessarily the intersection of \emph{all} $k$ ridges. The global $\|x\|^2$ regularizer creates a strict combinatorial trade-off: intersecting all $k$ ridges maximizes the numerator ($\sum b_i$), but if the ridges are awkwardly aligned, this exact intersection might lie extremely far from the origin, causing the denominator ($1 + \|x\|^2$) to blow up.
+However, the global optimum is not necessarily the intersection of \emph{all} $k$ ridges. The global $\lambda\|x\|^2$ regularizer creates a strict combinatorial trade-off: intersecting all $k$ ridges maximizes the sum of bump heights ($\sum b_i$), but if the ridges are awkwardly aligned, this exact intersection might lie extremely far from the origin, causing the regularization penalty to dominate.
 
 It is often optimal to ignore some bumps. Intersecting a smaller subset of $k' < k$ ridges reduces the collected height in the numerator, but the resulting intersection may be significantly closer to the origin, yielding a higher overall function value. Consequently, finding the global maximum requires evaluating the origin-distance trade-off for every possible subset of the $k$ bumps. For a realistic network learning $k=1000$ distinct features, this poses a $2^{1000}$ combinatorial search. Thus, the global optimization of this landscape is NP-Hard, driven by a feature-selection trade-off rather than the local geometry of the features themselves.
 
@@ -463,7 +467,7 @@ The \emph{Vincent function} $f(x) = -\tfrac{1}{n}\sum_i \sin(10\ln x_i)$
 basins, shares the ``bumpy surface'' character but is separable across
 coordinates and has no directional ridge structure.
 Our model generalizes Shekel in three ways: anisotropic and rank-deficient
-shape matrices $A_i$, a global $\|x\|^2$ decay, and a focus on SGD
+shape matrices $A_i$, a separate $\lambda\|x\|^2$ regularizer, and a focus on SGD
 dynamics rather than global optimization.
 
 \paragraph{Distributed SGD and landscape exploration.}

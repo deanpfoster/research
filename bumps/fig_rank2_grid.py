@@ -4,6 +4,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+lam = 0.1
+
 def make_bump(angle, center, height, eig1, eig2):
     R = np.array([[np.cos(angle), -np.sin(angle)],
                   [np.sin(angle),  np.cos(angle)]])
@@ -12,18 +14,18 @@ def make_bump(angle, center, height, eig1, eig2):
 
 def f(xy, A, c, b):
     d = xy - c
-    return b / (1 + d @ A @ d + xy @ xy)
+    return b / (1 + d @ A @ d) - lam * (xy @ xy)
 
 def grad_f(xy, A, c, b):
     d = xy - c
-    g = 1 + d @ A @ d + xy @ xy
-    return -b * (2 * A @ d + 2 * xy) / g**2
+    q = 1 + d @ A @ d
+    return -b * 2 * A @ d / q**2 - 2 * lam * xy
 
 def max_curvature(xy, A, c, b):
     d = xy - c
-    g = 1 + d @ A @ d + xy @ xy
-    grad_g = 2 * A @ d + 2 * xy
-    H = (b / g**2) * (2 / g * np.outer(grad_g, grad_g) - 2 * (A + np.eye(2)))
+    q = 1 + d @ A @ d
+    grad_q = 2 * A @ d
+    H = (b / q**2) * (2 / q * np.outer(grad_q, grad_q) - 2 * A) - 2 * lam * np.eye(2)
     return np.max(np.linalg.eigvalsh(-H))
 
 # 9 configurations: vary orientation, eccentricity, center
@@ -41,7 +43,7 @@ configs = [
 
 grid = np.linspace(-4, 4, 150)
 X, Y = np.meshgrid(grid, grid)
-eta = 0.8
+eta = 0.3
 
 fig, axes = plt.subplots(3, 3, figsize=(12, 11))
 

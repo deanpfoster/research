@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 # Same DGP as fig_two_rank1.py
 center = np.array([0.5, 0.0])
 b1, b2 = 5.0, 3.0
+lam = 0.1
 
 angle1, angle2 = np.pi / 4, -np.pi / 4
 v1 = np.array([np.cos(angle1), np.sin(angle1)])
@@ -20,9 +21,9 @@ A2 = a2 * np.outer(v2, v2)
 
 def f(xy):
     d = xy - center
-    g1 = 1 + d @ A1 @ d + xy @ xy
-    g2 = 1 + d @ A2 @ d + xy @ xy
-    return b1 / g1 + b2 / g2
+    q1 = 1 + d @ A1 @ d
+    q2 = 1 + d @ A2 @ d
+    return b1 / q1 + b2 / q2 - lam * (xy @ xy)
 
 # Sample sizes showing progressive resolution of the X
 sample_sizes = [50, 200, 1000, 5000]

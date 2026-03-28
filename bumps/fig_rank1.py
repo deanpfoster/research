@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 np.random.seed(17)
 
 b, c = 3.0, np.array([1.0, 0.0])
+lam = 0.1  # global regularizer
 # Rank-1 shape matrix: only varies along direction v = (cos30, sin30)
 v = np.array([np.cos(np.pi/6), np.sin(np.pi/6)])
 a = 6.0
@@ -14,20 +15,20 @@ A = a * np.outer(v, v)  # rank 1
 
 def f(xy):
     d = xy - c
-    g = 1 + d @ A @ d + xy @ xy
-    return b / g
+    q = 1 + d @ A @ d
+    return b / q - lam * (xy @ xy)
 
 def grad_f(xy):
     d = xy - c
-    g = 1 + d @ A @ d + xy @ xy
-    return -b * (2 * A @ d + 2 * xy) / g**2
+    q = 1 + d @ A @ d
+    return -b * 2 * A @ d / q**2 - 2 * lam * xy
 
 def hessian_f(xy):
-    """Hessian of f = b/g where g = 1 + (x-c)'A(x-c) + |x|^2."""
+    """Hessian of f = b/q - lam|x|^2 where q = 1 + (x-c)'A(x-c)."""
     d = xy - c
-    g = 1 + d @ A @ d + xy @ xy
-    grad_g = 2 * A @ d + 2 * xy
-    H = (b / g**2) * (2 / g * np.outer(grad_g, grad_g) - 2 * (A + np.eye(2)))
+    q = 1 + d @ A @ d
+    grad_q = 2 * A @ d
+    H = (b / q**2) * (2 / q * np.outer(grad_q, grad_q) - 2 * A) - 2 * lam * np.eye(2)
     return H
 
 def max_curvature(xy):
@@ -36,7 +37,7 @@ def max_curvature(xy):
     return np.max(np.linalg.eigvalsh(-H))
 
 # SGD gradient ascent with noise
-eta = 1.5
+eta = 0.5
 path = [np.array([-2.0, 2.0])]
 for _ in range(200):
     g = grad_f(path[-1]) + np.random.normal(0, 0.03, size=2)
@@ -49,8 +50,7 @@ X, Y = np.meshgrid(grid, grid)
 dx = X - c[0]
 dy = Y - c[1]
 quad = A[0,0]*dx**2 + (A[0,1]+A[1,0])*dx*dy + A[1,1]*dy**2
-norm2 = X**2 + Y**2
-F = b / (1 + quad + norm2)
+F = b / (1 + quad) - lam * (X**2 + Y**2)
 
 # Compute max curvature on the grid for the edge-of-stability contour
 curv = np.zeros_like(F)

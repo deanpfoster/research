@@ -4,7 +4,7 @@ Research paper exploring how SGD progressively discovers features of increasing 
 
 ## Data Generating Process
 
-f(x) = sum_i b_i / (1 + (x - c_i)' A_i (x - c_i) + ||x||^2)
+f(x) = sum_i b_i / (1 + (x - c_i)' A_i (x - c_i)) - lambda ||x||^2
 
 where the shape matrices A_i are rank-deficient, controlling the intrinsic dimensionality of each bump. Rank-1 bumps are ridges (easy to find), higher-rank bumps have smaller basins of attraction (harder to find), and SGD naturally discovers them in order of increasing rank --- progressive sharpening.
 
