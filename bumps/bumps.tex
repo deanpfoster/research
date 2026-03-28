@@ -298,6 +298,16 @@ Once the optimizer finds the slope of a bump, Adam's efficiency is dictated by t
 
 How many such bumps can Adam handle simultaneously? If we have a superposition of $k$ bumps, each aligned to \emph{distinct} coordinate axes, Adam can optimize all of them simultaneously without penalty. Because the updates are computed coordinate-wise, the presence of a sharp bump on axis $x_1$ does not suppress the learning rate for a broad bump on axis $x_2$. However, if multiple bumps overlap within the same coordinate subspace, interference occurs. The running variance $v_t$ for those shared coordinates will be dominated by the gradients of the sharpest feature, potentially hindering the discovery or resolution of overlapping broader structures.
 
+\subsection{Effective Step Size and Noise Annealing}
+
+While modern training regimes often avoid explicit learning rate decay schedules when using adaptive methods, Adam possesses an intrinsic auto-annealing mechanism that replicates the thermodynamics of progressive sharpening.
+
+The update rule for Adam is proportional to the Signal-to-Noise Ratio (SNR) of the gradients: $\Delta \theta \approx \eta \cdot \frac{\mathbb{E}[g]}{\sqrt{\mathbb{E}[g^2]}}$. Early in training, or when traversing the slope of a broad bump, the gradient is consistent across mini-batches (high SNR). The denominator scales with the numerator, resulting in a large effective step size near $\pm \eta$. As discussed in the Freidlin-Wentzell analysis, this large step size combined with high curvature acts as a high effective temperature $D$, violently ejecting Adam from sharp, high-rank bumps.
+
+However, as Adam settles into the broad bumps, the mean gradient (the signal) approaches zero, but the mini-batch variance (the noise) remains. The SNR drops precipitously. Because the denominator $\sqrt{v_t}$ is dominated by this variance, the \emph{effective} step size $\Delta \theta$ automatically shrinks, even though the global learning rate $\eta$ remains fixed. 
+
+This noise-induced annealing is functionally equivalent to decaying the learning rate in SGD. It cools the effective temperature $D$ of the system. Once the broad bumps are fit and the effective step size has decayed sufficiently, Adam can finally enter and stably remain inside the narrower basins of the sharp bumps. Thus, Adam still exhibits progressive sharpening, but the ``decay'' that allows it to resolve sharp features is driven autonomously by the local geometry and noise profile rather than a global schedule.
+
 \appendix
 
 \section{Empirical SGD Phenomena and the Bump Model}
