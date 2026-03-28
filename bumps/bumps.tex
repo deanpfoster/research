@@ -41,8 +41,12 @@ component has a center, a height, and a positive semidefinite shape
 matrix whose rank is the intrinsic dimension of the feature. Rank-1
 bumps behave like ridges, rank-2 bumps like elliptical basins, and
 superpositions produce intersections where the effective curvature jumps.
-This gives a controlled setting in which feature complexity, sharpness,
-and discoverability are all explicit and tunable.
+The global regularizer now sits outside the bump sum, so the local
+geometry of each feature is separated cleanly from the global envelope:
+$A_i$ controls intrinsic structure, while $\lambda$ alone controls how
+far the optimizer is rewarded for traveling. This gives a controlled
+setting in which feature complexity, sharpness, discoverability, and
+global confinement are all explicit and tunable.
 
 The resulting story is simple. In high dimension, a rank-$r$ feature is
 hard to find because the informative region occupies only a tiny volume,
@@ -222,7 +226,10 @@ intersection if one is reachable at all. Progressive sharpening is
 therefore naturally paired with \emph{progressive subset selection}: the
 learner is not only resolving sharper structure over time, but also
 implicitly choosing which discovered features deserve further
-coordination.
+coordination. With the regularizer separated from the bump sum, this
+trade-off is especially transparent: the bumps determine what structure
+exists locally, while $\lambda$ determines how expensive it is to travel
+far enough to combine that structure globally.
 
 \section{Finding Bumps in High Dimensions}
 
