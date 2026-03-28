@@ -9,6 +9,71 @@
 \begin{document}
 \maketitle
 
+\section{Introduction}
+
+Modern neural network training exhibits a striking combination of
+regularities. SGD often learns simple structure before complex
+structure, whether ``simple'' is defined spectrally, algebraically, or
+by feature usefulness
+\cite{shah2020simplicity,kalimeris2019sgd,rahaman2019spectral}. At the
+same time, the top Hessian eigenvalue typically grows during training
+until it reaches the edge-of-stability threshold $2/\eta$, after which
+training continues in an oscillatory but stable regime
+\cite{cohen2021gradient,arora2022understanding,damian2023selfstabilization}.
+The usual explanations for these phenomena focus on the optimizer. In
+this paper we ask a different question: how much of this behavior can be
+explained by the \emph{geometry of the target function itself}?
+
+Our proposal is that progressive sharpening is a natural consequence of
+\emph{progressive discovery}. If the target is a superposition of
+features with different intrinsic ranks and different curvatures, then a
+fixed-step optimizer should detect the broad, low-rank components first
+and only later resolve the narrow, high-rank ones. The optimizer then
+appears to move from flat structure to sharp structure, not because it
+has an abstract preference for sharpness, but because the accessible
+signal changes over time. In this view, the growth of
+$\lambda_{\max}(\nabla^2 L)$ during training is the observable trace of a
+search process that is uncovering progressively harder features.
+
+To make this idea analyzable, we introduce a family of rational ``bump''
+functions on $\mathbb{R}^d$ built from low-rank quadratic forms. Each
+component has a center, a height, and a positive semidefinite shape
+matrix whose rank is the intrinsic dimension of the feature. Rank-1
+bumps behave like ridges, rank-2 bumps like elliptical basins, and
+superpositions produce intersections where the effective curvature jumps.
+This gives a controlled setting in which feature complexity, sharpness,
+and discoverability are all explicit and tunable.
+
+The resulting story is simple. In high dimension, a rank-$r$ feature is
+hard to find because the informative region occupies only a tiny volume,
+and generic moment methods scale like $d^r$. Low-rank structure is
+therefore computationally accessible long before higher-rank structure.
+Once SGD reaches a bump, however, the same geometry determines whether a
+fixed learning rate can stably resolve it: broad directions are easy to
+follow, while sharp directions push the trajectory to the
+edge-of-stability boundary. Progressive sharpening is thus not an extra
+phenomenon layered on top of feature learning; it is what feature
+learning looks like when the unresolved structure becomes successively
+sharper.
+
+This perspective also clarifies why optimizer choice matters. For plain
+SGD, the relevant notion of difficulty is geometric and global: can the
+trajectory find the bump at all, and once found can it resolve the local
+curvature without becoming unstable? For Adam, an additional issue
+appears: whether the feature geometry is aligned with the optimizer's
+coordinate-wise preconditioner. The bump family lets us separate these
+effects cleanly.
+
+The rest of the paper develops this picture concretely. We define the
+data-generating process and visualize its low-rank components, then
+analyze the computational barrier to locating higher-rank bumps in high
+dimension. We next connect the model to progressive sharpening,
+edge-of-stability behavior, and the contrasting behavior of adaptive
+optimizers. The goal is not to claim that neural network loss landscapes
+\emph{are} bump functions, but to give a minimal geometric model in
+which several widely observed training phenomena arise from a single,
+testable story.
+
 \section{Data Generating Process}
 
 We consider the regression function $f \colon \mathbb{R}^d \to \mathbb{R}$ defined by
