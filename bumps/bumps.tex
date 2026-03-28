@@ -178,15 +178,33 @@ it, so the optimizer oscillates within the edge-of-stability boundary.
   \label{fig:tworank1}
 \end{figure}
 
+Figure~\ref{fig:tworank1data} shows what a learner actually observes:
+noisy point evaluations $y_i = f(x_i) + \varepsilon_i$ sampled uniformly
+in $[-3,3]^2$. At $N = 50$ the ridge structure is invisible; by $N = 200$
+a single arm begins to emerge; and by $N = 1000$ both arms of the X are
+resolved. This mirrors the progressive sharpening story: as the effective
+sample density increases, the learner gains access to features of
+successively higher intrinsic rank.
+
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=\textwidth]{fig_two_rank1_data.pdf}
+  \caption{Data-distributed view of the two rank-1 X-shaped bumps.
+    Points are sampled uniformly and colored by $y = f(x) + \varepsilon$.
+    The X-shaped ridge structure progressively emerges as sample size
+    increases, paralleling the progressive sharpening phenomenon.}
+  \label{fig:tworank1data}
+\end{figure}
+
 \subsection{Intractability of the Global Optimum}
 
-Even if an oracle provided the exact parameters ($b_i, c_i, A_i$) for all $k$ bumps, finding the global maximum of $f(x)$ remains fundamentally intractable. 
+Even if an oracle provided the exact parameters ($b_i, c_i, A_i$) for all $k$ bumps, finding the global maximum of $f(x)$ remains fundamentally intractable.
 
 Consider the overparameterized regime where the ambient dimension $d$ is much larger than the number of features $k$ ($d \gg k$), and assume for simplicity that all bumps are rank-1 (ridges). The peak of the landscape occurs where these ridges intersect constructively to pool their heights.
 
 Because $d \gg k$, the intersection of any subset of these $k$ ridges forms an under-constrained linear system. Finding the point on this intersection closest to the origin (to minimize the global $\|x\|^2$ penalty in the denominator) is a simple linear algebra problem, solvable via the Moore-Penrose pseudo-inverse in polynomial time ($O(k^2 d)$).
 
-However, the global optimum is not necessarily the intersection of \emph{all} $k$ ridges. The global $\|x\|^2$ regularizer creates a strict combinatorial trade-off: intersecting all $k$ ridges maximizes the numerator ($\sum b_i$), but if the ridges are awkwardly aligned, this exact intersection might lie extremely far from the origin, causing the denominator ($1 + \|x\|^2$) to blow up. 
+However, the global optimum is not necessarily the intersection of \emph{all} $k$ ridges. The global $\|x\|^2$ regularizer creates a strict combinatorial trade-off: intersecting all $k$ ridges maximizes the numerator ($\sum b_i$), but if the ridges are awkwardly aligned, this exact intersection might lie extremely far from the origin, causing the denominator ($1 + \|x\|^2$) to blow up.
 
 It is often optimal to ignore some bumps. Intersecting a smaller subset of $k' < k$ ridges reduces the collected height in the numerator, but the resulting intersection may be significantly closer to the origin, yielding a higher overall function value. Consequently, finding the global maximum requires evaluating the origin-distance trade-off for every possible subset of the $k$ bumps. For a realistic network learning $k=1000$ distinct features, this poses a $2^{1000}$ combinatorial search. Thus, the global optimization of this landscape is NP-Hard, driven by a feature-selection trade-off rather than the local geometry of the features themselves.
 
@@ -266,6 +284,89 @@ intractable. Consequently, the optimization process \emph{must} rely on either
 strong structural priors within the architecture (which restrict the effective
 search space) or iterative, progressive strategies that isolate one low-rank
 component at a time.
+
+\section{Parallel Agents and the Geometry of Discovery}
+\label{sec:parallel}
+
+A natural question: if one SGD agent progressively discovers bumps from
+low-rank to high-rank, do $k$ independent agents discover $k$ times as
+many bumps?  In general, no.  The agents redundantly discover the same
+easy bumps before any of them finds a hard one.
+
+\paragraph{Basin sizes and codimension.}
+The basin of attraction for a rank-$r$ bump in $\mathbb{R}^d$ has
+measure that scales as $(\epsilon/R)^{d-r}$, where $\epsilon$ is the
+characteristic width of the ridge and $R$ is the radius of the
+initialization region.  When several bumps coexist with different ranks,
+their basins differ by \emph{exponential} factors.  A rank-1 bump in
+$\mathbb{R}^{10}$ has basin measure $\sim (\epsilon/R)^9$; a rank-3
+bump in the same space has basin measure $\sim (\epsilon/R)^7$.  The
+ratio is $(\epsilon/R)^{-2}$, which for typical $\epsilon/R \ll 1$
+means the rank-1 bump dominates overwhelmingly.
+
+Consequently, $k$ independent agents initialized uniformly at random
+will almost all land in the basin of the lowest-rank (broadest) bump.
+The expected number of \emph{distinct} bumps discovered scales
+sublinearly in $k$: for $n$ bumps with basin probabilities $p_1 \gg
+p_2 \gg \cdots \gg p_n$, the expected number of distinct discoveries
+after $k$ trials is
+\begin{equation}
+  \mathbb{E}[\text{distinct}] = n - \sum_{i=1}^{n} (1 - p_i)^k
+  \approx 1 + \sum_{i=2}^{n} k p_i \quad \text{for } k p_i \ll 1.
+  \label{eq:coupon}
+\end{equation}
+This is far from $k$ when the $p_i$ are highly unequal---precisely the
+regime where bumps have a hierarchy of ranks.
+
+\paragraph{When does parallelism help?}
+The $k$-agent strategy approaches linear scaling when all basins have
+comparable measure, i.e., when $p_i \approx 1/n$ for all $i$.  In our
+model this happens when:
+\begin{enumerate}
+  \item \textbf{All bumps have similar codimension} ($d - r_i \approx
+    \text{const}$).  If every bump is rank-$r$ in $\mathbb{R}^d$, no
+    bump has a geometrically privileged basin, and random starts sample
+    them roughly uniformly.
+  \item \textbf{The ambient dimension $d$ is large relative to the rank
+    differences.}  At $d = 3$ with bumps of rank 1, 2, and 3, the basin
+    measures scale as $(\epsilon/R)^2$, $(\epsilon/R)^1$, and
+    $(\epsilon/R)^0 = O(1)$---a modest hierarchy.  At $d = 100$, a
+    rank-1 and rank-3 bump have basins scaling as $(\epsilon/R)^{99}$
+    vs.\ $(\epsilon/R)^{97}$---a ratio of only $(\epsilon/R)^{-2}$,
+    which is small in relative terms when exponents are already extreme.
+    In high $d$, \emph{all} bumps are hard, luck dominates for
+    everything, and $k$ agents give roughly $k\times$ coverage.
+  \item \textbf{Heights $b_i$ compensate for basin size.}  A high-rank
+    bump with a large amplitude $b_i$ has a steeper gradient at its
+    boundary, extending its effective basin of attraction beyond the
+    geometric ridge width.  When amplitudes are tuned to equalize
+    effective basin sizes, parallelism pays off.
+\end{enumerate}
+
+\paragraph{Connection to EASGD and GRAWA.}
+This analysis explains why naive parallel SGD (and EASGD
+\cite{zhang2015easgd}) suffers from redundant discovery: pulling all
+workers toward a uniform average compounds the bias toward the dominant
+basin.  GRAWA \cite{dimlioglu2024grawa} partially corrects this by
+downweighting workers on steep slopes (high gradient norm), effectively
+implementing a soft repulsion from already-discovered sharp features.
+In the language of our model, GRAWA's gradient-norm weighting gives
+higher weight to workers that have settled into a bump (low gradient)
+versus those still sliding down toward one (high gradient), encouraging
+diversity across basins rather than concentration in the easiest one.
+
+\paragraph{The $d = 3$ regime.}
+At $d = 3$ with a mixture of rank-1, 2, and 3 bumps, the basin
+hierarchy is mild: codimensions 2, 1, and 0 respectively.  The rank-3
+(full-rank) bump has a basin of measure $O(1)$---easy to find by random
+search---while the rank-1 bump has codimension 2, making it moderately
+hard.  This inverts the usual ordering: the ``sharpest'' bump (full
+rank, highest curvature) has the largest basin.  Multiple agents in this
+regime \emph{do} benefit from parallelism, because discovery is
+dominated by the luck of landing near a narrow ridge rather than by a
+deterministic hierarchy.  This is precisely the regime where random
+search outperforms gradient-based progressive discovery, and where the
+distributed optimization literature's tools become most relevant.
 
 \section{Sharpness and SGD}
 
@@ -357,9 +458,25 @@ optimizers \cite{jamil2013literature,naser2025review}. The Shekel
 function is isotropic ($A_i = I$), has no global decay term, and has
 only been used to benchmark evolutionary and swarm algorithms, never as
 a data-generating process for studying gradient-based learning dynamics.
-Our model generalizes it in three ways: anisotropic and rank-deficient
+The \emph{Vincent function} $f(x) = -\tfrac{1}{n}\sum_i \sin(10\ln x_i)$
+\cite{li2013cec}, another multimodal benchmark with many equal-depth
+basins, shares the ``bumpy surface'' character but is separable across
+coordinates and has no directional ridge structure.
+Our model generalizes Shekel in three ways: anisotropic and rank-deficient
 shape matrices $A_i$, a global $\|x\|^2$ decay, and a focus on SGD
 dynamics rather than global optimization.
+
+\paragraph{Distributed SGD and landscape exploration.}
+Elastic Averaging SGD (EASGD) \cite{zhang2015easgd} maintains multiple
+workers exploring a loss surface in parallel, pulled toward a shared center
+variable. GRAWA \cite{dimlioglu2024grawa} improves on EASGD by weighting
+the center toward workers in flatter regions (lower gradient norm),
+explicitly connecting distributed optimization to sharpness-aware learning.
+Their visualizations of worker trajectories on the Vincent function---where
+multiple agents discover distinct basins before converging---are analogous
+to our data-distributed view (Figure~\ref{fig:tworank1data}), with the
+key difference that our bumps have directional rank structure rather than
+isotropic basins.
 
 \paragraph{Radial basis functions.}
 The inverse quadratic kernel $\phi(r) = 1/(1 + \varepsilon^2 r^2)$ is a

@@ -11,3 +11,8 @@
 - Author requested survey of empirical SGD phenomena and assessment of bump-model analogs
 - Author requested related work section with old/new citation pairs (reward originals, prove currency)
 - Gemini contributing in parallel: intro, high-dim computational barrier, Adam section, Freidlin-Wentzell thermodynamics, annotated bibliography
+- Created data-distributed figure (fig_two_rank1_data.py): scatter plots at N=50,200,1000,5000 showing X-shaped ridge emerging from noisy samples
+- Added new section "Parallel Agents and the Geometry of Discovery" — analyzes when k agents help (sublinear scaling due to basin hierarchy, linear scaling when codimensions are equal or d is large)
+- Added EASGD (Zhang/Choromanska/LeCun 2015), GRAWA (Dimlioglu/Choromanska 2024), Vincent function (Li et al. CEC2013) to bib and related work
+- Connected distributed SGD literature to bump model: GRAWA's gradient-norm weighting as soft repulsion from already-discovered basins
+- d=3 regime identified as where parallelism genuinely helps (mild hierarchy, luck dominates)
