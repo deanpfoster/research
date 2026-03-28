@@ -4,3 +4,4 @@
 - Merged the bumps paper introduction to master.
 - Author asked me to freshen from master and see whether newer discoveries should be reflected in the introduction.
 - Merged the revised bumps introduction to master after incorporating the newer mechanism-level discoveries.
+- Author asked me to start a new paper in the bumps directory about a distributed learning system suggested by the bump model, where multiple SGD workers explore different regions while drifting toward the grand average.

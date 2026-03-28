@@ -1,0 +1,219 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+
+\title{Distributed Bump Hunting with Consensus-Coupled SGD}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+
+The bump model suggests a distributed learning scheme that is close to
+data-parallel SGD in implementation but very different in purpose.
+Ordinary data parallelism tries to make many workers behave like a
+single large worker: they process different batches, but they are
+continually synchronized so that all replicas remain in essentially the
+same part of parameter space. That is desirable when the goal is to
+accelerate optimization of one trajectory.
+
+Here we want something else. In a multi-bump landscape, different
+regions of parameter space reveal different local structure. If every
+worker is forced to stay near the same point, the system loses its main
+distributed advantage: parallel discovery. We instead want many SGD
+processes that remain genuinely separated in parameter space, so that
+different workers can discover different bumps, ridges, or basins. At
+the same time, we do not want those discoveries to remain private. Once
+one worker finds a useful structure, the rest of the system should feel
+that discovery and drift toward it.
+
+This suggests a simple modification of data-parallel SGD: keep many
+workers with their own parameters, let each worker take its usual local
+stochastic gradient step, and then add a weak consensus step toward the
+grand average of all workers. The average acts as a shared memory. A
+worker that finds a new bump pulls the average toward that region; the
+average then exerts a small force on the other workers, making the
+discovery contagious without forcing immediate collapse to a single
+point. The system is therefore neither independent multi-start SGD nor
+standard synchronized SGD. It is a distributed search process with soft
+communication through the ensemble mean.
+
+The central claim of this paper is that such a system should inherit the
+feature-discovery order of the bump model while exploring more
+effectively than a single trajectory. Broad, low-rank bumps should be
+found first by at least some workers. Once found, they bias the grand
+average, which increases the probability that other workers also move
+toward that region. Later, as workers accumulate around already-found
+structure, the same mechanism should help the ensemble flow from broad
+bumps toward sharper or intersecting bumps that would be difficult for a
+single run to locate reliably.
+
+\section{Consensus-Coupled SGD}
+
+Suppose we have $m$ workers with parameters
+$\theta_1, \dots, \theta_m \in \mathbb{R}^d$. Worker $i$ sees its own
+mini-batch and computes a stochastic gradient $g_i(\theta_i)$ of a
+common loss $L$. Let
+\[
+\bar{\theta} = \frac{1}{m} \sum_{j=1}^m \theta_j
+\]
+denote the grand average. The proposed update is
+\begin{equation}\label{eq:update}
+\theta_i^{t+1}
+= \theta_i^t - \eta\, g_i(\theta_i^t)
+- \gamma\,(\theta_i^t - \bar{\theta}^t),
+\end{equation}
+where $\eta > 0$ is the local learning rate and $\gamma > 0$ is a
+consensus strength.
+
+The first term is ordinary SGD. The second is the new ingredient: each
+worker takes a small step toward the current center of mass of the
+ensemble. If $\gamma$ is too large, the method degenerates into ordinary
+data-parallel training because all workers collapse rapidly onto a
+single path. If $\gamma$ is too small, the workers become nearly
+independent and discoveries do not propagate. The interesting regime is
+the intermediate one in which workers remain spatially separated for a
+long time but still exchange information through the moving average.
+
+Equation~\eqref{eq:update} can also be written as gradient descent on
+the penalized objective
+\[
+\sum_{i=1}^m L_i(\theta_i)
++ \frac{\gamma}{2\eta} \sum_{i=1}^m \|\theta_i - \bar{\theta}\|^2,
+\]
+up to stochasticity and the dependence of $\bar{\theta}$ on all
+particles. This makes the method look like a weakly coupled particle
+system: local loss gradients pull each worker into nearby features,
+while the quadratic coupling transmits discoveries across the ensemble.
+
+\section{Why This Differs from Ordinary Data Parallelism}
+
+Standard data-parallel SGD uses multiple workers to reduce gradient
+variance and increase throughput, but it does not try to maintain
+diversity. The workers are replicas. In effect, the system assumes that
+all useful information can be aggregated at the gradient level around a
+single current iterate.
+
+The bump model suggests that this assumption is wrong when the loss
+contains multiple separated structures. Far from a bump, the local
+gradient may carry almost no information about that bump. A worker near
+one bump and a worker near a different bump are not simply noisy
+versions of the same state; they have access to different local
+geometry. Forcing them to agree too quickly destroys that geometric
+coverage.
+
+Our proposal therefore treats spatial separation as a feature, not a
+bug. The ensemble should occupy multiple regions at once. Discovery is
+distributed, but sharing is centralized through $\bar{\theta}$. The
+grand average is not meant to be the one true model at every moment. It
+is a communication channel that accumulates weak evidence from all
+workers.
+
+\section{Qualitative Dynamics in a Bump Landscape}
+
+The bump model gives a concrete picture for how the system should work.
+
+\subsection*{Phase 1: independent exploration}
+
+At initialization, the workers are scattered. Because the consensus term
+is weak, each worker behaves roughly like an independent SGD trajectory
+and can fall into a different broad basin. This is the phase where the
+system gains coverage of parameter space.
+
+\subsection*{Phase 2: discovery enters the average}
+
+Suppose one worker encounters a broad low-rank bump first. That worker's
+parameters begin to move coherently toward the bump center. As a result,
+the grand average shifts slightly in the same direction. Every other
+worker then feels a small drift toward the discovered structure, even if
+its own local mini-batches have not yet revealed the bump clearly.
+
+\subsection*{Phase 3: recruitment without immediate collapse}
+
+If the coupling is weak enough, the other workers are not forced to jump
+directly onto the first worker's path. Instead, they keep their own
+local identities while being biased toward the promising region. Some
+will join the same bump; others will continue to explore elsewhere.
+This is the crucial regime in which discoveries spread through the
+ensemble without destroying diversity.
+
+\subsection*{Phase 4: flow toward intersections and sharper structure}
+
+Once several workers are influenced by the same broad bump, their common
+drift can carry parts of the ensemble toward intersections with other
+bumps or toward sharper substructure inside the basin. In the language
+of the original bump paper, the ensemble first finds broad low-rank
+features and then collectively flows toward sharper or higher-rank
+features. One worker may discover a side ridge, another may locate an
+intersection, and the average can relay both discoveries back to the
+rest of the system.
+
+\section{Design Principles}
+
+The bump picture suggests several operational principles.
+
+\paragraph{Weak early coupling.}
+The consensus strength $\gamma$ should initially be small relative to
+the local SGD dynamics. Otherwise the workers collapse before they have
+explored distinct regions.
+
+\paragraph{Broad initialization.}
+The initial ensemble should cover many parts of space. If all workers
+start nearly identical, the method reduces to ordinary data-parallel
+SGD.
+
+\paragraph{Late consolidation.}
+After discovery, one may increase $\gamma$ or average more aggressively
+so that the ensemble consolidates around the best found structures. The
+early phase is for coverage; the later phase is for exploitation.
+
+\paragraph{Persistent diversity.}
+It may be useful to reserve some workers for continued exploration even
+after the rest begin to consolidate. Otherwise the system risks
+prematurely collapsing onto the first decent bump it finds.
+
+\section{Predictions}
+
+This view makes several qualitative predictions.
+
+\begin{itemize}
+\item On landscapes with multiple separated broad bumps, the method
+  should discover useful basins faster than a single SGD trajectory.
+\item Compared with standard synchronized data parallelism, the worker
+  ensemble should exhibit larger pairwise distances early in training
+  and better bump coverage.
+\item The grand average should move before most workers individually
+  reach a newly discovered bump, because it aggregates partial discovery
+  from the first successful workers.
+\item If $\gamma$ is increased too much, the system should lose its
+  advantage and revert to single-trajectory behavior.
+\item If $\gamma$ is too small, workers should remain diverse but fail
+  to benefit from one another's discoveries.
+\end{itemize}
+
+\section{Open Questions}
+
+Several questions matter if this is to become a practical learning
+system.
+
+\begin{itemize}
+\item What schedules for $\gamma$ best balance exploration and
+  consolidation?
+\item Should communication use the full mean $\bar{\theta}$, a robust
+  average, or only a low-rank summary of the discovered directions?
+\item Can one measure worker diversity and use it as a control signal
+  for adaptive coupling?
+\item In realistic neural networks, which features correspond to the
+  bumps that should be discovered in parallel, and at what layer or
+  subspace should consensus operate?
+\end{itemize}
+
+The bump model does not answer these questions completely, but it gives
+a sharp conceptual proposal: distributed learning should not merely
+average many noisy copies of the same trajectory. It should maintain a
+population of genuinely separated learners whose discoveries are shared
+through a soft consensus field. That is the system suggested by the bump
+landscape.
+
+\end{document}
