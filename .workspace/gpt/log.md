@@ -15,3 +15,4 @@
 - Author asked me to add further literature connections to the distributed bumps paper, and to separate primary discussions from secondary annotated connections.
 - Merged the expanded literature-connections section for the distributed bumps paper to master.
 - Author asked me to revisit the first bump paper and add anything that should now be said there in light of the later understanding of the problem.
+- Merged the first-paper reframing around combinatorial global intractability and progressive discoverability to master.
