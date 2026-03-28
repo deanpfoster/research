@@ -65,7 +65,7 @@ for idx, (angle, center, height, eig1, eig2) in enumerate(configs):
     start = np.array([-2.5, 2.5]) if idx % 2 == 0 else np.array([2.5, -2.0])
     path = [start.copy()]
     for _ in range(200):
-        g = grad_f(path[-1], A, c, b) + np.random.normal(0, 0.03, size=2)
+        g = grad_f(path[-1], A, c, b) + np.random.normal(0, 0.3, size=2)
         path.append(path[-1] + eta * g)
     path = np.array(path)
 

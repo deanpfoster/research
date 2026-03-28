@@ -58,9 +58,9 @@ for i in range(len(grid)):
         F[i, j] = f(xy)
         curv[i, j] = max_curvature(xy)
 
-eta = 0.08
+eta = 0.15
 eos = 2 / eta
-nsteps = 1500
+nsteps = 800
 
 # 9 starting points — mostly along the broad ridge's axis so they
 # absorb into it naturally before sliding to the center
@@ -85,7 +85,7 @@ for idx, start in enumerate(starts):
     np.random.seed(200 + idx)
     path = [start.copy()]
     for _ in range(nsteps):
-        g = grad_f(path[-1]) + np.random.normal(0, 0.015, size=2)
+        g = grad_f(path[-1]) + np.random.normal(0, 0.3, size=2)
         path.append(path[-1] + eta * g)
     path = np.array(path)
 

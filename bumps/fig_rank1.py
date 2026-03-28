@@ -40,7 +40,7 @@ def max_curvature(xy):
 eta = 0.5
 path = [np.array([-2.0, 2.0])]
 for _ in range(200):
-    g = grad_f(path[-1]) + np.random.normal(0, 0.03, size=2)
+    g = grad_f(path[-1]) + np.random.normal(0, 0.3, size=2)
     path.append(path[-1] + eta * g)
 path = np.array(path)
 
