@@ -479,38 +479,34 @@ comparison.
 
 Because the bump data-generating process has a closed-form geometric definition, we can analytically estimate this spectral gap $1-\lambda_2$ and derive a concrete tuning rule for the coupling strength $\gamma$.
 
-When a worker has successfully anchored onto the ridge of a bump with height $b$ and center $c=0$ (without loss of generality), it has found the optimal coordinate for the signal directions. We are interested in the dynamics of the orthogonal, irrelevant directions $\theta_{\perp}$. By definition, in these irrelevant directions, the shape matrix $A_i$ has zero eigenvalues. Therefore, the local loss function $f$ simplifies to the global decay term:
+When a worker has successfully anchored onto the ridge of a bump with height $b$ and center $c=0$ (without loss of generality), it has found the optimal coordinate for the signal directions. We are interested in the dynamics of the orthogonal, irrelevant directions $\theta_{\perp}$. By definition, in these irrelevant directions, the shape matrix $A_i$ has zero eigenvalues. Therefore, the bump term contributes a constant height $b$, and the local loss function $f$ simplifies to the global regularizer term:
 \[
-f(\theta_{\perp}) \approx \frac{b}{1 + \|\theta_{\perp}\|^2}
+f(\theta_{\perp}) \approx b - \lambda \|\theta_{\perp}\|^2
 \]
-Since SGD is performing gradient \emph{ascent} to find the peak of this bump, the gradient in the irrelevant subspace is:
+Since SGD is performing gradient \emph{ascent} to find the peak of this landscape, the gradient in the irrelevant subspace is exactly linear:
 \[
-\nabla_{\perp} f(\theta_{\perp}) = - \frac{2b \, \theta_{\perp}}{(1 + \|\theta_{\perp}\|^2)^2}
+\nabla_{\perp} f(\theta_{\perp}) = -2\lambda \, \theta_{\perp}
 \]
-Near the ridge ($\|\theta_{\perp}\| \approx 0$), we can linearize this gradient:
+The SGD update step in these irrelevant directions is therefore a perfect, linear discrete-time Ornstein-Uhlenbeck (AR(1)) process:
 \[
-\nabla_{\perp} f(\theta_{\perp}) \approx -2b \, \theta_{\perp}
-\]
-The SGD update step in these irrelevant directions is therefore a discrete-time Ornstein-Uhlenbeck (AR(1)) process:
-\[
-\theta_{\perp}^{t+1} \approx \theta_{\perp}^t + \eta \nabla_{\perp} f(\theta_{\perp}^t) + \xi_t
+\theta_{\perp}^{t+1} = \theta_{\perp}^t + \eta \nabla_{\perp} f(\theta_{\perp}^t) + \xi_t
 \]
 \[
-\theta_{\perp}^{t+1} \approx (1 - 2\eta b) \theta_{\perp}^t + \xi_t
+\theta_{\perp}^{t+1} = (1 - 2\eta \lambda) \theta_{\perp}^t + \xi_t
 \]
-where $\xi_t$ is the mini-batch gradient noise. For an AR(1) process with decay coefficient $\rho = 1 - 2\eta b$, the eigenvalues of the transition operator $P_{\perp}$ are simply $\lambda_k = \rho^k$. Therefore, the second eigenvalue, which governs the slowest mode of decorrelation, is:
+where $\xi_t$ is the mini-batch gradient noise. For an AR(1) process with decay coefficient $\rho = 1 - 2\eta \lambda$, the eigenvalues of the transition operator $P_{\perp}$ are simply $\lambda_k = \rho^k$. Therefore, the second eigenvalue, which governs the slowest mode of decorrelation, is:
 \[
-\lambda_2 = 1 - 2\eta b
+\lambda_2 = 1 - 2\eta \lambda
 \]
-The spectral gap is precisely $1-\lambda_2 = 2\eta b$. This gives us an exact, closed-form estimate for the independent-draw time:
+The spectral gap is precisely $1-\lambda_2 = 2\eta \lambda$. This gives us an exact, closed-form estimate for the independent-draw time:
 \[
-\tau_{\mathrm{ind}} \approx \frac{1}{1-\lambda_2} = \frac{1}{2\eta b}
+\tau_{\mathrm{ind}} \approx \frac{1}{1-\lambda_2} = \frac{1}{2\eta \lambda}
 \]
 Plugging this spectral gap back into our design rule from the previous section ($\gamma \approx (\log 2)(1-\lambda_2)$), we obtain the optimal consensus coupling strength for the bump landscape:
 \[
-\gamma \approx (2 \log 2) \, \eta b \approx 1.38 \, \eta b
+\gamma \approx (2 \log 2) \, \eta \lambda \approx 1.38 \, \eta \lambda
 \]
-This is a highly practical result. It demonstrates that the optimal consensus coupling $\gamma$ should be strictly proportional to the local learning rate $\eta$ and the height of the bump $b$. Importantly, because we are analyzing the orthogonal directions, the condition number or sharpest eigenvalues of the shape matrix $A_i$ do not enter this equation. The required coupling strength is dictated entirely by the global geometric ``gravity'' ($\|x\|^2$) holding the worker to the ridge, independent of how sharp the ridge itself is.
+This is a beautiful and highly practical result. It demonstrates that the optimal consensus coupling $\gamma$ should be strictly proportional to the local learning rate $\eta$ and the global regularization constant $\lambda$. Importantly, because we are analyzing the orthogonal directions, neither the condition number of the shape matrix $A_i$ nor the height of the bump $b$ enter this equation. The required coupling strength is dictated entirely by the global geometric ``gravity'' ($\lambda \|x\|^2$) holding the worker to the center of the space, completely decoupling the consensus tuning from the local features of the specific bump.
 
 \section{Cool-down Dynamics: Coalescence vs.\ Ensembling}
 
@@ -528,7 +524,7 @@ This equilibrium equation reveals a fundamental choice in how the algorithm is t
 
 \textbf{Scenario A: Forced Coalescence (The Averaging Trap).} If one decays the learning rate ($\eta \to 0$) but holds the consensus coupling constant ($\gamma > 0$), the ratio $\frac{\eta}{\gamma} \to 0$. The equilibrium equation dictates that $\theta_i - \bar{\theta} \to 0$. The system forces all workers to perfectly coalesce into a single point. If the workers are situated in distinct, parallel bumps, this forced collapse will violently yank them out of their respective basins and deposit them in the empty, high-loss plateau at the true mathematical average. The system falls into the Averaging Trap precisely at the end of training.
 
-\textbf{Scenario B: Persistent Diversity (Proportional Annealing).} However, our analytic derivation in the previous section established that the optimal tuning rule is $\gamma \propto \eta b$. If we follow this geometric principle, then as we decay the learning rate $\eta \to 0$, we must \emph{simultaneously and proportionally} decay the consensus coupling $\gamma \to 0$. 
+\textbf{Scenario B: Persistent Diversity (Proportional Annealing).} However, our analytic derivation in the previous section established that the optimal tuning rule is $\gamma \propto \eta \lambda$. If we follow this geometric principle, then as we decay the learning rate $\eta \to 0$, we must \emph{simultaneously and proportionally} decay the consensus coupling $\gamma \to 0$. 
 
 Under proportional annealing, the ratio $\frac{\eta}{\gamma}$ remains strictly constant. The equilibrium displacement $\theta_i - \bar{\theta}$ therefore remains finite. As the ``temperature'' of the system drops to zero, the workers will not naively collapse into the empty center. Because the consensus spring $\gamma$ weakens at the exact same rate as the local gradient step $\eta$, the local gradients continue to overpower the shrinking consensus pull, keeping the workers safely anchored on their distinct ridges. 
 
