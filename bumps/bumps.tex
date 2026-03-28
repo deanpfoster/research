@@ -48,7 +48,11 @@ The resulting story is simple. In high dimension, a rank-$r$ feature is
 hard to find because the informative region occupies only a tiny volume,
 and generic moment methods scale like $d^r$. Low-rank structure is
 therefore computationally accessible long before higher-rank structure.
-Once SGD reaches a bump, however, the same geometry determines whether a
+Moreover, even if an oracle revealed the exact geometry of all bumps,
+assembling the true global optimum would still be a combinatorial
+subset-selection problem: one must decide which intersections are worth
+pooling and which are too far from the origin to justify their added
+height. Once SGD reaches a bump, however, the same geometry determines whether a
 fixed learning rate can stably resolve it: broad directions are easy to
 follow, while sharp directions push the trajectory to the
 edge-of-stability boundary. Progressive sharpening is thus not an extra
@@ -63,7 +67,12 @@ cools enough for sharper features to become stable.
 This perspective also clarifies why optimizer choice matters. For plain
 SGD, the relevant notion of difficulty is geometric and global: can the
 trajectory find the bump at all, and once found can it resolve the local
-curvature without becoming unstable? For Adam, an additional issue
+curvature without becoming unstable? In particular, the benchmark should
+not be ``did the optimizer find the exact global maximizer of $f$?''
+That objective is both computationally unrealistic and conceptually
+misaligned with the regime we care about. The more natural question is
+which subsets of low-rank structure are discovered, in what order, and
+at what sharpness levels. For Adam, an additional issue
 appears: whether the feature geometry is aligned with the optimizer's
 coordinate-wise preconditioner. The bump family lets us separate these
 effects cleanly, including the possibility that Adam exhibits its own
@@ -180,6 +189,18 @@ Because $d \gg k$, the intersection of any subset of these $k$ ridges forms an u
 However, the global optimum is not necessarily the intersection of \emph{all} $k$ ridges. The global $\|x\|^2$ regularizer creates a strict combinatorial trade-off: intersecting all $k$ ridges maximizes the numerator ($\sum b_i$), but if the ridges are awkwardly aligned, this exact intersection might lie extremely far from the origin, causing the denominator ($1 + \|x\|^2$) to blow up. 
 
 It is often optimal to ignore some bumps. Intersecting a smaller subset of $k' < k$ ridges reduces the collected height in the numerator, but the resulting intersection may be significantly closer to the origin, yielding a higher overall function value. Consequently, finding the global maximum requires evaluating the origin-distance trade-off for every possible subset of the $k$ bumps. For a realistic network learning $k=1000$ distinct features, this poses a $2^{1000}$ combinatorial search. Thus, the global optimization of this landscape is NP-Hard, driven by a feature-selection trade-off rather than the local geometry of the features themselves.
+
+This changes how the model should be interpreted. The point of the bump
+landscape is not that SGD is secretly solving an intractable global
+search problem. Rather, it is that realistic optimization must proceed
+through a sequence of partial discoveries: first find low-rank features
+that are geometrically accessible, then decide which combinations are
+worth refining, and only much later approach any globally optimal
+intersection if one is reachable at all. Progressive sharpening is
+therefore naturally paired with \emph{progressive subset selection}: the
+learner is not only resolving sharper structure over time, but also
+implicitly choosing which discovered features deserve further
+coordination.
 
 \section{Finding Bumps in High Dimensions}
 
