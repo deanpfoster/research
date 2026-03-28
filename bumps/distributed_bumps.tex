@@ -167,6 +167,76 @@ Elastic Averaging SGD (EASGD), introduced by Zhang, Choromanska, and LeCun \cite
 Empirically, EASGD and its decentralized counterparts (e.g., D-PSGD \cite{lian2017can}) successfully reduce communication overhead and often achieve lower test error than fully synchronized methods like Downpour or standard All-Reduce SGD in non-convex landscapes. The original authors attributed this to the fact that the elastic force allows workers to fluctuate and explore different local optima rather than collapsing prematurely. However, in environments with fast interconnects or for tasks like speech recognition, highly synchronized methods or blockwise model-update filtering (BMUF) \cite{chen2016scalable} often remain competitive or superior in final accuracy.
 
 The bump model provides a new geometric justification for \emph{why} EASGD works, and critically, suggests how it might be tuned to work better. Standard EASGD typically uses a fixed coupling constant $\alpha$. However, our bump analysis indicates that optimal discovery requires a phase transition: $\gamma$ must be extremely weak (or zero) early on to allow independent exploration of broad bumps, and then actively \emph{increased} (annealed upwards) to recruit the ensemble into sharper, high-rank structures discovered by individual pioneers. This schedule---weak early coupling followed by late consolidation---differs from the stationary elastic force typically employed.
+\section{The X-Shaped Case}
+
+The simplest test case is the X-shaped landscape formed by two rank-1
+bumps crossing at roughly right angles. Suppose there are two workers.
+One worker has drifted onto one ridge of the X, while the other has
+drifted onto the orthogonal ridge. Their parameters are now different in
+an important sense: the disagreement is not accidental mini-batch noise,
+but evidence that the ensemble has discovered two distinct pieces of
+structure.
+
+This is exactly the regime in which naive consensus can fail. If the
+coupling to the grand average is too strong, then each worker sees the
+other worker's orthogonal displacement as a reason to move back toward
+the center. The ensemble then collapses toward the intersection before
+either worker has adequately explored its own ridge. In effect, the
+system mistakes \emph{structured diversity} for \emph{error}.
+
+What we want instead is asymmetric treatment of disagreement. Fast,
+incoherent, worker-specific fluctuations should act like noise and
+should not drag the whole system. But persistent directional
+disagreement, especially disagreement that remains stable over multiple
+steps, is precisely the information we want to preserve. In the X case,
+the fact that two workers repeatedly occupy two nearly orthogonal
+directions is a sign that the landscape contains two real ridges, not a
+sign that the workers should immediately agree.
+
+This means that coupling to the instantaneous mean
+$\bar{\theta}^t = \frac{1}{m}\sum_j \theta_j^t$ is too crude. The raw
+mean cannot distinguish between a transient deviation caused by
+stochastic noise and a persistent deviation caused by discovery of a new
+feature. To separate these, the shared state must be filtered.
+
+The simplest modification is to replace the instantaneous center by a
+slow center $c_t$:
+\begin{align}
+c_{t+1} &= (1-\beta)c_t + \beta \bar{\theta}^t, \\
+\theta_i^{t+1} &= \theta_i^t - \eta\, g_i(\theta_i^t)
+  - \gamma\,(\theta_i^t - c_t),
+\end{align}
+with a small tracking rate $\beta$. The point of $\beta$ is to make the
+shared center respond only to disagreements that persist over time.
+Short-lived fluctuations cancel out before they substantially move
+$c_t$. But if one worker stays on one ridge and another stays on the
+orthogonal ridge for many steps, then the center slowly moves toward the
+intersection of those discoveries. The ridges are then communicated to
+the rest of the population without forcing instant collapse.
+
+In this picture, the orthogonal displacements of the two workers should
+initially behave like \emph{private exploration}, not like a consensus
+error to be erased. Only after that disagreement proves coherent over
+time should it be promoted into the shared center. The center should
+therefore represent \emph{durable discoveries}, not the average of every
+momentary fluctuation.
+
+The X-shaped example also clarifies the qualitative role of the two
+coupling parameters:
+\begin{itemize}
+\item $\gamma$ controls how hard each worker is pulled toward shared
+  structure.
+\item $\beta$ controls how quickly the shared state believes that a new
+  directional deviation is real.
+\end{itemize}
+
+For discovery, both should be modest. If $\gamma$ is too large, the
+workers collapse before either ridge is explored. If $\beta$ is too
+large, the center chases instantaneous deviations and converts noise
+into spurious consensus. The useful regime is the one in which workers
+can remain irrelevantly different in orthogonal directions for long
+enough that the system can decide whether the disagreement is merely
+noise or the signature of multiple bumps.
 
 \section{Design Principles}
 
@@ -175,7 +245,8 @@ The bump picture suggests several operational principles.
 \paragraph{Weak early coupling.}
 The consensus strength $\gamma$ should initially be small relative to
 the local SGD dynamics. Otherwise the workers collapse before they have
-explored distinct regions.
+explored distinct regions. In the X-shaped case, this means the workers
+must be allowed to remain separated along different ridges.
 
 \paragraph{Broad initialization.}
 The initial ensemble should cover many parts of space. If all workers
@@ -191,6 +262,12 @@ early phase is for coverage; the later phase is for exploitation.
 It may be useful to reserve some workers for continued exploration even
 after the rest begin to consolidate. Otherwise the system risks
 prematurely collapsing onto the first decent bump it finds.
+
+\paragraph{Filtered consensus.}
+Consensus should be applied to a temporally filtered shared state rather
+than the raw instantaneous mean. This is the simplest way to let
+durable discoveries influence the ensemble while treating fast
+worker-specific fluctuations as noise.
 
 \section{Predictions}
 
@@ -209,6 +286,9 @@ This view makes several qualitative predictions.
   advantage and revert to single-trajectory behavior.
 \item If $\gamma$ is too small, workers should remain diverse but fail
   to benefit from one another's discoveries.
+\item In X-shaped or multi-ridge landscapes, a filtered center should
+  preserve orthogonal worker discoveries longer than raw mean coupling
+  and should reach the shared intersection more reliably.
 \end{itemize}
 
 \section{Open Questions}
@@ -223,6 +303,8 @@ system.
   average, or only a low-rank summary of the discovered directions?
 \item Can one measure worker diversity and use it as a control signal
   for adaptive coupling?
+\item What statistics best distinguish transient worker-specific noise
+  from persistent directional disagreement that signals a real feature?
 \item In realistic neural networks, which features correspond to the
   bumps that should be discovered in parallel, and at what layer or
   subspace should consensus operate?

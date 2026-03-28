@@ -6,3 +6,4 @@
 - Merged the revised bumps introduction to master after incorporating the newer mechanism-level discoveries.
 - Author asked me to start a new paper in the bumps directory about a distributed learning system suggested by the bump model, where multiple SGD workers explore different regions while drifting toward the grand average.
 - Merged the initial distributed bumps paper draft to master.
+- Author asked me to add a section to the distributed bumps paper explaining the X-shaped case, where orthogonal worker disagreement should be treated as useful exploratory diversity rather than immediate consensus error.
