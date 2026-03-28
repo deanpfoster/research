@@ -17,3 +17,4 @@
 - Author asked me to revisit the first bump paper and add anything that should now be said there in light of the later understanding of the problem.
 - Merged the first-paper reframing around combinatorial global intractability and progressive discoverability to master.
 - Author asked me to freshen from master after moving the regularizer outside the bump sum, and to update the first paper's introduction/discussion if that changed the story.
+- Merged the first-paper framing update for the separated global regularizer to master.
