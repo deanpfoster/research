@@ -149,6 +149,15 @@ features. One worker may discover a side ridge, another may locate an
 intersection, and the average can relay both discoveries back to the
 rest of the system.
 
+\section{Related Work: Elastic Averaging SGD}
+
+The update rule proposed in~\eqref{eq:update} is mathematically equivalent to
+Elastic Averaging SGD (EASGD), introduced by Zhang, Choromanska, and LeCun \cite{zhang2015deep}. In EASGD, local workers are coupled to a central center variable $\tilde{x}$ via a quadratic penalty $\frac{\rho}{2}\|x^i - \tilde{x}\|^2$, which acts as an elastic spring pulling workers toward the consensus mean.
+
+Empirically, EASGD and its decentralized counterparts (e.g., D-PSGD \cite{lian2017can}) successfully reduce communication overhead and often achieve lower test error than fully synchronized methods like Downpour or standard All-Reduce SGD in non-convex landscapes. The original authors attributed this to the fact that the elastic force allows workers to fluctuate and explore different local optima rather than collapsing prematurely. However, in environments with fast interconnects or for tasks like speech recognition, highly synchronized methods or blockwise model-update filtering (BMUF) \cite{chen2016scalable} often remain competitive or superior in final accuracy.
+
+The bump model provides a new geometric justification for \emph{why} EASGD works, and critically, suggests how it might be tuned to work better. Standard EASGD typically uses a fixed coupling constant $\alpha$. However, our bump analysis indicates that optimal discovery requires a phase transition: $\gamma$ must be extremely weak (or zero) early on to allow independent exploration of broad bumps, and then actively \emph{increased} (annealed upwards) to recruit the ensemble into sharper, high-rank structures discovered by individual pioneers. This schedule---weak early coupling followed by late consolidation---differs from the stationary elastic force typically employed.
+
 \section{Design Principles}
 
 The bump picture suggests several operational principles.
@@ -215,5 +224,8 @@ average many noisy copies of the same trajectory. It should maintain a
 population of genuinely separated learners whose discoveries are shared
 through a soft consensus field. That is the system suggested by the bump
 landscape.
+
+\bibliographystyle{plain}
+\bibliography{distributed_bumps}
 
 \end{document}

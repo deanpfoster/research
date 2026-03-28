@@ -2,7 +2,7 @@ PAPER = bumps
 NEW_PAPER = distributed_bumps
 FIGS  = fig_rank1.pdf fig_rank2.pdf fig_rank1_grid.pdf fig_rank2_grid.pdf fig_two_rank1.pdf
 
-all: $(PAPER).pdf
+all: $(PAPER).pdf $(NEW_PAPER).pdf
 
 $(PAPER).pdf: $(PAPER).tex $(PAPER).bib $(FIGS)
 	pdflatex -interaction=nonstopmode $(PAPER).tex
@@ -10,7 +10,9 @@ $(PAPER).pdf: $(PAPER).tex $(PAPER).bib $(FIGS)
 	pdflatex -interaction=nonstopmode $(PAPER).tex
 	pdflatex -interaction=nonstopmode $(PAPER).tex
 
-$(NEW_PAPER).pdf: $(NEW_PAPER).tex
+$(NEW_PAPER).pdf: $(NEW_PAPER).tex $(NEW_PAPER).bib
+	pdflatex -interaction=nonstopmode $(NEW_PAPER).tex
+	bibtex $(NEW_PAPER)
 	pdflatex -interaction=nonstopmode $(NEW_PAPER).tex
 	pdflatex -interaction=nonstopmode $(NEW_PAPER).tex
 
