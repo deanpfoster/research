@@ -1,0 +1,25 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+
+\title{Progressive Sharpening via Bump Functions}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Data Generating Process}
+
+We consider the regression function $f \colon \mathbb{R}^d \to \mathbb{R}$ defined by
+\begin{equation}\label{eq:dgp}
+  f(x) \;=\; \sum_{i=1}^{k} \frac{b_i}{1 + (x - c_i)^\top A_i\,(x - c_i) \;+\; \|x\|^2},
+\end{equation}
+where for each bump $i = 1, \dots, k$:
+\begin{itemize}
+  \item $b_i \in \mathbb{R}$ is the height,
+  \item $c_i \in \mathbb{R}^d$ is the center,
+  \item $A_i \in \mathbb{R}^{d \times d}$ is a positive semi-definite shape matrix,
+\end{itemize}
+and $\|x\|^2 = x^\top x$ provides global decay away from the origin.
+
+\end{document}
