@@ -120,6 +120,49 @@ progressively higher-rank structure in the residual. Whether such a
 strategy can outperform a global fit is one of the central questions
 of this paper.
 
+\subsection{The High-Dimensional Computational Barrier}
+
+To understand the severe computational limits of finding these bumps, we must
+consider the scale of modern deep learning, where the ambient dimension $d$
+(the number of parameters) routinely ranges from millions to trillions.
+
+First, consider naive optimization via Stochastic Gradient Descent (SGD) from a
+random initialization. As established by Statistical Query (SQ) lower bounds,
+if the bump is localized, the gradient of the loss is exponentially close to
+zero almost everywhere in the domain. The probability mass of the region where
+the bump provides a meaningful gradient signal scales roughly as
+$(\epsilon/R)^{d-r}$, where $\epsilon$ is the width of the bump in the flat
+directions and $R$ is the radius of the initialization region. For $d \sim 10^6$,
+this volume fraction is effectively zero. A random initialization will simply
+not land in the basin of attraction, and gradient noise will dominate.
+
+To avoid this ``needle in a haystack'' problem, one might turn to spectral or
+tensor methods (the Method of Moments) to deterministically find the
+$r$-dimensional active subspace. However, these methods require estimating the
+$r$-th order moments of the data distribution. The sample complexity and the
+computational cost to store and compute an $r$-th order tensor in $d$ dimensions
+scale as $O(d^r)$.
+
+When $d = 10^6$ (a relatively small network by modern standards):
+\begin{itemize}
+  \item \textbf{Rank-1 ($r=1$):} $O(d) \approx 10^6$. Easily tractable.
+  \item \textbf{Rank-2 ($r=2$):} $O(d^2) \approx 10^{12}$. Requiring a trillion
+    entries, computing the covariance matrix is already at the boundary of what
+    is feasible without extreme sparsity or specialized low-rank approximations.
+  \item \textbf{Rank-3 ($r=3$):} $O(d^3) \approx 10^{18}$. This requires
+    exascale computing, putting it out of reach for general problems.
+  \item \textbf{Rank-5 ($r=5$):} $O(d^5) \approx 10^{30}$. This is a strict
+    computational wall. It is physically impossible to store or compute this
+    tensor.
+\end{itemize}
+
+This severe scaling law dictates that in the overparameterized regime, finding
+anything beyond a rank-1 or rank-2 bump via general unsupervised moments is
+intractable. Consequently, the optimization process \emph{must} rely on either
+strong structural priors within the architecture (which restrict the effective
+search space) or iterative, progressive strategies that isolate one low-rank
+component at a time.
+
 \section{Sharpness and SGD}
 
 Recent work in the optimization of deep neural networks has drawn
