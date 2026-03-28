@@ -439,7 +439,15 @@ Our bump model provides a unique, elegant contrast. Because our rational bump $f
 
 Without 3rd-order drift, the stabilization mechanism is purely a 4th-derivative effect. As the optimizer is repelled from the sharp peak, the amplitude $x$ of its bounces grows. Because our bump is sub-quadratic (the walls get flatter as one moves away from the center), the fourth derivative $\nabla^4 f$ is strictly negative. Thus, the local sharpness $H(x)$ experienced by the optimizer drops as the amplitude increases: $H(x) \approx H(0) + \frac{1}{2} \nabla^4 f \cdot x^2$. 
 
-The system acts as a perfect shock absorber, naturally expanding its bounce amplitude until the sharpness exactly drops to the $2/\eta$ stability limit. This isolates the EoS amplitude-stabilization mechanism (driven by the negative 4th derivative) from the EoS drift mechanism (driven by the 3rd derivative), demonstrating exactly how symmetry simplifies the dynamics. If we were to break this symmetry---for example, by adding a global linear slope or traversing a rank-2 valley---the standard first-order gradient descent along the sloped valley would produce an $O(\eta)$ motion, which would overwhelmingly dominate the slow $O(\eta^2)$ 3rd-order EoS drift.
+The system acts as a perfect shock absorber, naturally expanding its bounce amplitude until the sharpness exactly drops to the $2/\eta$ stability limit. This isolates the EoS amplitude-stabilization mechanism (driven by the negative 4th derivative) from the EoS drift mechanism (driven by the 3rd derivative), demonstrating exactly how symmetry simplifies the dynamics.
+
+\subsubsection*{Traversing the Ellipse: 1st-Order vs.\ 3rd-Order Drift}
+
+To see how this relates to motion along a valley, consider an extreme elliptical basin (a rank-2 bump) with shape matrix $A = \text{diag}(a_1, a_2)$ where $a_1 \gg a_2 > 0$. The optimizer will experience extreme curvature along the $x_1$ axis and quickly enter the Edge of Stability regime, bouncing violently back and forth ($\pm x_{\text{eos}}$) across the narrow walls. 
+
+What happens to the movement along the shallow $x_2$ axis during this oscillation? Because the optimizer is simply bouncing back and forth, the gradient in the $x_2$ direction remains consistently pointed toward the center. The update along $x_2$ is a standard gradient descent step $\Delta x_2 \approx \eta \nabla_{x_2} f(x)$, governed by the second eigenvalue ($\lambda_2 \approx 2b a_2$). 
+
+This motion down the shallow valley is a standard \emph{first-order} effect, proportional to $O(\eta)$. Because $\eta \ll 1$ in deep learning, this $O(\eta)$ first-order drift overwhelmingly dominates the slow $O(\eta^2)$ 3rd-order EoS drift seen in asymmetric valleys. Thus, in a highly ill-conditioned rank-2 bump, SGD bounces violently across the narrow walls while smoothly and rapidly (relative to EoS drift) sliding down the shallow valley toward the true maximum. The EoS oscillation does not prevent the optimization of the remaining coordinates; it merely acts as a geometric regularizer that slightly slows convergence along the shallow axis by inflating the denominator of the gradient.
 
 \section{Adaptive Optimizers and Coordinate Alignment}
 
