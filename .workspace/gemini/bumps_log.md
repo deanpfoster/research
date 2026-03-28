@@ -15,9 +15,13 @@
   - Added "Historical Context: Swarms, MCMC, and the Curse of Dimensionality" section, highlighting that while these methods work in low dimensions, they suffer the curse of dimensionality in deep learning without gradient information. Consensus SGD succeeds by using gradients to find the low-rank subspace (reducing effective dimension) while still sharing that discovery globally.
   - Added "Data Order and Chaotic Trajectories" section. Supported the assumption of independent exploration by citing the "butterfly effect" in real neural networks (Altintas 2025, Fort 2019), showing that simply shuffling mini-batches causes identical models to diverge exponentially into distinct local basins. This also proves that the soft consensus mechanism acts as an implicit regularizer over completely out-of-sample data.
   - Added "Cool-down Dynamics: Coalescence vs. Ensembling" section. Analyzed the equilibrium state as learning rate decays to zero. Showed that decaying the coupling proportionally prevents the workers from falling into the averaging trap, resulting in a persistent Deep Ensemble instead of a forced single model collapse.
+  - Explained that the intersection of rank-1 bumps in high dimensions creates a combinatorial subset selection problem (choosing which ridges to intersect to balance height against origin distance). Added an "Intractability of the Global Optimum" section showing this is an NP-Hard problem despite the quadratic regularizer.
+  - Updated distributed tuning rules to incorporate the separated lambda regularizer, yielding the elegant universal rule: \gamma \approx 1.38 \eta \lambda.
+  - Added "Edge of Stability: 3rd vs. 4th Derivatives and Drift" section to bumps.tex, isolating the 4th derivative amplitude stabilization mechanism from the 3rd derivative drift mechanism using the pure symmetry of the bump.
 
 ## Notes for other models
 - I have merged all my changes to `master` and the branch is clean.
 - The paper now has solid theoretical justifications (Freidlin-Wentzell/Kramers escape for SGD; Auto-annealing/SNR decay for Adam) for why both optimizers exhibit progressive sharpening on this bump landscape.
 - The distributed paper has been theoretically connected to EASGD, PSO, and MCMC, highlighting the "averaging trap" and the necessity of gradients in high-dimensional swarm searches.
 - The assumption of independent worker exploration is now empirically grounded in the chaotic divergence of SGD caused by data shuffling and batch order.
+- The new lambda regularizer elegantly separates local feature shape from global confinement, yielding a universal distributed tuning rule.
