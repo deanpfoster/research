@@ -115,6 +115,23 @@ by construction. This gives a concrete data-generating mechanism for
 the phenomenon, rather than relying on implicit properties of the
 optimizer.
 
+\appendix
+
+\section{Annotated Bibliography}
+
+\subsection*{Sharpness and Generalization}
+\begin{itemize}
+    \item \textbf{\cite{hochreiter1997flat} Hochreiter and Schmidhuber (1997) ``Flat Minima'':} The seminal paper proposing that algorithms converging to broad, flat regions of the loss landscape generalize better. They argue that flat minima can be described with lower precision (linking to Minimum Description Length) and are more robust to perturbations in the weights and data.
+    \item \textbf{\cite{keskar2017large} Keskar et al.\ (2017) ``On Large-Batch Training for Deep Learning'':} Empirically demonstrates the generalization gap between small-batch and large-batch SGD, concluding that large-batch training tends to get trapped in sharper minima, whereas the inherent noise of small-batch SGD drives the optimization towards flatter, more robust minima.
+    \item \textbf{\cite{foret2021sharpnessaware} Foret et al.\ (2021) ``Sharpness-Aware Minimization (SAM)'':} Introduces an optimization procedure that explicitly seeks out flat minima by minimizing a worst-case loss within a local neighborhood (loss sharpness), rather than optimizing only the point estimate. This approach significantly improves generalization across various models.
+    \item \textbf{\cite{cohen2021gradient} Cohen et al.\ (2021) ``Gradient Descent on Neural Networks Typically Occurs at the Edge of Stability'':} Analyzes the ``progressive sharpening'' phenomenon. The authors show that during training, the maximum eigenvalue of the Hessian increases until it reaches the theoretical stability limit $2/\eta$. After this point, the optimizer enters the ``Edge of Stability'' (EoS) regime, marked by oscillating, non-monotonic loss but continuous long-term convergence.
+\end{itemize}
+
+\subsection*{Convergence Rates for Low-Rank Structures}
+\begin{itemize}
+    \item \textbf{\cite{chi2019nonconvex} Chi et al.\ (2019) ``Nonconvex Optimization Meets Low-Rank Matrix Factorization'':} Reviews the use of non-convex formulations (e.g., Burer-Monteiro) to solve high-dimensional low-rank problems. The authors demonstrate that SGD, with appropriate initialization, achieves nearly linear (exponential) convergence rates $O(\log(1/\epsilon))$. Crucially for our bump functions, these non-convex methods scale well in high dimensions, as their memory footprint and iteration complexity depend primarily on the intrinsic rank $r$ rather than the ambient dimension $d$.
+\end{itemize}
+
 \bibliographystyle{plain}
 \bibliography{bumps}
 
