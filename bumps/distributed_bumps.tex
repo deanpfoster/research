@@ -173,6 +173,14 @@ Consensus-coupled SGD circumvents this curse by marrying the population-based co
 
 Once the local gradient has anchored the worker in the low-dimensional structure, the consensus term ($-\gamma(\theta_i - \bar{\theta})$) acts as the swarm communication channel. It allows the ensemble to share the discovery of this $r$-dimensional subspace globally. Therefore, the success of EASGD and related methods on deep neural networks can be understood as a hybrid strategy: using gradients to defeat the curse of dimensionality locally, and using soft consensus to defeat local minima globally.
 
+\section{Data Order and Chaotic Trajectories}
+
+A core assumption of our proposal is that workers will naturally fan out to explore the landscape independently. In a deterministic setting, initializing all workers with identical (or nearly identical) weights would cause them to collapse into a single trajectory immediately. However, empirical studies of real neural networks reveal that SGD dynamics exhibit an extreme ``butterfly effect'' early in training \cite{altintas2025butterfly}. 
+
+Because the landscape is highly non-convex and chaotic, simply randomizing the order of the mini-batches is sufficient to cause identical models to diverge exponentially fast into completely orthogonal subspaces or distinct basins of attraction \cite{fort2019deep}. This means that we do not necessarily need to forcefully disperse the workers at initialization; the inherent mini-batch noise and data shuffling provide more than enough stochasticity to guarantee independent exploration.
+
+Furthermore, this dynamic provides a critical statistical advantage: because the workers are driven by different random sequences of data, their individual trajectories are fundamentally out-of-sample with respect to one another. When the soft consensus mechanism pulls a worker toward a newly discovered feature, it is pulling it toward a structure verified by a \emph{different} subset of the data stream. By aggregating these effectively out-of-sample discoveries, the grand average $\bar{\theta}$ acts as a regularizer, confirming that a bump is a genuine feature of the data distribution rather than an artifact of a single worker over-fitting to its specific mini-batch sequence.
+
 \section{Related Work: Elastic Averaging SGD}
 
 The update rule proposed in~\eqref{eq:update} is mathematically equivalent to
