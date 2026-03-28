@@ -53,6 +53,29 @@ of the elliptical level sets.
   \label{fig:rank2}
 \end{figure}
 
+Figures~\ref{fig:rank1grid} and~\ref{fig:rank2grid} show a gallery of
+examples with varying orientations and shape parameters, each with its
+SGD trajectory and edge-of-stability contour.
+
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=\textwidth]{fig_rank1_grid.pdf}
+  \caption{Nine rank-1 bumps with different ridge orientations and
+    sharpness values. Orange dashed curves show the edge-of-stability
+    boundary $\lambda_{\max}(-\nabla^2 f) = 2/\eta$. SGD paths (red)
+    oscillate along the ridge once they reach this boundary.}
+  \label{fig:rank1grid}
+\end{figure}
+
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=\textwidth]{fig_rank2_grid.pdf}
+  \caption{Nine rank-2 bumps with different orientations and eigenvalue
+    ratios. Round bumps ($\lambda_1 = \lambda_2$) produce circular
+    edge-of-stability boundaries; eccentric bumps produce elliptical ones.}
+  \label{fig:rank2grid}
+\end{figure}
+
 \section{Finding Bumps in High Dimensions}
 
 When the rank of $A_i$ exceeds roughly five, locating the center $c_i$

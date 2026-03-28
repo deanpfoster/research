@@ -1,5 +1,5 @@
 PAPER = bumps
-FIGS  = fig_rank1.pdf fig_rank2.pdf
+FIGS  = fig_rank1.pdf fig_rank2.pdf fig_rank1_grid.pdf fig_rank2_grid.pdf
 
 all: $(PAPER).pdf
 
