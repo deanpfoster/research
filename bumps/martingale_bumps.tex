@@ -1,0 +1,266 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+
+\title{Martingale-Coupled Distributed Search on Bump Landscapes}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+
+The consensus-coupled SGD framework of the companion paper proposes that
+distributed learners should share discoveries through a soft consensus
+field: each worker is weakly attracted toward the grand average of the
+ensemble. This mechanism accelerates feature discovery by making one
+worker's bump detection contagious to the rest. However, it has a
+fundamental flaw: the consensus pull is always attractive. Every worker is
+drawn toward the mean regardless of whether the mean contains any useful
+structure. If enough workers happen to cluster near an arbitrary point in
+the landscape, the attraction can amplify that cluster into a false
+consensus. Workers coalesce not because they have discovered a bump, but
+simply because they have attracted each other.
+
+In this paper we propose a modification that eliminates this failure mode.
+Instead of pulling every worker toward every other, we assign each pair a
+random sign: half of the interactions are attractive and half are
+repulsive. If worker $j$ is attracted to worker $i$, it receives a force
+toward $i$'s position. If worker $j$ is repelled by worker $i$, it
+receives a force away from $i$'s position. The signs are fixed at
+initialization and balanced: for each worker $i$, exactly half of the
+other workers are attracted to it and half are repelled. The expected
+force on any worker from the ensemble is therefore zero. This is the
+martingale property.
+
+The consequence is simple but powerful. In empty regions of the landscape
+where no bump is present, the attractive and repulsive forces cancel.
+Workers diffuse freely, as if uncoupled. But when one worker discovers a
+bump and stays near it, the attracted partners drift toward the bump
+while the repelled partners drift away. The attracted partners then
+discover the bump themselves, creating additional attractors that recruit
+still more agents. A genuine bump acts as a nucleation site that breaks
+the martingale symmetry through persistent occupation. A random cluster
+in empty space, by contrast, generates no persistent occupation: the
+worker that created the cluster drifts away, and the forces cancel again.
+
+The system therefore has a built-in filter: it amplifies real structure
+and ignores false consensus. Workers coalesce only at bumps, not at
+arbitrary points. This is exactly the property missing from the original
+consensus-coupled proposal.
+
+\section{Setup}
+
+We use the bump data-generating process from the companion papers. The
+regression function $f \colon \mathbb{R}^d \to \mathbb{R}$ is
+\begin{equation}\label{eq:dgp}
+  f(x) = \sum_{i=1}^{k} \frac{b_i}{1 + (x - c_i)^\top A_i\,(x - c_i)},
+\end{equation}
+where each bump has height $b_i$, center $c_i$, and positive
+semi-definite shape matrix $A_i$.
+
+We have $n$ agents with positions
+$\theta_1, \dots, \theta_n \in \mathbb{R}^d$. At initialization, we draw
+a sign matrix $S \in \{-1, 0, +1\}^{n \times n}$ with the following
+properties:
+\begin{itemize}
+  \item $S_{ii} = 0$ (no self-interaction),
+  \item For each column $j$, exactly $\lfloor(n-1)/2\rfloor$ off-diagonal
+    entries are $+1$ and the rest are $-1$,
+  \item $S$ is fixed for the duration of the run.
+\end{itemize}
+The balance condition ensures that the sum $\sum_{j \neq i} S_{ij}$ is
+either $0$ or $\pm 1$ for every column, making the expected coupling
+force approximately zero.
+
+The update rule for agent $i$ is
+\begin{equation}\label{eq:martingale-update}
+\theta_i^{t+1}
+= \theta_i^t + \eta\,g_i(\theta_i^t)
++ \gamma \sum_{j \neq i} S_{ij}\,(\theta_j^t - \theta_i^t)
++ \xi_i^t,
+\end{equation}
+where $g_i$ is the local gradient (ascent on $f$), $\gamma > 0$ is the
+coupling strength, and $\xi_i^t$ is mini-batch noise.
+
+\section{The Martingale Property}
+
+Consider a single agent $i$ at position $\theta_i$ and suppose the other
+agents are distributed without any landscape-induced structure. The
+coupling force on agent $i$ is
+\[
+F_i = \gamma \sum_{j \neq i} S_{ij}\,(\theta_j - \theta_i).
+\]
+By the balance condition, if the $\theta_j$ are exchangeable (no agent
+occupies a privileged position), then $\mathbb{E}[F_i] = 0$. The force
+is a martingale: it has zero drift in the absence of asymmetric
+structure.
+
+Now suppose agent $j^*$ has discovered a bump and remains persistently
+near $c_k$ for many steps. The agents with $S_{ij^*} = +1$ feel a
+persistent pull toward $c_k$, while those with $S_{ij^*} = -1$ feel a
+persistent push away. But the agents that are pulled toward $c_k$ will
+themselves discover the bump, become persistent occupants, and begin
+exerting their own attractive forces on a new set of partners. The
+repelled agents, meanwhile, are pushed into unexplored territory where
+they may find other bumps.
+
+This creates an asymmetric cascade. A single discovery at a bump seeds a
+chain reaction among attracted partners, while repelled partners are
+dispersed outward to continue exploring. The rate of cascade depends on
+the coupling strength $\gamma$ and the bump geometry, but the
+qualitative behavior is robust: bumps nucleate clusters, empty space does
+not.
+
+\section{Contrast with Consensus Coupling}
+
+In the original consensus-coupled SGD, every agent is attracted to the
+grand mean $\bar{\theta}$. The force on agent $i$ is
+$-\gamma(\theta_i - \bar{\theta})$, which is always directed toward the
+center of mass. This has two failure modes:
+
+\paragraph{False coalescence.}
+If a subset of agents happens to cluster in empty space (by stochastic
+fluctuation), the resulting shift in $\bar{\theta}$ pulls all other
+agents toward that cluster. The cluster grows not because it contains
+structure but because the attraction is self-reinforcing. In the
+martingale scheme, a random cluster produces both attraction and
+repulsion, and the net effect is zero: the cluster dissolves.
+
+\paragraph{Averaging trap.}
+When two agents discover two different bumps, the grand mean lies between
+them in empty space. Both agents are pulled away from their bumps toward
+the void. In the martingale scheme, each discoverer attracts its own
+subset of partners directly toward its bump. There is no central average
+that pulls everyone to the middle.
+
+The martingale coupling thus solves both problems simultaneously. It
+preserves the discovery-propagation mechanism of consensus coupling
+(attracted partners find bumps faster) while eliminating the pathological
+attraction to empty space.
+
+\section{Simulation}
+
+We test the martingale mechanism on a minimal example: 100 agents in
+$\mathbb{R}^2$ with a single bump. Agent~0 starts at the bump center;
+the remaining 99 agents are initialized uniformly at random in
+$[-50, 50]^2$. The bump is located at $(30, 30)$ with height $b = 5$
+and shape $A = 0.5\,I_2$.
+
+We compare two conditions:
+\begin{enumerate}
+  \item \textbf{Random search}: agents perform independent noisy gradient
+    ascent with no inter-agent coupling ($\gamma = 0$).
+  \item \textbf{Martingale coupling}: agents perform the same gradient
+    ascent but with the signed coupling force from
+    equation~\eqref{eq:martingale-update}.
+\end{enumerate}
+Discovery is defined as any agent besides agent~0 entering within
+distance~$2$ of the bump center. We run 200 independent trials for each
+condition and record the discovery time.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{fig_martingale_discovery.pdf}
+  \caption{Left: histogram of discovery times across 200 trials.
+    Right: cumulative fraction of trials in which the bump has been
+    discovered by step $t$. Martingale coupling substantially accelerates
+    discovery compared to independent random search.}
+  \label{fig:discovery}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{fig_martingale_snapshot.pdf}
+  \caption{Spatial snapshot of agent positions at $t = 300$ for a single
+    trial. Left: random search, agents diffuse independently. Right:
+    martingale coupling, agents near the bump cluster while others
+    continue exploring. The red star marks the discoverer (agent~0); the
+    dashed circle marks the discovery radius.}
+  \label{fig:snapshot}
+\end{figure}
+
+\section{Why the Martingale Breaks at Bumps}
+
+The martingale property holds exactly only when no agent occupies a
+privileged position. A bump breaks this symmetry. An agent sitting on a
+bump has a higher ``fitness'' in the sense that its position is
+stabilized by the local gradient: the bump's curvature keeps the agent
+near the peak even as noise and repulsive forces try to dislodge it.
+This persistence is the key asymmetry.
+
+For an agent $j^*$ on a bump, the position $\theta_{j^*} \approx c_k$ is
+approximately constant over many steps. The attractive force
+$\gamma(\theta_{j^*} - \theta_i) \approx \gamma(c_k - \theta_i)$ on an
+attracted partner $i$ is therefore a persistent, coherent drift toward
+$c_k$. In contrast, the repulsive force on a repelled partner pushes it
+away from $c_k$ but does not push it toward any particular alternative.
+The attraction is directed; the repulsion is diffuse.
+
+Over time, this asymmetry compounds. Attracted agents accumulate near the
+bump and themselves become persistent attractors for their own partners.
+The number of agents near the bump grows super-linearly: each new
+arrival seeds its own chain of attracted partners. This is the
+nucleation cascade that makes martingale coupling faster than random
+search.
+
+\section{Connection to the Spectral Gap}
+
+The analysis of the companion paper showed that the optimal consensus
+coupling $\gamma$ should be proportional to the spectral gap of the
+irrelevant directions: $\gamma \approx (\log 2)(1 - \lambda_2)$, where
+$1 - \lambda_2 = 2\eta\lambda$ for the bump landscape with global
+regularizer $\lambda\|x\|^2$.
+
+The same logic applies here, but with a twist. In the consensus scheme,
+$\gamma$ must be tuned carefully: too large causes false coalescence, too
+small prevents discovery propagation. In the martingale scheme, the false
+coalescence failure mode is eliminated, so the upper bound on $\gamma$
+is relaxed. One can use a somewhat larger coupling strength without
+risking pathological collapse, because the balanced signs prevent
+self-reinforcing drift in empty regions. The spectral gap still sets the
+lower bound (coupling must be fast enough relative to the mixing time of
+irrelevant directions), but the usable range of $\gamma$ is wider.
+
+\section{Multiple Bumps and Exploration--Exploitation}
+
+When the landscape contains multiple bumps, the martingale mechanism
+naturally partitions the ensemble. The first agent to find bump~1
+recruits its attracted partners; the first agent to find bump~2 recruits
+a different set. Because the sign assignments are random and fixed,
+different bumps recruit overlapping but distinct subsets of the
+population. This provides automatic load balancing: no central
+coordinator decides how many agents should explore each bump.
+
+Moreover, the repelled agents are pushed away from known bumps into
+unexplored territory. This creates a natural exploration--exploitation
+balance. Attracted agents exploit known structure; repelled agents
+explore new regions. The balance is controlled by the coupling strength
+$\gamma$: stronger coupling means faster exploitation of known bumps but
+also faster expulsion of repelled agents into the wilderness, where they
+may find new bumps sooner.
+
+\section{Open Questions}
+
+\begin{itemize}
+  \item How does the nucleation cascade rate depend on $n$, $d$, and the
+    bump geometry?
+  \item Should the sign matrix $S$ be symmetric ($S_{ij} = S_{ji}$) or
+    asymmetric? Symmetric signs create Newton's-third-law pairs;
+    asymmetric signs allow richer interaction patterns.
+  \item Can the sign matrix be adapted online based on agent fitness, or
+    does fixed assignment suffice?
+  \item How does the martingale mechanism interact with the filtered
+    center $c_t$ from the consensus paper?
+  \item In realistic neural network training, what is the analogue of the
+    sign matrix? Can it be implemented efficiently at scale?
+  \item What is the optimal ratio of attracted to repelled agents? The
+    50/50 split is the simplest martingale, but other ratios may be
+    better for specific landscape geometries.
+\end{itemize}
+
+\bibliographystyle{plain}
+\bibliography{distributed_bumps}
+
+\end{document}
