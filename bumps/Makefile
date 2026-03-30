@@ -2,7 +2,7 @@ PAPER = bumps
 NEW_PAPER = distributed_bumps
 MART_PAPER = martingale_bumps
 FIGS  = fig_rank1.pdf fig_rank2.pdf fig_rank1_grid.pdf fig_rank2_grid.pdf fig_two_rank1.pdf fig_two_rank1_data.pdf
-MART_FIGS = fig_martingale_discovery.pdf fig_martingale_snapshot.pdf
+MART_FIGS = fig_martingale_discovery.pdf fig_martingale_snapshot.pdf fig_martingale_1d.pdf
 
 all: $(PAPER).pdf $(NEW_PAPER).pdf $(MART_PAPER).pdf
 
