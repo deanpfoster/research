@@ -166,7 +166,9 @@ More importantly, the denominator dictates an absolute explosion threshold. For 
 \end{equation}
 If the swarm size $n$ or the coupling strength $\gamma$ grows too large, the injected communication noise overwhelms the regularizer's restoring force, and the swarm geometrically explodes to infinity.
 
-This mirrors the concept of the \emph{critical batch size} in distributed training \cite{mccandlish2018empirical, shallue2019measuring, jain2018parallelizing}. Just as there is a critical batch size beyond which adding more data-parallel workers yields diminishing returns because the gradient noise falls below the landscape curvature \cite{jain2018parallelizing}, the martingale swarm has a \textbf{critical swarm size} $n_{\text{crit}} \approx 2\eta \lambda_{\min} / \gamma^2$. If $n$ exceeds this threshold, the swarm can no longer be contained by the convex basin, and the search process collapses.
+This mirrors the concept of the \emph{critical batch size} formally derived by Jain, Kakade, et al.\ \cite{jain2018parallelizing} for SGD on least squares. In their analysis of purely convex quadratics, increasing the batch size linearly reduces the stationary variance up to a critical threshold dictated by the inverse condition number and the noise profile. Beyond this critical batch size, parallel workers provide diminishing returns \cite{mccandlish2018empirical, shallue2019measuring}.
+
+However, the martingale swarm exhibits a far more severe structural penalty. For standard data-parallelism, exceeding the critical batch size merely wastes compute. But for the martingale swarm, exceeding the \textbf{critical swarm size} $n_{\text{crit}} \approx 2\eta \lambda_{\min} / \gamma^2$ fundamentally breaks the algorithm. If $n$ exceeds this threshold, the injected communication noise required for exploration physically overwhelms the regularizer's restoring force, and the search process undergoes a catastrophic geometric explosion.
 
 \section{Anisotropic Temperature and Directional Escape}
 
