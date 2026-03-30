@@ -66,13 +66,14 @@ a sign matrix $S \in \{-1, 0, +1\}^{n \times n}$ with the following
 properties:
 \begin{itemize}
   \item $S_{ii} = 0$ (no self-interaction),
-  \item For each column $j$, exactly $\lfloor(n-1)/2\rfloor$ off-diagonal
-    entries are $+1$ and the rest are $-1$,
+  \item For all $i \neq j$, $S_{ij}$ is drawn independently and uniformly from $\{-1, +1\}$.
   \item $S$ is fixed for the duration of the run.
 \end{itemize}
-The balance condition ensures that the sum $\sum_{j \neq i} S_{ij}$ is
-either $0$ or $\pm 1$ for every column, making the expected coupling
-force approximately zero.
+Because the signs are fully independent (IID), the expected coupling force on any exploring agent remains zero. 
+
+One consequence of using fully independent coin flips, rather than explicitly balancing each column to have exactly half $+1$ and half $-1$ entries, is that the cascade process is not guaranteed to leave any agents behind. Through a series of re-randomizations, it is possible for every single agent to randomly draw a net positive attraction and be recruited into the bump.
+
+In a low-dimensional setting, this total collapse into a single feature would be catastrophic, as the landscape outside the bump would become a "ghost town" devoid of explorers. However, in our overparameterized regime where the ambient dimension is vast ($d \sim 10^9$ to $10^{12}$) and features are low-rank (e.g., $r = 2$), recruiting the entire ensemble to a discovered bump is actually desirable. The agents converge only in the $r$-dimensional subspace defining the bump. In the remaining $d - r$ orthogonal dimensions, the agents remain functionally independent and free to explore. The vast null space ensures that exploration continues unabated even if the entire swarm is recruited to exploit a specific low-rank feature.
 
 The update rule for agent $i$ is
 \begin{equation}\label{eq:martingale-update}

@@ -179,14 +179,9 @@ for ax, mode, title in [(axes[0], 'random', 'Random search (no coupling)'),
     pos[0] = bump_center + rng.normal(0, 0.1, size=2)
 
     if mode == 'martingale':
-        sign_matrix = np.zeros((n_agents, n_agents), dtype=int)
-        for j in range(n_agents):
-            off_diag = np.arange(n_agents) != j
-            indices = np.where(off_diag)[0]
-            rng.shuffle(indices)
-            half = len(indices) // 2
-            sign_matrix[indices[:half], j] = +1
-            sign_matrix[indices[half:], j] = -1
+        # Fully IID independent coin flips
+        sign_matrix = rng.choice([-1, 1], size=(n_agents, n_agents))
+        np.fill_diagonal(sign_matrix, 0)
 
     # Run for a fixed number of steps and plot
     snapshot_step = 500

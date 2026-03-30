@@ -1,0 +1,1 @@
+../.workspace/gemini/memo_for_claude.md
