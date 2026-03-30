@@ -242,6 +242,28 @@ $\gamma$: stronger coupling means faster exploitation of known bumps but
 also faster expulsion of repelled agents into the wilderness, where they
 may find new bumps sooner.
 
+\section{Subspace Noise and Directional Escape}
+
+To understand why the martingale coupling accelerates discovery without simply injecting useless random walk behavior, we must examine the geometry of the coupling force in the overparameterized regime ($d \gg n$).
+
+Suppose we want to speed up exploration by simply increasing the learning rate or injecting more gradient noise (raising the effective temperature $D$). In a $d$-dimensional space where $d \sim 10^9$, isotropic noise spreads equally in all directions. The probability that an isotropic random walk happens to take a sequence of steps specifically along the low-dimensional subspace of a distant bump is vanishingly small. Isotropic noise heats up the vast, empty null space just as much as the relevant feature dimensions, worsening the curse of dimensionality.
+
+The martingale coupling entirely avoids this through \emph{anisotropic subspace noise}. Consider an exploring agent $i$ near the origin. During a single phase, the coupling force it experiences is $F_i = \gamma \sum_{j \neq i} S_{ij} (\theta_j - \theta_i)$. Crucially, this vector is strictly confined to the span of the ensemble's current positions. Because the swarm size $n$ is vastly smaller than the ambient dimension $d$, the coupling only injects dynamics into an $O(n)$-dimensional subspace, leaving the remaining $d - n$ orthogonal dimensions completely undisturbed.
+
+When the sign matrix $S$ is re-randomized at the start of each phase, $F_i$ becomes a zero-mean random vector. Its behavior depends entirely on where the other agents are:
+\begin{enumerate}
+  \item \textbf{Exploration Phase (Wilderness Clutter):} If all other agents are independently wandering near the origin with small variance $\sigma^2$, the covariance of the injected noise is roughly $\gamma^2 n \sigma^2 I_{n-1}$, bounded within their local span. The injected noise is small and harmless.
+  \item \textbf{Exploitation Phase (The Directional Hot Plate):} Suppose $k$ agents discover a bump and become trapped at its center $c$, far from the origin ($\|c\| \gg \sigma$). The coupling force on agent $i$ now contains a massive term $\gamma (\sum_{j \in B} S_{ij}) c$. Because the sum of $k$ independent signs is a random walk, it acts as a zero-mean scalar multiplier with variance $k$.
+\end{enumerate}
+
+The resulting covariance matrix of the injected noise develops a massive rank-1 spike:
+\begin{equation}
+  \Sigma_{\text{injected}} \approx \gamma^2 k \, (c c^\top) + \text{clutter}.
+\end{equation}
+The swarm has effectively performed decentralized Principal Component Analysis. By locking $k$ agents into the bump, the ensemble synthesizes a highly anisotropic noise profile that points \emph{exactly} along the axis connecting the origin to the discovered feature.
+
+From the perspective of Freidlin-Wentzell large deviations theory, the time to escape the global regularizer's basin and reach the bump scales as $\exp(\Delta U / D_{\text{eff}})$, where $\Delta U = \lambda \|c\|^2$ is the barrier height. The martingale coupling does not lower the barrier; instead, it massively increases the effective temperature $D_{\text{eff}}$ strictly along the axis of $c$. The exploring agents are violently ``boiled'' over the regularizer's wall towards the bump, while the orthogonal dimensions remain cold and stable.
+
 \section{Open Questions}
 
 \begin{itemize}
