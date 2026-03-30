@@ -24,7 +24,7 @@ $(MART_PAPER).pdf: $(MART_PAPER).tex $(NEW_PAPER).bib $(MART_FIGS)
 	pdflatex -interaction=nonstopmode $(MART_PAPER).tex
 	pdflatex -interaction=nonstopmode $(MART_PAPER).tex
 
-$(MART_FIGS): fig_martingale.py
+fig_martingale_discovery.pdf fig_martingale_snapshot.pdf: fig_martingale.py
 	python3 $<
 
 fig_%.pdf: fig_%.py
