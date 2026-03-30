@@ -164,7 +164,29 @@ The swarm has effectively performed decentralized Principal Component Analysis. 
 From the perspective of Freidlin-Wentzell large deviations theory, the expected time to escape the global regularizer's basin and reach the bump scales exponentially with the barrier height divided by the temperature: $\exp(\Delta U / D_{\text{eff}})$. 
 In the orthogonal null dimensions, the temperature remains cold ($D_{\text{eff}} \approx D$). But along the specific 1D axis leading to the bump, the effective temperature becomes massively hot: $D_{\text{eff}} \approx D + \frac{1}{2} \gamma^2 k \|c\|^2$.
 
-The martingale coupling does not lower the barrier, nor does it pull agents via a deterministic tractor beam. Instead, it creates a directional hot plate. The exploring agents are violently boiled over the regularizer's wall towards the bump, while the vast $10^{12}$ orthogonal dimensions remain cold and stable.
+The martingale coupling does not lower the barrier. Instead, it creates a directional hot plate. The exploring agents are violently boiled over the regularizer's wall towards the bump, while the vast $10^{12}$ orthogonal dimensions remain cold and stable.
+
+\subsection{The Thermodynamic Race ($\tau = 1$ limit)}
+
+While injecting pure white noise ($\tau = 1$) provides an exponential speedup for exploring agents, it simultaneously exposes the anchored agents to massive thermal fluctuations. Because the anchored agent is pulled by $n-1$ exploring agents located near the origin, the variance of the force it experiences is $n-1$ times larger than the variance it injects into any single explorer. 
+
+This creates a thermodynamic race. For the swarm to succeed, the exploring agents must be boiled out of the regularizer's basin \emph{before} the anchored agent is violently knocked out of the bump.
+
+Let $E_{\text{reg}} = \lambda \|c\|^2$ be the energy barrier of the regularizer. The expected time for an explorer to reach the bump is:
+\begin{equation}
+  \tau_{\text{explore}} \propto \exp\left( \frac{E_{\text{reg}}}{\frac{1}{2} \gamma^2 \|c\|^2} \right).
+\end{equation}
+Conversely, if the bump has depth $b$, the expected time for the anchored agent to be knocked out by the $n-1$ explorers is:
+\begin{equation}
+  \tau_{\text{anchor}} \propto \exp\left( \frac{b}{\frac{1}{2} \gamma^2 (n-1) \|c\|^2} \right).
+\end{equation}
+
+For the cascade to grow, we require $\tau_{\text{explore}} \ll \tau_{\text{anchor}}$. Because the coupling parameter $\gamma^2$ cancels identically from both exponents, the viability of the pure-noise ($\tau=1$) martingale search simplifies to a strict, parameter-free structural condition:
+\begin{equation}
+  b > (n-1) E_{\text{reg}}.
+\end{equation}
+
+If a feature is sufficiently deep (its local depth exceeds $n-1$ times the global regularization penalty at that location), the anchored agent is unconditionally stable against the swarm's noise. The martingale coupling can then be safely tuned to maximize the exponential speedup $\tau_{\text{explore}}$, ensuring rapid discovery of the structure without risking runaway explosion in the vast null space.
 
 \section{Multiple Bumps and Exploration--Exploitation}
 
