@@ -143,6 +143,31 @@ condition and record the discovery time.
   \label{fig:snapshot}
 \end{figure}
 
+\section{The Convex Case: Swarm Variance and the Critical Threshold}
+
+Before analyzing the escape dynamics in a multimodal landscape, it is instructive to consider the global behavior of the swarm in the convex null space, governed solely by the global regularizer $f(\theta) = \frac{1}{2} \theta^\top H \theta$ (where $H = 2\lambda I$). 
+
+When $n$ agents run independent SGD on a quadratic, they form an Ornstein-Uhlenbeck (OU) process. The stationary covariance of a single uncoupled agent is $\Sigma_{\text{sgd}} \approx \frac{\eta}{2} H^{-1} C$, where $C$ is the gradient noise covariance for a mini-batch of size $B$ \cite{mandt2017stochastic}. For $n$ independent workers, the variance of the ensemble mean $\bar{\theta} = \frac{1}{n} \sum \theta_i$ drops linearly to $\frac{1}{n} \Sigma_{\text{sgd}}$, perfectly simulating a single large batch of size $nB$.
+
+Introducing the martingale coupling fundamentally alters this steady-state distribution. If we strictly enforce Newton's Third Law in the sign matrix---drawing symmetric signs $S_{ij}^t = S_{ji}^t$ such that every attractive pull is matched by an equal and opposite pull---the sum of all coupling forces across the swarm is exactly zero ($\sum_{i=1}^n F_i^t = 0$). Consequently, the ensemble mean $\bar{\theta}$ is completely blind to the martingale coupling; it evolves exactly as it would under standard data-parallel SGD, retaining the perfect $1/n$ variance reduction.
+
+However, the individual agents $\theta_i$ experience the coupling as a massive source of injected noise. As derived earlier, the variance of the force injected into agent $i$ by the rest of the swarm is proportional to $\gamma^2 (n-1) \Sigma_{\text{mc}}$, where $\Sigma_{\text{mc}}$ is the stationary covariance of the coupled agents. 
+
+Because this martingale noise is independent of the mini-batch gradient noise, the total effective noise covariance driving agent $i$ is $C_{\text{total}} = \eta^2 C + \gamma^2 (n-1) \Sigma_{\text{mc}}$. Solving the Lyapunov equation $\eta H \Sigma_{\text{mc}} + \eta \Sigma_{\text{mc}} H = C_{\text{total}}$ yields the exact stationary covariance of the martingale swarm:
+\begin{equation}
+  \Sigma_{\text{mc}} = \left( 2\eta H - \gamma^2 (n-1) I \right)^{-1} \eta^2 C.
+\end{equation}
+
+This reveals a profound structural constraint on distributed search. In a purely convex landscape, the martingale coupling is a strict penalty: the individual agents are artificially heated, expanding their stationary variance ($\Sigma_{\text{mc}} > \Sigma_{\text{sgd}}$) in order to hunt for non-convex features. 
+
+More importantly, the denominator dictates an absolute explosion threshold. For the covariance to remain positive definite and stable, we must satisfy:
+\begin{equation}
+  \gamma^2 (n-1) < 2\eta \lambda_{\min}(H).
+\end{equation}
+If the swarm size $n$ or the coupling strength $\gamma$ grows too large, the injected communication noise overwhelms the regularizer's restoring force, and the swarm geometrically explodes to infinity.
+
+This mirrors the concept of the \emph{critical batch size} in distributed training \cite{mccandlish2018empirical, shallue2019measuring, jain2018parallelizing}. Just as there is a critical batch size beyond which adding more data-parallel workers yields diminishing returns because the gradient noise falls below the landscape curvature \cite{jain2018parallelizing}, the martingale swarm has a \textbf{critical swarm size} $n_{\text{crit}} \approx 2\eta \lambda_{\min} / \gamma^2$. If $n$ exceeds this threshold, the swarm can no longer be contained by the convex basin, and the search process collapses.
+
 \section{Anisotropic Temperature and Directional Escape}
 
 To understand why pure white noise accelerates discovery rather than just making the system chaotic, we must examine the covariance matrix of the injected noise.
