@@ -268,6 +268,42 @@ injects noise proportional to the agent's own displacement, which is
 negligible near equilibrium but nonzero during large excursions along the
 anchor axis.
 
+\subsection{Capture: The Two-Step Mechanism}
+
+The anisotropic temperature alone does not recruit agents --- it only
+increases their mobility along the bump axis. For recruitment to occur,
+the bump's basin of attraction must capture the agent once it wanders
+close enough. The full mechanism is therefore two steps: (1)~the coupling
+creates a corridor of elevated diffusion (the ``slime trail''), and
+(2)~the bump's gradient traps the agent once it enters the basin.
+
+To verify this decomposition, we repeat the simulation from
+Figure~\ref{fig:anisotropic} with the bump's gradient turned on, using
+identical pre-generated noise so the trajectories are directly
+comparable. Without the bump, the coupled agent makes large excursions
+past $x = 10$ but always bounces back. With the bump, the first such
+excursion that enters the basin locks the agent onto the bump permanently.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{fig_martingale_capture.pdf}
+  \caption{Same noise realization with and without the bump. Faint traces:
+    no bump (pure temperature, from Figure~\ref{fig:anisotropic}). Solid
+    traces: bump present, providing capture. The coupled agent (bottom) is
+    captured at $t = 792$; the uncoupled agent (top) must wait until
+    $t = 2691$ for a lucky fluctuation to reach the basin. The traces are
+    identical until the moment of capture, confirming that the coupling
+    provides mobility while the bump provides trapping.}
+  \label{fig:capture}
+\end{figure}
+
+Figure~\ref{fig:capture} confirms the decomposition. The coupled agent is
+captured $3.4\times$ faster than the uncoupled agent, and the pre- and
+post-capture traces diverge at exactly the moment the agent enters the
+bump's basin. Neither mechanism alone is sufficient: without coupling, the
+agent rarely reaches the bump; without the bump, the excursions are
+transient noise that always reverts.
+
 \section{Multiple Bumps and Exploration--Exploitation}
 
 When the landscape contains multiple bumps, the martingale mechanism
