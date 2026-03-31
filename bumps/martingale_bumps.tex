@@ -107,6 +107,16 @@ them in empty space. Both agents are pulled away from their bumps toward
 the void. In the martingale scheme, there is no central average
 that pulls everyone to the middle. The forces remain mean-zero and simply increase local variance.
 
+\paragraph{The $1/n^2$ Dilution Failure.}
+It is tempting to simplify the pairwise $O(n^2)$ martingale interactions $S_{ij}(\theta_j - \theta_i)$ by assigning each agent a single, agent-wise coin flip $S_i \in \{-1, +1\}$ determining whether they are attracted to or repelled from the grand mean: $F_i = \gamma S_i (\bar{\theta} - \theta_i)$. However, this destroys the algorithm in both regimes. 
+First, because $\sum S_i \neq 0$ generically, the center of mass $\bar{\theta}$ receives a massive random kick every step, completely breaking the Newton's Third Law $100\%$ compute efficiency ($1/n$ variance reduction) in the convex null space. 
+Second, if Agent 1 finds a bump at $c$ while $n-1$ exploring agents remain near the origin $0$, the grand mean sits at $c/n$. The noise injected into the exploring agents becomes proportional to $\gamma^2 \|c/n\|^2 = \frac{1}{n^2} \gamma^2 \|c\|^2$. The anchored agent's discovery is catastrophically diluted by the $n-1$ explorers, reducing the directional hot plate by a factor of $1/n^2$ and annihilating the exponential speedup. 
+
+The explicit, independent pairwise interactions $S_{ij}$ are fundamentally required to bypass the averaging trap without destroying the convergence of the mean. 
+
+\paragraph{Communication Efficiency via Hamming Codes.}
+While the full pairwise interaction seems to demand $O(n^2)$ dense communication, the sign matrix structure allows for elegant compression. If the signs $S_{ij}^t$ are structured deterministically using orthogonal columns (e.g., Walsh-Hadamard matrices) or error-correcting codes (e.g., a Hamming code basis), the swarm can compute the pairwise forces without sending $n$ distinct parameter vectors. The workers can simply broadcast $O(\log n)$ distinct linear combinations (parity sums) of their parameters. Agent $i$ then reconstructs its specific $F_i^t$ by adding or subtracting the appropriate $\log n$ broadcasted sums. This scales the communication bottleneck from $O(n)$ full parameter vectors per worker to $O(\log n)$, making massive swarms feasible in the $d \sim 10^{12}$ regime.
+
 \section{Simulation}
 
 We test the martingale mechanism on a minimal example: 100 agents in
@@ -264,54 +274,9 @@ boost along the anchor axis.
 
 
 
-Figure~\ref{fig:anisotropic} confirms the prediction. The coupled agent's
-fluctuations in the anchor direction are visibly larger, with measured
-variance $32.1$ versus $7.1$ uncoupled (a $4.6\times$ boost). In the
-orthogonal direction, the variances are nearly identical ($6.6$ versus
-$5.5$, a $1.2\times$ ratio consistent with the small second-order
-contribution from the $-\gamma S \theta_i$ term in the coupling force).
 
-The slight orthogonal leakage arises because the full coupling force is
-$F = \gamma S(c - \theta_i)$, not $\gamma S c$. The $\theta_i$ term
-injects noise proportional to the agent's own displacement, which is
-negligible near equilibrium but nonzero during large excursions along the
-anchor axis.
 
-\subsection{Capture: The Two-Step Mechanism}
 
-The anisotropic temperature alone does not recruit agents --- it only
-increases their mobility along the bump axis. For recruitment to occur,
-the bump's basin of attraction must capture the agent once it wanders
-close enough. The full mechanism is therefore two steps: (1)~the coupling
-creates a corridor of elevated diffusion (the ``slime trail''), and
-(2)~the bump's gradient traps the agent once it enters the basin.
-
-To verify this decomposition, we repeat the simulation from
-Figure~\ref{fig:anisotropic} with the bump's gradient turned on, using
-identical pre-generated noise so the trajectories are directly
-comparable. Without the bump, the coupled agent makes large excursions
-past $x = 10$ but always bounces back. With the bump, the first such
-excursion that enters the basin locks the agent onto the bump permanently.
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth]{fig_martingale_capture.pdf}
-  \caption{Same noise realization with and without the bump. Faint traces:
-    no bump (pure temperature, from Figure~\ref{fig:anisotropic}). Solid
-    traces: bump present, providing capture. The coupled agent (bottom) is
-    captured at $t = 792$; the uncoupled agent (top) must wait until
-    $t = 2691$ for a lucky fluctuation to reach the basin. The traces are
-    identical until the moment of capture, confirming that the coupling
-    provides mobility while the bump provides trapping.}
-  \label{fig:capture}
-\end{figure}
-
-Figure~\ref{fig:capture} confirms the decomposition. The coupled agent is
-captured $3.4\times$ faster than the uncoupled agent, and the pre- and
-post-capture traces diverge at exactly the moment the agent enters the
-bump's basin. Neither mechanism alone is sufficient: without coupling, the
-agent rarely reaches the bump; without the bump, the excursions are
-transient noise that always reverts.
 
 \section{Multiple Bumps and Exploration--Exploitation}
 
