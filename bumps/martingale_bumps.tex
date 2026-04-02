@@ -114,8 +114,12 @@ Second, if Agent 1 finds a bump at $c$ while $n-1$ exploring agents remain near 
 
 The explicit, independent pairwise interactions $S_{ij}$ are fundamentally required to bypass the averaging trap without destroying the convergence of the mean. 
 
-\paragraph{Communication Efficiency via Hamming Codes.}
-While the full pairwise interaction seems to demand $O(n^2)$ dense communication, the sign matrix structure allows for elegant compression. If the signs $S_{ij}^t$ are structured deterministically using orthogonal columns (e.g., Walsh-Hadamard matrices) or error-correcting codes (e.g., a Hamming code basis), the swarm can compute the pairwise forces without sending $n$ distinct parameter vectors. The workers can simply broadcast $O(\log n)$ distinct linear combinations (parity sums) of their parameters. Agent $i$ then reconstructs its specific $F_i^t$ by adding or subtracting the appropriate $\log n$ broadcasted sums. This scales the communication bottleneck from $O(n)$ full parameter vectors per worker to $O(\log n)$, making massive swarms feasible in the $d \sim 10^{12}$ regime.
+\paragraph{Communication Efficiency: Compression vs. Sparsity.}
+While the full pairwise interaction seems to demand $O(n^2)$ dense communication, the algorithm can be scaled efficiently using two distinct paradigms:
+\begin{enumerate}
+    \item \textbf{Dense Interaction via Hamming Compression:} The swarm can perfectly compute the $O(n)$ dense interactions without $O(n)$ communication by leveraging structured, orthogonal sign matrices (e.g., Walsh-Hadamard). Rather than broadcasting individual parameter vectors, workers broadcast $O(\log n)$ parity sums (linear combinations) of their parameters over a Hamming code basis. Agent $i$ exactly reconstructs its specific $F_i^t$ from these $O(\log n)$ sums. The swarm retains the mathematically pristine $O(1)$ coalescence time of the fully connected graph, while scaling the communication bottleneck to $O(\log n)$.
+    \item \textbf{Topological Sparsity ($K \ll n$):} Alternatively, one could permanently fix a sparse interaction graph where each agent only communicates with a small neighborhood of size $K$. Because the injected noise $\gamma^2 K \sigma^2$ drops significantly, the explosion threshold is relaxed by a factor of $n/K$. This permits scaling the coupling strength to $\gamma_{\text{sparse}} \approx \gamma_{\text{dense}} \sqrt{n/K}$, perfectly recovering the exponential speedup! However, the cascade becomes topological: an anchored agent only boils its specific $K$ neighbors over the barrier. The recruitment dynamics transition from global coalescence to a wave of contagion governed by the graph's diameter.
+\end{enumerate}
 
 \section{Simulation}
 
@@ -283,7 +287,9 @@ boost along the anchor axis.
 When the landscape contains multiple bumps, the martingale mechanism
 naturally partitions the variance. The agents anchored in bump~1 synthesize noise pointing along the axis to bump~1, while agents in bump~2 synthesize noise pointing to bump~2. The total injected covariance matrix becomes a low-rank superposition of the discovered feature directions.
 
-This provides automatic load balancing and an elegant exploration-exploitation tradeoff without any central coordination. The swarm dynamically detects the axes of relevant features and selectively turns up the temperature along those specific axes, accelerating the recruitment of exploring agents into known structure while preserving a cold, stable null space for continued search.
+Crucially, because features in $d \sim 10^{12}$ dimensions are overwhelmingly likely to be orthogonal ($c_1 \cdot c_2 \approx 0$), the stabilizing shrinkage tether $\alpha(\bar{\theta} - \theta_i)$ gracefully handles simultaneous discoveries. If agents anchor at $c_1$ and $c_2$, the grand mean shifts to the 2D plane spanned by both bumps. The shrinkage physically pulls the exploring agents toward the low-rank subspace of all discovered features simultaneously, without the forces destructively interfering or tearing the agents apart.
+
+This provides automatic load balancing and an elegant exploration-exploitation tradeoff without any central coordination. The swarm dynamically detects the orthogonal axes of relevant features and selectively turns up the temperature along those specific axes, accelerating the recruitment of exploring agents into the known low-rank subspace while preserving a cold, stable null space for continued search.
 
 \section{Open Questions}
 
