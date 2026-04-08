@@ -291,6 +291,21 @@ Crucially, because features in $d \sim 10^{12}$ dimensions are overwhelmingly li
 
 This provides automatic load balancing and an elegant exploration-exploitation tradeoff without any central coordination. The swarm dynamically detects the orthogonal axes of relevant features and selectively turns up the temperature along those specific axes, accelerating the recruitment of exploring agents into the known low-rank subspace while preserving a cold, stable null space for continued search.
 
+\section{Connection to Calibeating and Online Learning}
+
+The mathematical structure of the martingale swarm establishes a profound connection between distributed non-convex optimization and game-theoretic adversarial forecasting, specifically the framework of \emph{calibeating} \cite{foster2023calibeating}.
+
+In the forecasting literature, a procedure ``calibeats'' a reference forecaster if it applies a structured, randomized smoothing kernel (a perturbation) to the reference's output such that the new forecasts are mathematically guaranteed to strictly improve the proper scoring rule without ever doing worse \cite{foster2023calibeating, hart2021calibrated}. Recent work has extended this pure game-theoretic concept directly into Online Convex Optimization (OCO) and multi-armed bandits, demonstrating how online descent methods and multiplicative weights (Hedge) can dynamically construct these calibeating perturbations \cite{lee2022online, chen2026calibeating}.
+
+Our hybrid martingale swarm is precisely a distributed physical manifestation of a calibeating procedure. 
+\begin{enumerate}
+    \item \textbf{The Reference Forecaster:} A swarm of $n$ uncoupled, independent SGD agents achieves an optimal $O(1/n)$ variance reduction in the convex null space, but suffers exponential escape times in the non-convex multi-modal regions.
+    \item \textbf{Proper Calibration (Matching the Baseline):} By injecting zero-mean spatial noise via symmetric signs ($S_{ij}^t = S_{ji}^t$), the swarm strictly conserves momentum ($\sum F_i = 0$). The ensemble mean $\bar{\theta}$ is perfectly insulated from the injected noise, guaranteeing that the swarm perfectly matches the optimal $O(1/n)$ convergence rate of the baseline in any purely convex region. It never does worse.
+    \item \textbf{Proper Calibeating (Beating the Baseline):} The moment a non-convex feature is discovered, the injected noise geometrically shifts into a massive, directional hot plate (the rank-1 variance spike). The exploring agents exploit this self-synthesized adversarial sequence to boil over the barrier in $O(1)$ time, entirely destroying the baseline's exponential escape time. 
+\end{enumerate}
+
+The explicit $\alpha$ shrinkage acts as the multiplicative weight update, gently pulling the probability distribution of the exploring swarm toward the specific orthogonal dimensions (the ``winning arms'') where the bumps reside. The martingale coupling provides a universal guarantee: by exploiting the zero-mean variance of the communication channel, the swarm strictly calibeats standard data-parallel SGD across the entire loss landscape.
+
 \section{Open Questions}
 
 \begin{itemize}
