@@ -1,0 +1,2077 @@
+%2multibyte Version: 5.50.0.2960 CodePage: 65001
+%%\newenvironment{proof}[1][Proof]{\noindent\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
+
+
+\documentclass[12pt,notitlepage,a4paper]{article}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage[onehalfspacing,nodisplayskipstretch]{setspace}
+\usepackage[a4paper,nohead,left=1in,right=1in,top=1in,bottom=1in]{geometry}
+
+\setcounter{MaxMatrixCols}{10}
+%TCIDATA{OutputFilter=LATEX.DLL}
+%TCIDATA{Version=5.50.0.2960}
+%TCIDATA{Codepage=65001}
+%TCIDATA{<META NAME="SaveForMode" CONTENT="1">}
+%TCIDATA{BibliographyScheme=Manual}
+%TCIDATA{Created=Monday, December 20, 2010 11:42:45}
+%TCIDATA{LastRevised=Wednesday, April 08, 2026 16:54:23}
+%TCIDATA{<META NAME="GraphicsSave" CONTENT="32">}
+%TCIDATA{<META NAME="DocumentShell" CONTENT="Standard LaTeX\Standard LaTeX Article">}
+%TCIDATA{Language=American English}
+%TCIDATA{CSTFile=LaTeX article (bright).cst}
+%TCIDATA{ComputeDefs=
+%$\lambda $
+%$a^{\Lambda }$
+%$a_{t}^{\Lambda }$
+%$\nu (\{n_{0},n_{0}$
+%$\alpha $
+%}
+
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{acknowledgement}[theorem]{Acknowledgement}
+\newtheorem{algorithm}[theorem]{Algorithm}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{case}[theorem]{Case}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\let\oldexample\example
+\renewcommand{\example}{\oldexample\normalfont}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{solution}[theorem]{Solution}
+\newtheorem{summary}[theorem]{Summary}
+\newenvironment{proof}[1][Proof]{\noindent\textbf{#1.} }{\hfill $\square$}
+\newcounter{savedtheorem}
+\input{tcilatex}
+\begin{document}
+
+\title{Proper Calibeating\thanks{%
+Previous versions: December 2025. We thank for useful comments and
+suggestions. A presentation is available at \texttt{%
+http://www.ma.huji.ac.il/hart/pres.html\#calib-beat-p}}}
+\author{Dean P. Foster\thanks{%
+Department of Statistics, Wharton, University of Pennsylvania, Philadelphia,
+and Amazon, New York. \emph{e-mail}: \texttt{dean@foster.net} \ \emph{web
+page}: \texttt{http://deanfoster.net}} \and Sergiu Hart\thanks{%
+Institute of Mathematics, Department of Economics, and Federmann Center for
+the Study of Rationality, The Hebrew University of Jerusalem. \emph{e-mail}: 
+\texttt{hart@huji.ac.il} \ \emph{web page}: \texttt{%
+http://www.ma.huji.ac.il/hart}}}
+\maketitle
+
+\begin{abstract}
+\end{abstract}
+
+\tableofcontents
+
+%TCIMACRO{%
+%\TeXButton{References Without Numbers}{\def\@biblabel#1{#1\hfill}
+%\def\thebibliography#1{\section*{References}
+%\addcontentsline{toc}{section}{References}
+%\list
+%{}{
+%\labelwidth 0pt
+%\leftmargin 1.8em
+%\itemindent -1.8em
+%\usecounter{enumi}}
+%\def\newblock{\hskip .11em plus .33em minus .07em}
+%\sloppy\clubpenalty4000\widowpenalty4000
+%\sfcode`\.=1000\relax\def\baselinestretch{1}\large \normalsize}
+%\let\endthebibliography=\endlist} }%
+%BeginExpansion
+\def\@biblabel#1{#1\hfill}
+\def\thebibliography#1{\section*{References}
+\addcontentsline{toc}{section}{References}
+\list
+{}{
+\labelwidth 0pt
+\leftmargin 1.8em
+\itemindent -1.8em
+\usecounter{enumi}}
+\def\newblock{\hskip .11em plus .33em minus .07em}
+\sloppy\clubpenalty4000\widowpenalty4000
+\sfcode`\.=1000\relax\def\baselinestretch{1}\large \normalsize}
+\let\endthebibliography=\endlist
+%EndExpansion
+%TCIMACRO{%
+%\TeXButton{define shfrac}{\newcommand{\shfrac}[2]{\ensuremath{{}^{#1} \hspace{-0.04in}/_{\hspace{-0.03in}#2}}}} }%
+%BeginExpansion
+\newcommand{\shfrac}[2]{\ensuremath{{}^{#1} \hspace{-0.04in}/_{\hspace{-0.03in}#2}}}
+%EndExpansion
+%TCIMACRO{%
+%\TeXButton{def \T \B}{\newcommand\T{\rule{0pt}{2.6ex}}
+%\newcommand\B{\rule[-1.2ex]{0pt}{0pt}}}}%
+%BeginExpansion
+\newcommand\T{\rule{0pt}{2.6ex}}
+\newcommand\B{\rule[-1.2ex]{0pt}{0pt}}%
+%EndExpansion
+
+\section{Introduction\label{s:intro}}
+
+\subsection{by gemini}
+
+Forecasting the probability of future events is a foundational problem in
+machine learning, statistics, and game theory. Forecasters are traditionally
+evaluated using scoring rules, which assign a numerical loss based on the
+predicted probability distribution and the realized action. A scoring rule
+is deemed \textquotedblleft proper\textquotedblright\ if a forecaster
+minimizes their expected loss by truthfully reporting the underlying
+distribution. In the literature, the standard and most widely used proper
+scoring rule is the quadratic, or Brier, scoring rule.
+
+In recent years, the literature has shifted focus toward robust, adversarial
+forecasting guarantees, specifically the concepts of calibration and
+calibeating. However, up to this point, the plain terms \textquotedblleft
+calibration\textquotedblright\ and \textquotedblleft
+calibeating\textquotedblright\ have referred exclusively to guarantees under
+the standard quadratic scoring rule. A natural theoretical question arises:
+if a forecaster utilizes a procedure that is calibrated (or calibeats a
+reference forecaster) under the Brier score, do these guarantees persist if
+the evaluator uses an entirely different proper scoring rule?
+
+In this paper, we extend these concepts universally by introducing
+procedures that are proper-calibrated and proper-calibeating. We define a
+procedure as uniformly proper-calibrated if its calibration score converges
+to zero uniformly across the entire class of proper, $1$-Lipschitz
+continuous scoring rules.
+
+Our main contributions are twofold. First, we generalize the classic
+decomposition of the Brier score (into calibration and refinement
+components). We prove that for any Lipschitz scoring rule, an approximate
+decomposition holds for general fractional binning sequences as long as the
+binning is \textquotedblleft local\textquotedblright\ (i.e., forecasts
+within a bin are sufficiently close to one another). Second, and most
+notably, we establish that any forecasting procedure that is $\varepsilon $%
+-calibrated under the standard quadratic scoring rule is inherently $%
+\varepsilon $-proper-calibrated. We show that this universal guarantee holds
+for existing stochastic procedures, as well as for deterministic,
+continuously calibrated procedures.
+
+\subsubsection{Literature Survey}
+
+\begin{itemize}
+\item Proper Scoring Rules:
+
+\begin{itemize}
+\item The evaluation of probabilistic forecasts is classically done via
+proper scoring rules, where the forecaster minimizes expected loss by
+reporting the true probabilities.
+
+\item Foundational work by Brier (1950) introduced the quadratic scoring
+rule, which remains the default standard in the literature.
+
+\item Savage (1971) formalized the mathematical characterization of proper
+scoring rules, noting that they correspond to the divergence generated by
+concave entropy functions.
+
+\item In our framework, we restrict our attention to proper scoring rules
+that are Lipschitz-continuous.
+
+\item Consequently, we explicitly exclude rules that allow for infinite
+losses, such as the logarithmic (Kullback-Leibler) scoring rule.
+\end{itemize}
+
+\item Calibration:
+
+\begin{itemize}
+\item The concept of empirical calibration---that an event should happen
+with frequency $p$ whenever a forecaster predicts it will happen with
+probability $p$---was popularized by Dawid (1982).
+
+\item Foster and Vohra (1998) established a foundational result in
+adversarial learning by showing that a forecaster can guarantee \$%
+\TEXTsymbol{\backslash}varepsilon\$-calibration against any sequence of
+realized actions by using a randomized (stochastic) procedure.
+
+\item More recently, Foster and Hart (2021) expanded this literature by
+introducing \textquotedblleft continuously calibrated\textquotedblright\
+procedures.
+
+\item They proved that calibration conditions can be satisfied by a
+deterministic procedure if the forecasts are evaluated over a continuous
+binning.
+\end{itemize}
+
+\item Calibeating:
+
+\begin{itemize}
+\item Foster and Hart (2023) shifted the goalpost from merely achieving
+calibration to \textquotedblleft calibeating\textquotedblright .Calibeating
+requires a procedure to achieve a Brier score that is bounded by the
+refinement score of a baseline, reference forecaster.
+
+\item Historically, the plain terms \textquotedblleft
+calibration\textquotedblright\ and \textquotedblleft
+calibeating\textquotedblright\ refer strictly to the standard quadratic
+scoring rule.
+
+\item Our current work generalizes these streams of literature by bridging
+standard Brier score guarantees with uniform performance bounds across all
+1-Lipschitz proper scoring rules.
+\end{itemize}
+\end{itemize}
+
+\subsection{Literature\label{s-s:literature}}
+
+Calibeating:
+
+\begin{itemize}
+\item Foster and Hart (2023); also 2022/2026 (arxiv), 2024 (add), 2026
+(errata)
+
+\item Lee, Noarov, Pai, and Roth (2022)
+
+\item Recent work by Chen, Huang, Jordan, and Luo 2026
+\end{itemize}
+
+\section{The Setup\label{s:setup}}
+
+The setup is as in our previous papers, Foster and Hart (2018, 2021, 2023,
+2026), except that the set of forecasts $C$ is now specified as the
+appropriate probability simplex $\Delta $.
+
+Let $A$ be a finite set of \emph{actions}, and let $\Delta :=\{c\in \mathbb{R%
+}_{+}^{A}:\sum_{a\in A}c(a)=1\}$, the simplex of probability distributions
+over the set $A$, be the set of \emph{forecasts.} We identify the elements
+of $A$ with the unit vectors of $\Delta $.
+
+\subsection{Scoring Rules\label{s-s:scoring rules}}
+
+A \emph{scoring rule} $L_{A}:A\times \Delta \rightarrow \mathbb{R}$
+associates to every forecast $c\in \Delta $ and every realized action $a\in
+A $ a loss\footnote{%
+There are scoring rules, such as the logarithmic scoring rule, that allow
+the loss to be infinite; as they are not Lipschitz-continuous, we will not
+deal with them here (for \textquotedblleft
+log-calibeating,\textquotedblright\ see Appendix A.9 in [FH2022]).} $%
+L_{A}(a,c)$. The function $L_{A}$ is linearly extended to $L:\Delta \times
+\Delta \rightarrow \mathbb{R}$ by $L(d,c):=\sum_{a\in A}d(a)L_{A}(a,c)$;
+thus, $L(d,c)=\mathbb{E}_{a\sim d}\left[ L_{A}(a,c)\right] $ is the expected
+loss when the realization is distributed according to\footnote{%
+For $a$ in A we thus have $L_{A}(a,c)=L(\mathbf{1}_{a},c).$} $d\in \Delta .$
+Writing $\mathbf{L}(c)$ for the vector $(L_{A}(a,c))_{a\in A}$ in $\mathbb{R}%
+^{A}$, we thus have%
+\begin{equation}
+L(d,c)=d\cdot \mathbf{L}(c)  \label{eq:d*Lambda(c)}
+\end{equation}%
+for every $c,d\in \Delta .$
+
+A scoring rule $L$ is \emph{proper} if $L(d,c)\geq L(d,d)$ for every $c,d\in
+\Delta $; i.e., forecasting the correct distribution minimizes the expected
+loss (if $L(d,c)>L(d,d)$ for all $c\neq d$, then $L$ is \emph{strictly proper%
+}). To measure the deviation from the perfect forecast $c=d$, define the $L$%
+\emph{-divergence}\footnote{%
+At times this is written $D(d||c)$ (as is the case for the Kullback-Leibler
+divergence).} $D\equiv D^{L}:\Delta \times \Delta \rightarrow \mathbb{R}$ by%
+\begin{equation}
+D(d,c)\,:=\,L(d,c)-L(d,d).  \label{eq:D-le}
+\end{equation}%
+Thus, $L$ is proper if and only if $D$ is always $\geq 0.$ The standard
+scoring rule is the \emph{quadratic (Brier) scoring rule}, whose divergence
+is $D(d,c)=\left\Vert c-d\right\Vert ^{2}$ (and $L_{A}(a,c)=-2c(a)+\left%
+\Vert c\right\Vert ^{2}$).
+
+A scoring rule $L$ is $M$\emph{-Lipschitz} for some finite $M$ if%
+\begin{equation*}
+\left\Vert \mathbf{L}(c)-\mathbf{L}(c^{\prime })\right\Vert \leq M\left\Vert
+c-c^{\prime }\right\Vert
+\end{equation*}%
+for all $c,c^{\prime }\in \Delta $, where $\left\Vert \cdot \right\Vert $
+denotes the standard Euclidean norm.
+
+We list several useful properties (see Appendix \ref{s-a:scoring rules} for
+details):
+
+\begin{proposition}
+\label{p:L}(i) If $L$ is a proper scoring rule then the function $H\equiv
+H^{L}:\Delta \rightarrow \mathbb{R}$ (\textquotedblleft the $L$%
+-entropy\textquotedblright ) given by $H(c):=L(c,c)$ is concave, and we have 
+\begin{eqnarray*}
+L(d,c) &=&H(c)-(c-d)\cdot \mathbf{L}(c)\;\;\;\text{and} \\
+D(d,c) &=&H(c)-H(d)-(c-d)\cdot \mathbf{L}(c)
+\end{eqnarray*}%
+for every $c,d$ in $\Delta $.
+
+(ii) If $L$ is a proper $M$-Lipschitz scoring rule then%
+\begin{eqnarray}
+0 &\leq &D(d,c)\leq M\left\Vert c-d\right\Vert ^{2}\;\;\;\text{and}
+\label{eq:L} \\
+\left\vert D(d,c)-D(d,c^{\prime })\right\vert &=&\left\vert
+L(d,c)-L(d,c^{\prime })\right\vert \leq M\left\Vert c-c^{\prime }\right\Vert
+\label{eq:D-D-L}
+\end{eqnarray}%
+for every $c,c^{\prime },d$ in $\Delta $.
+\end{proposition}
+
+\subsection{Scores for Sequences of Forecasts\label{s-s:sequences}}
+
+Let $t$ be the horizon; for $s=1,...,t$, let $a_{s}\in A$ be the action, $%
+c_{s}\in \Delta $ the forecast, and $i_{s}\in I$ the \textquotedblleft
+bin\textquotedblright\ (for some set of bins $I$).\footnote{%
+We abstract away from the way the binning is determined. The
+\textquotedblleft standard\textquotedblright\ binning, by forecast, is given
+by $\mathbf{i=c}$, i.e., $i_{s}=c_{s}$ for every $s$.} As in FH2023, we
+write $\mathbf{a}^{t}$ for $(a_{s})_{s=1}^{t}$ and $\mathbf{a}$ for $%
+(a_{s})_{s=1}^{\infty },$ and similarly for the other sequences.\footnote{%
+While usually only $\mathbf{a}^{t},\mathbf{c}^{t},...$ are needed, for
+convenience we may often use $\mathbf{a},\mathbf{c},...$ $.$} Assume that
+the binning is a refinement of the standard binning that is generated by the
+forecasts; i.e., all forecasts in the same bin $i$ have the same $c$
+(formally: $i_{s}=i_{r}$ implies $c_{s}=c_{r}$).\footnote{%
+Formally, the forecast is \emph{measurable} with respect to the binning.} A
+scoring rule $L$, with corresponding divergence function $D^{L}$, generates
+the following scores, which we refer to as $L$\emph{-Brier}, $L$\emph{%
+-calibration}, and $L$\emph{-refinement}:\footnote{%
+The $\mathcal{B}$-score depends on the sequence $\mathbf{c},$ the $\mathcal{R%
+}$-score on the sequence $\mathbf{i}$, and the $\mathcal{K}$-score on both
+(of course, all of them depend on the sequence $\mathbf{a}$ as well). When $L
+$ is the standard quadratic score we drop the superscript $L$.\newline
+Since we use different forecasting sequences and different binning
+sequences, precise and explicit notation is needed (so as to avoid errors,
+as in Foster and Hart 2023; see 2026 Errata).}%
+\begin{eqnarray*}
+\mathcal{B}_{t}^{L}\equiv \mathcal{B}_{t}^{L}(\mathbf{c}) &%
+%TCIMACRO{\TeXButton{:=}{{\;:=\;}}}%
+%BeginExpansion
+{\;:=\;}%
+%EndExpansion
+&\frac{1}{t}\sum_{s=1}^{t}D^{L}(a_{s},c_{s}) \\
+\mathcal{K}_{t}^{L}\equiv \mathcal{K}_{t}^{L}(\mathbf{c};\mathbf{i}) &%
+%TCIMACRO{\TeXButton{:=}{{\;:=\;}}}%
+%BeginExpansion
+{\;:=\;}%
+%EndExpansion
+&\frac{1}{t}\sum_{s=1}^{t}D^{L}(\bar{a}_{t}(i_{s}),c_{s}) \\
+\mathcal{R}_{t}^{L}\equiv \mathcal{R}_{t}^{L}(\mathbf{i}) &%
+%TCIMACRO{\TeXButton{:=}{{\;:=\;}}}%
+%BeginExpansion
+{\;:=\;}%
+%EndExpansion
+&\frac{1}{t}\sum_{s=1}^{t}D^{L}(a_{s},\bar{a}_{t}(i_{s})),
+\end{eqnarray*}%
+where for each $i$ in $I$%
+\begin{equation*}
+n_{t}(i)\,%
+%TCIMACRO{\TeXButton{:=}{{\;:=\;}}}%
+%BeginExpansion
+{\;:=\;}%
+%EndExpansion
+\,\left\vert \{s\leq t:i_{s}=i\}\right\vert 
+\end{equation*}%
+is the number of entries in bin $i$, and%
+\begin{equation*}
+\bar{a}_{t}(i)\,%
+%TCIMACRO{\TeXButton{:=}{{\;:=\;}}}%
+%BeginExpansion
+{\;:=\;}%
+%EndExpansion
+\,\frac{1}{n_{t}(i)}\sum_{s\leq t:i_{s}=i}a_{s}
+\end{equation*}%
+is the average action in bin $i$. For the standard binning given by the
+forecasts, i.e., when $\mathbf{i}=\mathbf{c}$, we shorten $\mathcal{K}^{L}(%
+\mathbf{c};\mathbf{c})$ to $\mathcal{K}^{L}(\mathbf{c}).$
+
+Let%
+\begin{equation*}
+\mathcal{H}_{t}^{L}%
+%TCIMACRO{\TeXButton{:=}{{\;:=\;}}}%
+%BeginExpansion
+{\;:=\;}%
+%EndExpansion
+\frac{1}{t}\sum_{s=1}^{t}H^{L}(a_{s})=\frac{1}{t}\sum_{s=1}^{t}L(a_{s},a_{s})
+\end{equation*}%
+be the average $L$-entropy, then%
+\begin{equation*}
+\mathcal{B}_{t}^{L}(\mathbf{c})=\frac{1}{t}\sum_{s=1}^{t}L(a_{s},c_{s})-%
+\mathcal{H}_{t}^{L}
+\end{equation*}%
+and, summing by bins and using the linearity of $L$ in its first argument,%
+\begin{eqnarray}
+\mathcal{R}_{t}^{L}(\mathbf{i}) &=&\frac{1}{t}\sum_{s=1}^{t}L(a_{s},\bar{a}%
+_{t}(i_{s}))-\mathcal{H}_{t}^{L}  \notag \\
+&=&\sum_{i\in I}\left( \frac{n_{t}(i)}{t}\right) \left( \frac{1}{n_{t}(i)}%
+\sum_{s\leq t:i_{s}=i}L(a_{s},\bar{a}_{t}(i))\right) -\mathcal{H}_{t}^{L} 
+\notag \\
+&=&\sum_{i\in I}\left( \frac{n_{t}(i)}{t}\right) L(\bar{a}_{t}(i),\bar{a}%
+_{t}(i))-\mathcal{H}_{t}^{L}  \notag \\
+&=&\sum_{i\in I}\left( \frac{n_{t}(i)}{t}\right) H^{L}(\bar{a}_{t}(i))-%
+\mathcal{H}_{t}^{L}.  \label{eq:R-H-H}
+\end{eqnarray}
+
+The following is a classic decomposition result (XX):
+
+\begin{theorem}
+\label{th:S-decompose}Let the binning sequence $\mathbf{i}$ be a refinement
+of the forecasting sequence $\mathbf{c}$; then 
+\begin{equation*}
+\mathcal{B}_{t}^{L}(\mathbf{c})=\mathcal{K}_{t}^{L}(\mathbf{c};\mathbf{i})+%
+\mathcal{R}_{t}^{L}(\mathbf{i}).
+\end{equation*}
+\end{theorem}
+
+\begin{proof}
+Let $c^{i}$ denote the forecast in bin $i$. Summing by bins and again using
+the linearity of $L$ in its first argument gives 
+\begin{eqnarray*}
+\mathcal{B}_{t}^{L}(\mathbf{c}) &=&\sum_{i\in I}\left( \frac{n_{t}(i)}{t}%
+\right) \left( \frac{1}{n_{t}(i)}\sum_{s\leq t:i_{s}=i}L(a_{s},c^{i})\right)
+-\mathcal{H}_{t}^{L} \\
+&=&\sum_{i\in I}\left( \frac{n_{t}(i)}{t}\right) L(\bar{a}_{t}(i),c^{i})-%
+\mathcal{H}_{t}^{L},
+\end{eqnarray*}%
+and%
+\begin{eqnarray*}
+\mathcal{K}_{t}^{L}(\mathbf{c};\mathbf{i}) &=&\sum_{i}\left( \frac{n_{t}(i)}{%
+t}\right) \left[ L(\bar{a}_{t}(i),c^{i})-L(\bar{a}_{t}(i),\bar{a}_{t}(i))%
+\right] \\
+&=&\sum_{i\in I}\left( \frac{n_{t}(i)}{t}\right) L(\bar{a}%
+_{t}(i),c^{i})-\sum_{i\in I}\left( \frac{n_{t}(i)}{t}\right) H^{L}(\bar{a}%
+_{t}(i)).
+\end{eqnarray*}%
+Subtracting gives $\mathcal{B}-\mathcal{K}=\mathcal{R}$ by (\ref{eq:R-H-H}).
+\end{proof}
+
+\subsubsection{General Fractional Binning Sequences\label{s-s-s:fractional}}
+
+Following Foster and Hart (2021), we now consider general fractional
+binnings. Let $I$ be a finite or countably infinite set of bins;\footnote{%
+For pure binnings the number of bins is always finite (up to time $t$, it is
+at most $t$).} a \emph{general (fractional) binning sequence} $\mathbf{f}%
+=(f_{s})_{s=1,2,...}$specifies in each period $s$ the fraction $f_{s}(i)\geq
+0$ that is assigned to each bin $i\in I$, where $\sum_{i\in I}f_{s}(i)=1$;
+thus, $f_{s}$ may be viewed as a probability distribution on $I$, i.e., $%
+f_{s}\in \Delta (I)$. For example, given a fractional binning $\Pi
+=(w_{i})_{i\in I}$ (where $w_{i}:\Delta \rightarrow \lbrack 0,1]$ and $%
+\sum_{i\in I}w_{i}(c)=1$ for every $c\in \Delta $; see Foster and Hart 2021)
+we put\footnote{%
+The resulting binning sequence is thus time-independent: the fraction $%
+f_{s}(i)$ depends only on the forecast $c_{s}$ and not on the period $s$.} $%
+f_{s}(i)=w_{i}(c_{s})$. When each $f_{s}$ is a unit vector, i.e., in each
+period there is a single bin only, we will call the binning sequence \emph{%
+pure}.
+
+The definitions of calibration and refinement naturally extend to fractional
+binnings:%
+\begin{eqnarray*}
+\mathcal{K}_{t}^{L}(\mathbf{c};\mathbf{f}) &%
+%TCIMACRO{\TeXButton{:=}{{\;:=\;}}}%
+%BeginExpansion
+{\;:=\;}%
+%EndExpansion
+&\frac{1}{t}\sum_{i\in I}n_{t}(i)D^{L}(\bar{a}_{t}(i),\bar{c}_{t}(i)) \\
+\mathcal{R}_{t}^{L}(\mathbf{f}) &%
+%TCIMACRO{\TeXButton{:=}{{\;:=\;}}}%
+%BeginExpansion
+{\;:=\;}%
+%EndExpansion
+&\frac{1}{t}\sum_{i\in I}\sum_{s=1}^{t}f_{s}(i)D^{L}(a_{s},\bar{a}_{t}(i)),
+\end{eqnarray*}%
+where for each $i$ in $I$%
+\begin{equation*}
+n_{t}(i)\,%
+%TCIMACRO{\TeXButton{:=}{{\;:=\;}}}%
+%BeginExpansion
+{\;:=\;}%
+%EndExpansion
+\,\sum_{s=1}^{t}f_{s}(i)
+\end{equation*}%
+is the total weight in bin $i$, and%
+\begin{eqnarray*}
+\bar{a}_{t}(i) &%
+%TCIMACRO{\TeXButton{:=}{{\;:=\;}}}%
+%BeginExpansion
+{\;:=\;}%
+%EndExpansion
+&\sum_{s=1}^{t}\left( \frac{f_{s}(i)}{n_{t}(i)}\right) a_{s} \\
+\bar{c}_{t}(i) &%
+%TCIMACRO{\TeXButton{:=}{{\;:=\;}}}%
+%BeginExpansion
+{\;:=\;}%
+%EndExpansion
+&\sum_{s=1}^{t}\left( \frac{f_{s}(i)}{n_{t}(i)}\right) c_{s}
+\end{eqnarray*}%
+are the average action and the average forecast in bin $i$.
+
+These definitions clearly reduce to the previous definitions when the
+binning sequence is pure and it refines the standard by-forecast-binning,
+because then each bin contains a single value of forecast. For general
+binning sequences, where a bin may contain multiple forecast values, the
+decomposition of Theorem \ref{th:S-decompose} no longer holds.\footnote{%
+For the quadratic scoring rule there is another such a decomposition, but
+with a different definition of refinement, namely, as the average
+bin-variance of the \emph{differences} $a_{t}-c_{t}$. Carrying this out for
+a proper scoring rule would yield here an average of \emph{differences
+between divergences} (which is in general not a divergence). We sidestep
+this by using Theorem \ref{th:decompose-delta} below (cf. FH2026).} However,
+we will now show that it continues to approximately hold for
+\textquotedblleft local\textquotedblright\ binning sequences where the
+forecasts in each bin are close to one another (and the scoring rule is
+Lipschitz).
+
+Given a (continuous) fractional binning $\Pi =(w_{i})_{i\in I},$ let $\Pi (%
+\mathbf{c})$ denote the fractional binning sequence $\mathbf{f}$ where $%
+f_{s}=(w_{i}(c_{s}))_{i\in I}\in \Delta (I)$ for every $s$; i.e., in each
+period $s$ the fractions are given by the weight functions $w_{i}$ applied
+to the forecast $c_{s}.$
+
+Let $\delta >0$; a general binning sequence $\mathbf{f}$ is $\delta $\emph{%
+-local with respect to the sequence }$\mathbf{c}$ if for each $i$ there is
+an open ball $B(y^{i};\delta )$ with center $y^{i}\in \Delta $ and radius $%
+\delta $ such that $f_{s}(i)>0$ implies $\left\Vert c_{s}-y^{i}\right\Vert
+<\delta $; i.e., all forecasts in bin $i$ lie in $B(y^{i};\delta ).$ Pure
+binning sequences that are a refinement of the forecast-binning are thus $%
+\delta $-local for every $\delta >0$. The generalization of the
+decomposition theorem \ref{th:S-decompose} is:\footnote{%
+This is the counterpart of the Lemma in the Errata for the quadratic scoring
+rule: $\mathcal{R}^{\#}=\mathcal{B}-\mathcal{K}$, and so $\mathcal{B}-\left[ 
+\mathcal{K}+\mathcal{R}\right] =\mathcal{R}^{\#}-\mathcal{R}$.}
+
+\begin{theorem}
+\label{th:decompose-delta}Let $\delta >0$; if the general binning sequence $%
+\mathbf{f}$ is $\delta $-local with respect to the forecasting sequence $%
+\mathbf{c}$, then%
+\begin{equation*}
+\left\vert \mathcal{B}_{t}^{L}(\mathbf{c})-\left( \mathcal{K}_{t}^{L}(%
+\mathbf{c};\mathbf{f})+\mathcal{R}_{t}^{L}(\mathbf{f})\right) \right\vert
+<2M\delta
+\end{equation*}%
+for every $M$-Lipschitz scoring rule $L$.
+\end{theorem}
+
+\begin{proof}
+Replacing all $c_{s}$ and $\bar{c}_{t}(i)$ in bin $i$ by $y^{i}$ yields
+scores\footnote{%
+The refinement score is not affected since it does not depend on the
+forecasts. For simplicity we drop the subscript $t$ from $n_{t},\bar{a}_{t},$
+and $\bar{c}_{t}$.}%
+\begin{eqnarray*}
+\mathcal{\hat{B}}_{t}^{L}(\mathbf{c}) &%
+%TCIMACRO{\TeXButton{:=}{{\;:=\;}}}%
+%BeginExpansion
+{\;:=\;}%
+%EndExpansion
+&\sum_{i\in I}\left( \frac{n(i)}{t}\right) \sum_{s=1}^{t}\left( \frac{%
+f_{s}(i)}{n(i)}\right) D(a_{s},y^{i})\text{\ \ \ and} \\
+\mathcal{\hat{K}}_{t}^{L}(\mathbf{c};\mathbf{f}) &%
+%TCIMACRO{\TeXButton{:=}{{\;:=\;}}}%
+%BeginExpansion
+{\;:=\;}%
+%EndExpansion
+&\sum_{i\in I}\left( \frac{n(i)}{t}\right) D(\bar{a}(i),y^{i}).
+\end{eqnarray*}%
+The proof consists of showing, first, that $\mathcal{\hat{B}}$ is close to $%
+\mathcal{B}$ and $\mathcal{\hat{K}}$ is close to $\mathcal{K}$, and second,
+that\footnote{%
+Since positive fractions of $c_{s}$ may be allocated to more than one bin
+and thus replaced by \emph{different} $y^{i}$-s, there is no single
+replacement of the forecasting sequence $\mathbf{c}$ that would give (ii) by
+the decomposition of Theorem \ref{th:S-decompose}; the proof of (ii) is just
+a slight variant.} $\mathcal{\hat{B}-\hat{K}=R}$.
+
+(i) 
+\begin{eqnarray*}
+\left\vert \mathcal{B}_{t}^{L}(\mathbf{c})-\mathcal{\hat{B}}_{t}^{L}(\mathbf{%
+c})\right\vert &<&M\delta \text{\ \ \ and} \\
+\left\vert \mathcal{K}_{t}^{L}(\mathbf{c};\mathbf{f})-\mathcal{\hat{K}}%
+_{t}^{L}(\mathbf{c};\mathbf{f})\right\vert &<&M\delta .
+\end{eqnarray*}%
+Indeed, all $c_{s}$ in bin $i$ (i.e., with $f_{s}(i)>0$) satisfy $\left\Vert
+c_{s}-y^{i}\right\Vert <\delta $, and thus their average $\bar{c}(i)\equiv 
+\bar{c}_{t}(i)$ satisfies $\left\Vert \bar{c}(i)-y^{i}\right\Vert <\delta $
+as well. Therefore $\left\vert D(a_{s},c_{s})-D(a_{s},y^{i})\right\vert
+<M\delta $ and $\left\vert D(\bar{a}(i),\bar{c}(i))-D(\bar{a}%
+(i),y^{i})\right\vert <M\delta $ by (\ref{eq:D-D-L}). Averaging the former
+over $s$ and $i$ yields the inequality for $\mathcal{B}$, and averaging the
+latter over $i$ yields the inequality for $\mathcal{K}$.
+
+(ii)%
+\begin{equation*}
+\mathcal{\hat{B}}_{t}^{L}(\mathbf{c})=\mathcal{\hat{K}}_{t}^{L}(\mathbf{c};%
+\mathbf{f})+\mathcal{R}_{t}^{L}(\mathbf{f}).
+\end{equation*}%
+Indeed, we have%
+\begin{eqnarray*}
+\mathcal{\hat{B}}_{t}^{L}(\mathbf{c}) &=&\sum_{i\in I}\left( \frac{n(i)}{t}%
+\right) \sum_{s=1}^{t}\left( \frac{f_{s}(i)}{n(i)}\right) L(a_{s},y^{i})-%
+\mathcal{H}_{t}^{L} \\
+&=&\sum_{i\in I}\left( \frac{n(i)}{t}\right) L(\bar{a}(i),y^{i})-\mathcal{H}%
+_{t}^{L},
+\end{eqnarray*}%
+and%
+\begin{eqnarray*}
+\mathcal{\hat{K}}_{t}^{L}(\mathbf{c};\mathbf{f}) &=&\sum_{i\in I}\left( 
+\frac{n(i)}{t}\right) \left[ L(\bar{a}(i),y^{i})-L(\bar{a}(i),\bar{a}(i))%
+\right] \\
+&=&\sum_{i\in I}\left( \frac{n(i)}{t}\right) L(\bar{a}(i),y^{i})-\sum_{i\in
+I}\left( \frac{n(i)}{t}\right) H(\bar{a}(i)).
+\end{eqnarray*}%
+Subtracting gives (ii) by (\ref{eq:R-H-H}).
+
+Combining (i) and (ii) yields the result.
+\end{proof}
+
+\section{\textquotedblleft Proper\textquotedblright\ Concepts\label{s:proper}%
+}
+
+We will say that a procedure is \textquotedblleft proper\textquotedblright
+-calibrated if it is calibrated with respect to every proper Lipschitz
+scoring rule $L$; that is, the $L$-calibration score converges to zero as
+the horizon increases. Moreover, we require uniformity in the scoring rule $L
+$.  Since multiplying a scoring rule by a constant multiplies the
+calibration score by that same constant, to get uniform convergence we need
+to normalize the scoring functions; for Lipschitz scoring rules, a
+convenient normalization is to rescale them by dividing by the Lipschitz
+constant, which yields $1$-Lipschitz scoring rules.\footnote{%
+Functions that are $1$-Lipschitz are called \textquotedblleft nonexpansive."}
+Proper-calibeating will be similarly defined. 
+
+Let thus $\mathcal{L}$ denote the class of all proper Lipschitz scoring
+rules, and $\mathcal{L}_{1}$ the subclass of $1$-Lipschitz such rules. We
+will say that a procedure is \emph{(uniformly) proper-calibrated /
+proper-calibeating} if the corresponding requirement holds simultaneously
+for all scoring rules in $\mathcal{L}_{1}$ (we will usually drop the term
+\textquotedblleft uniform\textquotedblright ). The formal definitions are as
+follows, for $\varepsilon \geq 0$ (when $\varepsilon =0$ we say
+\textquotedblleft proper-calibrated/calibeating\textquotedblright\ instead
+of \textquotedblleft $0$-proper-calibrated/calibeating\textquotedblright ),
+procedure $\sigma $ (deterministic or stochastic) with forecasting sequence $%
+\mathbf{c}$:
+
+\begin{itemize}
+\item The procedure $\sigma $ is \emph{(uniformly) }$\varepsilon $-\emph{%
+proper-calibrated} (following Foster and Vohra 1998) if\footnote{%
+The expectation $\mathbb{E}$ is taken over the random forecasts of $\sigma $.%
+}%
+\begin{equation*}
+\varlimsup_{t\rightarrow \infty }\left( \sup_{L\in \mathcal{L}_{1}}\sup_{%
+\mathbf{a}_{t}\in A^{t}}\mathbb{E}\left[ \mathcal{K}_{t}^{L}(\mathbf{c})%
+\right] \right) \leq \varepsilon ^{2}.
+\end{equation*}
+
+\item The procedure $\sigma $ is \emph{(uniformly) continuously }$%
+\varepsilon $\emph{-proper-calibrated} (following Foster and Hart 2021) if%
+\begin{equation*}
+\varlimsup_{t\rightarrow \infty }\left( \sup_{L\in \mathcal{L}_{1}}\sup_{%
+\mathbf{a}_{t}\in A^{t}}\mathbb{E}\left[ \mathcal{K}_{t}^{L}(\mathbf{c};\Pi (%
+\mathbf{c}))\right] \right) \leq \varepsilon ^{2}
+\end{equation*}%
+for every continuous binning\footnote{%
+In Foster and Hart (2021) it is proved that it suffices for the condition to
+hold for one specific continuous binning $\Pi _{0}$.} $\Pi $.
+
+\item Let $B$ be a finite set; the\ $\mathbf{b}$-based procedure $\sigma $
+is \emph{(uniformly) }$(\varepsilon ,B)$-\emph{proper-calibeating }%
+(following Foster and Hart 2023) if%
+\begin{equation*}
+\varlimsup_{t\rightarrow \infty }\left( \sup_{L\in \mathcal{L}_{1}}\sup_{%
+\mathbf{a}_{t}\in A^{t},\mathbf{b}_{t}\in B^{t}}\mathbb{E}\left[ \mathcal{B}%
+_{t}^{L}(\mathbf{c})-\mathcal{R}_{t}^{L}(\mathbf{b})\right] \right) \leq
+\varepsilon ^{2}.
+\end{equation*}
+\end{itemize}
+
+From now on, the plain terms \textquotedblleft
+calibration\textquotedblright\ and \textquotedblleft
+calibeating\textquotedblright\ refer to the standard quadratic scoring rule
+only. 
+
+\bigskip 
+
+\noindent \textbf{Remark. }While the quadratic scoring rule needs rescaling
+in order to be included in $\mathcal{L}_{1}$ (because its Lipschitz constant
+is $2\sqrt{2}$), its divergence $D(d,c)=\left\Vert d-c\right\Vert ^{2}$
+satisfies the crucial inequality (\ref{eq:L}) without rescaling. Therefore
+it may be convenient to artificially add the quadratic scoring rule without
+rescaling it to $\mathcal{L}_{1}$, so that $\varepsilon $%
+-proper-calibration/calibeating includes $\varepsilon $%
+-calibration/calibeating (with the same $\varepsilon $).
+
+\section{Proper Calibration\label{s:proper calibration}}
+
+Calibration turns out to always yield proper calibration.
+
+\begin{theorem}
+\label{th:proper-calibration}Every procedure that is $\varepsilon $%
+-calibrated is $\varepsilon $-\emph{proper}-calibrated, and every procedure
+that is continuously $\varepsilon $-calibrated is continuously $\varepsilon $%
+-\emph{proper}-calibrated.
+\end{theorem}
+
+\bigskip 
+
+This is an immediate consequence of the following:
+
+\begin{proposition}
+\label{p:K-KS}Let $L$ be a proper $M$-Lipschitz scoring rule. Then\footnote{%
+We do not use a superscript $L$ when $L$ is the standard quadratic scoring
+rule.}%
+\begin{equation*}
+\mathcal{K}_{t}^{L}(\mathbf{c};\mathbf{f})\leq M\,\mathcal{K}_{t}(\mathbf{c};%
+\mathbf{f}).
+\end{equation*}
+\end{proposition}
+
+\begin{proof}
+Using Proposition \ref{p:L} (ii) yields 
+\begin{eqnarray}
+\mathcal{K}_{t}^{L}(\mathbf{c};\mathbf{f}) &=&\frac{1}{t}\sum_{i\in I}\left( 
+\frac{n_{t}(i)}{t}\right) D^{L}(\bar{a}_{t}(i),\bar{c}_{t}(i))
+\label{eq:KS vs K} \\
+&\leq &\frac{1}{t}\sum_{i\in I}\left( \frac{n_{t}(i)}{t}\right) M\left\Vert 
+\bar{a}_{t}(i)-\bar{c}_{t}(i)\right\Vert ^{2}=M\,\mathcal{K}_{t}(\mathbf{c};%
+\mathbf{f}).  \notag
+\end{eqnarray}
+\end{proof}
+
+\bigskip
+
+\begin{proof}[Proof of Theorem \protect\ref{th:proper-calibration}]
+By Proposition \ref{p:K-KS}, for every proper $1$-Lipschitz scoring rule $L$
+we have $\mathcal{K}_{t}^{L}(\mathbf{c})\leq \mathcal{K}_{t}(\mathbf{c}),$
+and $\mathcal{K}_{t}^{L}(\mathbf{c};\Pi (\mathbf{c}))\leq \mathcal{K}_{t}(%
+\mathbf{c};\Pi (\mathbf{c}))$ for every continuous binning $\Pi $.
+\end{proof}
+
+\bigskip
+
+The existing results in the literature thus yield stochastic $\varepsilon $%
+-proper-calibrated procedures (that are of type MM; and, almost
+deterministic procedures of type FP), and deterministic continuously
+proper-calibrated procedures (that are of type FP).
+
+\bigskip
+
+For instance, from Theorem 4 of Foster and Hart (2023) (with $C=\Delta $,
+and thus $\gamma ^{2}=\max_{c,c^{\prime }\in \Delta }\left\Vert c-c^{\prime
+}\right\Vert ^{2}=2$) we get:
+
+\begin{theorem}
+\label{th:calibration S}Let $\delta >0$ and let $\Delta _{\delta }\subset
+\Delta $ be a finite $\delta $-grid of $\Delta $. Then there exists a
+stochastic $\Delta _{\delta }$-forecasting procedure $\sigma $ that is $%
+\delta $-proper-calibrated; specifically, 
+\begin{equation*}
+\mathbb{E}\left[ \mathcal{K}_{t}^{L}(\mathbf{c})\right] \leq \delta
+^{2}+2|\Delta _{\delta }|\frac{\ln t+1}{t}
+\end{equation*}%
+for all $t\geq 1$, all sequences $\mathbf{a}_{t}\in A^{t}$, and all proper $1
+$-Lipschitz scoring rules $L$ (i.e., $L\in \mathcal{L}_{1}$). Moreover, $%
+\sigma $ may be taken to be $\delta $-almost deterministic (i.e., all
+randomizations are $\delta $-local).
+\end{theorem}
+
+\bigskip
+
+Theorem 11 (D) of Foster and Hart (2021) (see also Theorems 6 and 12 of
+Foster and Hart 2023) yields:
+
+\begin{theorem}
+\label{th:cont}There exists a \emph{deterministic} forecasting procedure $%
+\sigma $ that is continuously proper-calibrated.
+\end{theorem}
+
+\section{Proper Calibeating\label{s:proper calibeating}}
+
+Unlike calibration, for calibeating it is \emph{not} true that
+proper-calibeating is a consequence of calibeating. We show this below, and
+then we provide two ways of obtaining proper calibeating: first, proving
+that the simple calibeating procedure of Theorem 3 of Foster and Hart (2023)
+is proper calibeating; and second, proving that calibeating the appropriate
+joint binning yields proper calibeating.
+
+\subsection{Calibeating Does Not Imply Proper Calibeating\label{s-s:example}}
+
+We show that in general calibeating with respect to the standard quadratic
+scoring rule does \emph{not} yield calibeating with respect to other proper
+Lipschitz scoring rules (this is in contrast to calibration, where, as we
+have seen above, calibration always entails proper calibration).
+
+\begin{example}
+\label{ex:not-S-beat}In the one-dimensional case, where $A=\{0,1\},$
+consider $t=10$ periods where the actions $a_{t}$, the forecasts $b_{t}$ and 
+$c_{t}$ (given in the table below as the forecasted probability of $a=1$),
+are as follows:%
+\begin{equation*}
+\begin{tabular}{c|cccccccccc}
+$t$ & $1$ & $2$ & $3$ & $4$ & $5$ & $6$ & $7$ & $8$ & $9$ & $10$ \\ 
+\hline\hline
+$a_{t}$ & $1$ & $0$ & $0$ & $0$ & $0$ & $1$ & $1$ & $1$ & $1$ & $0$ \\ 
+$b_{t}$ & $\frac{1}{5}$ & $\frac{1}{5}$ & $\frac{1}{5}$ & $\frac{1}{5}$ & $%
+\frac{1}{5}$ & $\frac{4}{5}$ & $\frac{4}{5}$ & $\frac{4}{5}$ & $\frac{4}{5}$
+& $\frac{4}{5}$ \\ 
+$c_{t}$ & $1$ & $0$ & $\frac{1}{2}$ & $\frac{1}{2}$ & $\frac{1}{2}$ & $\frac{%
+1}{2}$ & $\frac{1}{2}$ & $\frac{1}{2}$ & $1$ & $0$%
+\end{tabular}%
+~~~.
+\end{equation*}%
+The sequences $\mathbf{b}_{t}$ and $\mathbf{c}_{t}$ are both perfectly
+calibrated (i.e., $\bar{a}_{t}(b)=b$ and $\bar{a}_{t}(c)=c$ for each
+forecast used), and so, for every scoring rule $L$ we have $\mathcal{K}%
+_{t}^{L}(\mathbf{b})=\mathcal{K}_{t}^{L}(\mathbf{c})=0$ and\footnote{%
+We use formula (\ref{eq:R-H-H}), slightly abusing notation and writing $%
+H^{L}(p)$ instead of $H^{L}((p,1-p))$.} 
+\begin{eqnarray*}
+\mathcal{B}_{t}^{L}(\mathbf{b}) &=&\mathcal{R}_{t}^{L}(\mathbf{b})=\frac{5}{%
+10}H^{L}\left( \frac{1}{5}\right) +\frac{5}{10}H^{L}\left( \frac{4}{5}%
+\right) -\mathcal{H}_{t}^{L}\text{\ \ \ and} \\
+\mathcal{B}_{t}^{L}(\mathbf{c}) &=&\mathcal{R}_{t}^{L}(\mathbf{c})=\frac{6}{%
+10}H^{L}\left( \frac{1}{2}\right) +\frac{2}{10}H^{L}\left( 1\right) +\frac{2%
+}{10}H^{L}\left( 0\right) -\mathcal{H}_{t}^{L},
+\end{eqnarray*}%
+where $\mathcal{H}_{t}^{L}=(5/10)H^{L}(0)+(5/10)H^{L}(1).$ For the standard
+quadratic scoring rule, for which $H(p)=-(p^{2}+(1-p)^{2})$ (see Appendix %
+\ref{s-a:scoring rules}) this yields%
+\begin{equation}
+\mathcal{B}_{t}(\mathbf{c})=\frac{3}{20}<\frac{8}{25}=\mathcal{R}_{t}(%
+\mathbf{b}),  \label{eq:ex-quad}
+\end{equation}%
+and so $\mathbf{c}_{t}$ calibeats $\mathbf{b}_{t}$. For the $\alpha $%
+-spherical scoring rule $L$ with $\alpha =2$ (which is proper and
+Lipschitz), for which $H^{L}(p)=-(p^{2}+(1-p)^{2})^{1/2}$, this yields%
+\footnote{%
+Higher values of $\alpha $ yield higher differences between $\mathcal{B}%
+_{t}^{L}(\mathbf{c})$ and $\mathcal{B}_{t}^{L}(\mathbf{b})$; for example,
+for $\alpha =3$ these are $\approx 0.222$ and $\approx 0.196,$ respectively.}%
+\begin{equation}
+\mathcal{B}_{t}^{L}(\mathbf{c})\approx 0.1757>0.1754\approx \mathcal{R}%
+_{t}^{L}(\mathbf{b}),  \label{eq:ex-L}
+\end{equation}%
+and so $\mathbf{c}_{t}$ does \emph{not} $L$-calibeat $\mathbf{b}_{t}$\textbf{%
+.} Repeating this sequence of length $10$ periodically yields the
+inequalities (\ref{eq:ex-quad}) and (\ref{eq:ex-L}) for every $t$ that is a
+multiple of $10,$ and thus also in the limit as\footnote{%
+Because all the scores at $t=10m+r,$ where $1\leq r\leq 9$, differ from
+those at $t^{\prime }=10m$ by $O(r/t)\rightarrow 0$ as $t\rightarrow \infty $%
+.} $t\rightarrow \infty $, which shows that $\mathbf{c}$ calibeats $\mathbf{b%
+}$ with respect to the quadratic scoring rule but \emph{not} with respect to
+the $2$-spherical scoring rule.
+\end{example}
+
+\subsection{A Simple Way to Proper Calibeat\label{s-s:simple}}
+
+We show that the simple calibeating procedure of Theorem 3 of Foster and
+Hart (2023), whereby one forecasts the current action average of the $b_{t}$%
+-bin, is in fact proper-calibeating.
+
+\begin{theorem}
+\label{th:simple-calibeat-univ}Let $B$ be a finite set, and let $\zeta $ be
+the deterministic $\mathbf{b}$-based forecasting procedure given by 
+\begin{equation*}
+c_{t}=\bar{a}_{t-1}^{\mathbf{b}}(b_{t})
+\end{equation*}%
+for every time $t\geq 1$ (if $t$ is the first time that $b_{t}$ is used,
+take $c_{t}$ to be an arbitrary element of $\Delta $). Then the procedure $%
+\zeta $ is $B$-proper-calibeating; specifically,%
+\begin{equation*}
+0\leq \mathcal{B}_{t}^{L}(\mathbf{c})-\mathcal{R}_{t}^{L}(\mathbf{b})\leq
+2|B|\frac{\ln t+1}{t},
+\end{equation*}%
+for all $t\geq 1$, all sequences $\mathbf{a}_{t}\in A^{t}$ and $\mathbf{b}%
+_{t}\in B^{t}$, and all proper $1$-Lipschitz scoring rules $L$ (i.e., $L\in 
+\mathcal{L}_{1}$).
+\end{theorem}
+
+As in Foster and Hart (2023), we define the \emph{online }$L$-refinement
+score, for a pure binning sequence $\mathbf{i}$, as follows:%
+\begin{equation*}
+\widetilde{\mathcal{R}}_{t}^{L}\equiv \widetilde{\mathcal{R}}_{t}^{L}(%
+\mathbf{i}):=\frac{1}{t}\sum_{s=1}^{t}D(a_{s},\bar{a}_{s-1}(i_{s}))
+\end{equation*}%
+(take $\bar{a}_{0}(i)$ to be an arbitrary point in $\Delta $). In $\mathcal{R%
+}_{t}^{L}$ one uses in each period $s$ an (offline) average of the actions, $%
+\bar{a}_{t}(\cdot )$, taken over all periods from $1$ to $t$; this is
+replaced in $\widetilde{\mathcal{R}}_{t}^{L}$ by the corresponding online
+average of the actions, $\bar{a}_{s-1}(\cdot )$, taken only over the past
+periods, from $1$ to $s-1$. We have:
+
+\begin{proposition}
+\label{p:online-R-S}Let $L$ be a proper $M$-Lipschitz scoring rule. Then%
+\begin{equation*}
+0\leq \widetilde{\mathcal{R}}_{t}^{L}(\mathbf{i})-\mathcal{R}_{t}^{L}(%
+\mathbf{i})\leq 2M\frac{N_{t}}{t}\left( \ln \left( \frac{t}{N_{t}}\right)
++1\right) ,
+\end{equation*}%
+where $N_{t}:=\left\vert \{i_{s}:s\leq t\}\right\vert $ is the number of
+bins used up to time $t.$
+\end{proposition}
+
+Before proving this proposition, we show how it readily proves Theorem \ref%
+{th:simple-calibeat-univ}.
+
+\begin{proof}[Proof of Theorem \protect\ref{th:simple-calibeat-univ}]
+Our choice of $c_{t}=\bar{a}_{t-1}^{\mathbf{b}}(b_{t})$ makes $\mathcal{B}%
+_{t}^{L}(\mathbf{c})=\widetilde{\mathcal{R}}_{t}^{L}(\mathbf{b})$ for every $%
+\mathbf{a}_{t}$ and $\mathbf{b}_{t}$ and every $L$ in $\mathcal{L}$; use
+Proposition \ref{p:online-R-S}, with $N_{t}\leq \left\vert B\right\vert .$
+\end{proof}
+
+\subsubsection{Online vs Offline Refinement\label{s-s-s:online refinement}}
+
+We prove Proposition \ref{p:online-R-S}. This will follow from the following:
+
+\begin{proposition}
+\label{p:online-offline}Let $x_{1},...,x_{n}\in \Delta ,$ let $L$ be a
+scoring rule, and define%
+\begin{eqnarray*}
+v_{n} &%
+%TCIMACRO{\TeXButton{:=}{{\;:=\;}}}%
+%BeginExpansion
+{\;:=\;}%
+%EndExpansion
+&\frac{1}{n}\sum_{j=1}^{n}D(x_{j},\bar{x}_{n})\text{ and} \\
+\widetilde{v}_{n} &%
+%TCIMACRO{\TeXButton{:=}{{\;:=\;}}}%
+%BeginExpansion
+{\;:=\;}%
+%EndExpansion
+&\frac{1}{n}\sum_{j=1}^{n}D(x_{j},\bar{x}_{j-1}).
+\end{eqnarray*}%
+Then%
+\begin{equation}
+\widetilde{v}_{n}-v_{n}=\frac{1}{n}\sum_{j=1}^{n}jD(\bar{x}_{j},\bar{x}%
+_{j-1}).  \label{eq:v-online-error}
+\end{equation}%
+Moreover, if $L$ is a proper $M$-Lipschitz scoring rule, then%
+\begin{equation*}
+0\leq \widetilde{v}_{n}-v_{n}\leq 2M\frac{\ln n+1}{n}.
+\end{equation*}
+\end{proposition}
+
+\begin{proof}
+Let $\xi _{n}:=n(\widetilde{v}_{n}-v_{n})$; canceling the $L(x_{j},x_{j})$
+terms that appear in both sums yields 
+\begin{equation*}
+\xi _{n}=\sum_{j=1}^{n}L(x_{j},\bar{x}_{j-1})-\sum_{j=1}^{n}L(x_{j},\bar{x}%
+_{n})=\sum_{j=1}^{n}L(x_{j},\bar{x}_{j-1})-nL(\bar{x}_{n},\bar{x}_{n})
+\end{equation*}%
+(for the second sum we have used $\bar{x}_{n}=(1/n)(x_{1}+...+x_{n})$). Put $%
+\eta _{n}:=\xi _{n}-\xi _{n-1};$ we have%
+\begin{equation*}
+\eta _{n}=L(x_{n},\bar{x}_{n-1})-nL(\bar{x}_{n},\bar{x}_{n})+(n-1)L(\bar{x}%
+_{n-1},\bar{x}_{n-1}).
+\end{equation*}%
+The sum of the first and third terms is $nL(\bar{x}_{n},\bar{x}_{n-1})$
+(because $\bar{x}_{n}=(1/n)x_{n}+((n-1)/n)\bar{x}_{n-1}$), and so%
+\begin{equation*}
+\eta _{n}=n\left[ L(\bar{x}_{n},\bar{x}_{n-1})-L(\bar{x}_{n},\bar{x}_{n})%
+\right] =nD(\bar{x}_{n},\bar{x}_{n-1}).
+\end{equation*}%
+Now $\xi _{n}=\sum_{j=1}^{n}\eta _{j},$ and so we have obtained the claimed
+identity.
+
+Properness gives $\eta _{j}\geq 0,$ and so $\xi _{n}\geq 0.$ The Lipschitz
+condition gives, by Lemma \ref{l:O(diff^2)},%
+\begin{equation*}
+\eta _{j}\leq jM\left\Vert \bar{x}_{j}-\bar{x}_{j-1}\right\Vert
+^{2}=jM\left\Vert \frac{1}{j}(\bar{x}_{j-1}-x_{j})\right\Vert ^{2}\leq jM%
+\frac{2}{j^{2}}=\frac{2M}{j}
+\end{equation*}%
+(we used $\left\Vert x-y\right\Vert ^{2}\leq 2$ for all $x,y\in \Delta $).
+Therefore%
+\begin{equation*}
+\xi _{n}=\sum_{j=1}^{n}\eta _{j}\leq 2M\sum_{j=1}^{n}\frac{1}{j}\leq 2M(\ln
+n+1),
+\end{equation*}%
+completing the proof.
+\end{proof}
+
+\bigskip
+
+\begin{proof}[Proof of Proposition \protect\ref{p:online-R-S}]
+For each bin $i$ with $n_{t}(i)>0,$ Proposition \ref{p:online-offline} gives%
+\begin{equation*}
+0\leq \frac{1}{n_{t}(i)}\sum_{s\leq t:i_{s}=i}D(a_{s},\bar{a}_{s-1}(i))-%
+\frac{1}{n_{t}(i)}\sum_{s\leq t:i_{s}=i}D(a_{s},\bar{a}_{t}(i))\leq 2M\frac{%
+\ln n_{t}(i)+1}{n_{t}(i)}.
+\end{equation*}%
+Averaging over all these $i$ with weights $n_{t}(i)/t$ then yields%
+\begin{equation*}
+0\leq \widetilde{\mathcal{R}}_{t}^{L}-\mathcal{R}_{t}^{L}\leq 2M\frac{1}{t}%
+\sum_{i}(\ln n_{t}(i)+1).
+\end{equation*}%
+The maximum of the righthand side is attained when all the positive $%
+n_{t}(i) $ are equal (because $\ln $ is concave), i.e., when $%
+n_{t}(i)=t/N_{t}$ (because there are $N_{t}$ nonempty bins, and the sum of
+all the $n_{t}(i)$ is $t$); this yields the claimed bound.
+\end{proof}
+
+\bigskip
+
+\noindent \textbf{Remarks.} \emph{(a)} In the quadratic case formula (\ref%
+{eq:v-online-error}) yields Proposition 2 of Foster and Hart 2023 on the
+online variance.
+
+\emph{(b)} In the logarithmic case one may use the regularization of adding
+a positive constant to each bin (see Appendix A.9 in Foster and Hart 2022).
+However, this does \emph{not} work when the slope at the boundary of $\Delta 
+$ is much higher. For instance, take the $\alpha $-power scoring rule with $%
+\alpha =-1,$ binary ($m=2$), and consider a single bin. Let the sequence of
+actions be $x_{1}=(1,0)$ and then $x_{j}=(0,1)$ forever (i.e., for all $%
+j\geq 2$), then%
+\begin{equation*}
+\eta _{j}=jD(\bar{x}_{j},\bar{x}_{j-1})=1+\frac{1}{(j-1)(j-2)^{2}}\geq 1
+\end{equation*}%
+for all $j\geq 3,$ which shows that\footnote{%
+Ignore the first $2$ periods where $\delta _{i}$ is infinite---these are the
+\textquotedblleft regularization" periods whereby we \textquotedblleft seed"
+the bin---and start counting only from $i=3.$} $\widetilde{v}_{n}-v_{n}\geq
+(n-2)/n\rightarrow 1,$ and the online refinement is at a distance of about $1
+$ from the offline refinement.
+
+\subsection{Proper Calibeating by a Proper Calibrated Procedure\label%
+{s-s:joint}}
+
+Here we prove that calibeating the appropriate joint binning, as in Theorem
+5 of Foster and Hart (2023), yields proper-calibeating, moreover, by a
+proper-calibrated procedure.
+
+\begin{theorem}
+\label{th:beat-by-calib S}Let $B$ be a finite set, and let $\Delta _{\delta
+}\subset \Delta $ be a finite $\delta $-grid of $\Delta $ for some $\delta >0
+$. Then there exists a stochastic $\mathbf{b}$-based $\Delta _{\delta }$%
+-forecasting procedure $\zeta $ that is $(\delta ,B)$-proper-calibeating and 
+$\delta $-proper-calibrated; specifically,%
+\begin{equation*}
+\mathbb{E}\left[ \mathcal{B}_{t}^{L}(\mathbf{c})-\mathcal{R}_{t}^{L}(\mathbf{%
+b}\times \mathbf{c})\right] \leq \delta ^{2}+2|B|\,|\Delta _{\delta }|\frac{%
+\ln t+1}{t},
+\end{equation*}%
+and thus,%
+\begin{eqnarray*}
+\mathbb{E}\left[ \mathcal{B}_{t}^{L}(\mathbf{c})-\mathcal{R}_{t}^{L}(\mathbf{%
+b})\right]  &\leq &\delta ^{2}+2|B|\,|\Delta _{\delta }|\frac{\ln t+1}{t}%
+\text{\ \ and} \\
+\mathbb{E}\left[ \mathcal{K}_{t}^{L}(\mathbf{c})\right] =\mathbb{E}\left[ 
+\mathcal{B}_{t}^{L}(\mathbf{c})-\mathcal{R}_{t}^{L}(\mathbf{c})\right] 
+&\leq &\delta ^{2}+2|B|\,|\Delta _{\delta }|\frac{\ln t+1}{t}
+\end{eqnarray*}%
+for all $t\geq 1$ and all sequences $\mathbf{a}_{t}\in A^{t}$ and $\mathbf{b}%
+_{t}\in B^{t}$, and all proper $1$-Lipschitz scoring rules $L$ (i.e., $L\in 
+\mathcal{L}_{1}$). Moreover, $\zeta $ may be taken to be $\delta $-almost
+deterministic.
+\end{theorem}
+
+\begin{proof}
+The decomposition Theorem \ref{th:S-decompose} (applied to both $\mathcal{B}%
+_{t}^{L}$ and $\mathcal{B}_{t}$) together with Proposition \ref{p:K-KS} yield%
+\begin{eqnarray*}
+\mathcal{B}_{t}^{L}(\mathbf{c})-\mathcal{R}_{t}^{L}(\mathbf{b}\times \mathbf{%
+c}) &=&\mathcal{K}_{t}^{L}(\mathbf{c};\mathbf{b}\times \mathbf{c}) \\
+&\leq &\mathcal{K}_{t}(\mathbf{c};\mathbf{b}\times \mathbf{c})=\mathcal{B}%
+_{t}(\mathbf{c})-\mathcal{R}_{t}(\mathbf{b}\times \mathbf{c}).
+\end{eqnarray*}%
+Apply Theorem 5 of Foster and Hart (2023) with $C=\Delta $ (and thus $\gamma
+^{2}=\max_{c,d\in \Delta }\left\Vert c-d\right\Vert ^{2}=2$) to get the
+first inequality, and then Proposition \ref{p:refine-S} below, which shows
+that coarsening the binning can only increase the refinement score, to get
+the other two inequalities.
+\end{proof}
+
+\bigskip \bigskip 
+
+\noindent \textbf{Remark. }The following four statements regarding $\mathbf{c%
+}$ and the joint binning $\mathbf{b}\times \mathbf{c}$ are equivalent:
+
+\begin{description}
+\item[(J1)] $\mathbf{c}$ calibeats $\mathbf{b\times c}$, i.e., $\mathcal{B}(%
+\mathbf{c})\leq \mathcal{R}(\mathbf{b}\times \mathbf{c})$; equivalently,%
+\footnote{%
+Because we always have $\mathcal{R}(\mathbf{c})\leq \mathcal{B}(\mathbf{c})$%
+, and $\mathcal{R}(\mathbf{b}\times \mathbf{c})\leq \mathcal{R}(\mathbf{c})$
+(since the $\mathbf{b}\times \mathbf{c}$-binning is a refinement of the $%
+\mathbf{c}$-binning). Similarly for every scoring rule $L$, i.e., for (J4)
+below.} $\mathcal{B}(\mathbf{c})=\mathcal{R}(\mathbf{c})=\mathcal{R}(\mathbf{%
+b}\times \mathbf{c})$.
+
+\item[(J2)] $\mathbf{c}$ is calibrated on the $\mathbf{b\times c}$-binning,
+i.e., $\mathcal{K}(\mathbf{c};\mathbf{b}\times \mathbf{c})=0$.
+
+\item[(J3)] $\mathbf{c}$ is proper-calibrated on the $\mathbf{b\times c}$%
+-binning, i.e., $\mathcal{K}^{L}(\mathbf{c};\mathbf{b}\times \mathbf{c})=0$
+for every $L$ in $\mathcal{L}$.
+
+\item[(J4)] $\mathbf{c}$ proper-calibeats $\mathbf{b\times c}$, i.e., $%
+\mathcal{B}^{L}(\mathbf{c})\leq \mathcal{R}^{L}(\mathbf{b}\times \mathbf{c})$
+for every $L$ in $\mathcal{L}$; equivalently, $\mathcal{B}^{L}(\mathbf{c})=%
+\mathcal{R}^{L}(\mathbf{c})=\mathcal{R}^{L}(\mathbf{b}\times \mathbf{c})$
+for every $L$ in $\mathcal{L}$.
+\end{description}
+
+\noindent Indeed, since the $\mathbf{b}\times \mathbf{c}$-binning is a
+refinement of the $\mathbf{c}$-binning, we get the decomposition $\mathcal{B}%
+^{L}(\mathbf{c})=\mathcal{R}^{L}(\mathbf{b}\times \mathbf{c})+\mathcal{K}%
+^{L}(\mathbf{c};\mathbf{b}\times \mathbf{c})$, which immediately yields (J1) 
+$\Longleftrightarrow $ (J2), and (J3) $\Longleftrightarrow $ (J4). As for
+(J2) $\Longleftrightarrow $ (J3), it follows from $\mathcal{K}^{L}\leq M\,%
+\mathcal{K}$ for every $L$ in $\mathcal{L}$, and the standard quadratic
+scoring rule being in $\mathcal{L}$. Moreover, (J1) implies that $\mathbf{c}$
+is calibrated (because $\mathcal{K}(\mathbf{c})=\mathcal{B}(\mathbf{c})-%
+\mathcal{R}(\mathbf{c})=0$), and (J4) that it is proper-calibrated (because $%
+\mathcal{K}^{L}(\mathbf{c})=\mathcal{B}^{L}(\mathbf{c})-\mathcal{R}^{L}(%
+\mathbf{c})=0$).
+
+\bigskip 
+
+\noindent \textbf{Remark. }Calibeating together with calibration does \emph{%
+not} suffice to get $L$-calibeating; one needs $\mathbf{c}$ to \emph{%
+calibeat the joint} $\mathbf{b}\times \mathbf{c}$ of $\mathbf{b}$ and $%
+\mathbf{c}$. See Example \ref{ex:not-S-beat}, where $L$ is the proper
+Lipschitz $2$-spherical scoring rule: $\mathbf{c}$ is calibrated (and thus $L
+$-calibrated) and calibeats $\mathbf{b}$, but it does not $L$-calibeat $%
+\mathbf{b}$. Indeed, $\mathbf{c}$ is not calibrated with respect to the $%
+\mathbf{b}\times \mathbf{c}$-binning: the $(b=1/5,c=1/2)$-bin is not $%
+\mathbf{c}$-calibrated, as the average action there is $0$ and not $1/2$. As
+seen in the above proof, to get $L$-calibeating from calibeating we rely on
+the decomposition Theorem \ref{th:S-decompose} which requires the binning to
+be a refinement of the $\mathbf{c}$-binning, and so it does not apply to an
+arbitrary $\mathbf{b}$-binning,\footnote{%
+For our simple calibeating procedure we use a different tool, namely,
+Proposition \ref{p:online-R-S}.} but it does apply to the joint $\mathbf{b}$%
+\textbf{$\times $}$\mathbf{c}$-binning. Appendix \ref{s-a:bxc} provides a
+setup where we vary only the frequencies of the bins, suggesting that a
+\textquotedblleft natural\textquotedblright\ proof of proper-calibeating
+from calibeating together with calibration might well require calibeating
+the joint.
+
+\subsubsection{Refined Refinement\label{s-s-s:refined refinement}}
+
+For the proof we need to generalize to proper scoring rules the result that
+the refinement score can only decrease when the binning becomes finer (for
+the quadratic scoring rule, this is Proposition 11 of Foster and Hart 2023).
+While in this section we need it only for pure binnings, we state it already
+for the more general fractional binnings (to be used in the following
+section).
+
+Let $\mathbf{f}$ be a fractional binning on a set of bins $I,$ and $\mathbf{g%
+}$ a fractional binning sequence on a set of bins $J$ (thus $f_{s}\in \Delta
+(I)$ and $g_{s}\in \Delta (J)$). We say that $\mathbf{f}$ is a \emph{%
+refinement} of $\mathbf{g}$ (or $\mathbf{g}$ is a \emph{coarsening} of $%
+\mathbf{f}$) if each $j$\textbf{-}bin is a union of $i$-bins, with $g_{s}(j)$
+the sum of the corresponding $f_{s}(i)$; i.e., there is a partition $I=\cup
+_{j\in J}I(j)$ of $I$ into disjoint sets $I(j)$ for $j\in J,$ and $%
+g_{s}(j)=\sum_{i\in I(j)}f_{s}(i)$ for every $j\in J$ and $s\geq 1$.
+
+\begin{proposition}
+\label{p:refine-S}If the binning sequence $\mathbf{f}$ is a refinement of
+the binning sequence $\mathbf{g}$, then%
+\begin{equation*}
+\mathcal{R}_{t}^{L}(\mathbf{f})\leq \mathcal{R}_{t}^{L}(\mathbf{g})
+\end{equation*}%
+for every proper scoring rule $L$ and every $t\geq 1.$
+\end{proposition}
+
+\begin{proof}
+Let $I$ and $J$ be the sets of bins of $\mathbf{f}$ and $\mathbf{g}$,
+respectively. It suffices to prove the claim when $J$ has only one bin; we
+then apply it to each $j$-bin separately and average over $j$ to get the
+general result. Let $\bar{a}_{t}$ denote the overall average of the actions
+(i.e., the average in the single bin in $J$), then we have%
+\begin{eqnarray*}
+\frac{1}{t}\sum_{i\in I}\sum_{s=1}^{t}f_{s}(i)L(a_{s},\bar{a}_{t}(i))
+&=&\sum_{i\in I}\left( \frac{n_{t}(i)}{t}\right) \sum_{s=1}^{t}\left( \frac{%
+f_{s}(i)}{n_{t}(i)}\right) L(a_{s},\bar{a}_{t}(i)) \\
+&=&\sum_{i\in I}\left( \frac{n_{t}(i)}{t}\right) L(\bar{a}_{t}(i),\bar{a}%
+_{t}(i))=\sum_{i\in I}\left( \frac{n_{t}(i)}{t}\right) H(\bar{a}_{t}(i)) \\
+&\leq &H\left( \sum_{i}\frac{n_{t}(i)}{t}\bar{a}_{t}(i)\right) =H(\bar{a}%
+_{t}) \\
+&=&L(\bar{a}_{t},\bar{a}_{t})=\frac{1}{t}\sum_{s=1}^{t}L(a_{s},\bar{a}_{t}),
+\end{eqnarray*}%
+where the inequality is by the concavity of the function $H$ (and we have
+for convenience dropped the subscript $t$ from $\bar{a}_{t}(i)$ and $%
+n_{t}(i) $). Subtracting $\mathcal{H}_{t}^{L}$ from both sides yields the
+desired inequality.
+\end{proof}
+
+\bigskip
+
+\begin{corollary}
+\label{c:refine-S}If the binning sequence $\mathbf{f}$ is a refinement of
+the binning sequence $\mathbf{g}$ and the binning sequence $\mathbf{g}$ is a
+refinement of the binning sequence $\mathbf{c}$ then%
+\begin{equation*}
+\mathcal{K}_{t}^{L}(\mathbf{c};\mathbf{f})\geq \mathcal{K}_{t}^{L}(\mathbf{c}%
+;\mathbf{g})\geq \mathcal{K}_{t}^{L}(\mathbf{c})
+\end{equation*}%
+for every proper scoring rule $L$ and every $t\geq 1.$
+\end{corollary}
+
+\begin{proof}
+Since both $\mathbf{f}$ and $\mathbf{g}$ refine $\mathbf{c}$, the
+decomposition of \ref{th:S-decompose} applies to each one of $\mathbf{f}$, $%
+\mathbf{g}$, and $\mathbf{c}$, and so $\mathcal{R}^{L}(\mathbf{f})+\mathcal{K%
+}^{L}(\mathbf{c};\mathbf{f})\mathbf{=}\mathcal{R}^{L}(\mathbf{g})+\mathcal{K}%
+^{L}(\mathbf{c};\mathbf{g})=\mathcal{R}^{L}(\mathbf{c})+\mathcal{K}_{t}^{L}(%
+\mathbf{c};\mathbf{c})$ (they all equal $\mathcal{B}^{L}(\mathbf{c})$);
+apply Proposition \ref{p:refine-S}.
+\end{proof}
+
+\subsection{Proper Calibeating by a Deterministic Continuously Proper
+Calibrated Procedure\label{s-s:continuous}}
+
+The result of this section is the proper counterpart of Theorems 6 and 12 of
+Foster and Hart (2023, 2026). Since fractional binnings in general do not
+refine the standard by-forecast binning (because each bin may well contain
+forecasts with different values), and the decomposition $\mathcal{B}^{L}=%
+\mathcal{K}^{L}+\mathcal{R}^{L}$ is no longer valid, we use Theorem \ref%
+{th:decompose-delta} instead.
+
+\begin{theorem}
+\label{th:calibeat by cont cal S}Let $B$ be a finite set. Then there exists
+a \emph{deterministic} $\mathbf{b}$-based forecasting procedure $\zeta $
+that is $B$-proper-calibeating, and continuously proper-calibrated.
+Specifically: first, for every continuous binning $\Pi $ there is a
+deterministic $\mathbf{b}$-based forecasting procedure $\zeta $such that%
+\begin{equation}
+\mathcal{K}_{t}^{L}(\mathbf{c};\mathbf{b}\times \Pi (\mathbf{c}))\leq o(1);
+\label{eq:34}
+\end{equation}%
+and second, for the continuous binning $\Pi ^{\ast }$ of Foster and Hart
+(2026), (\ref{eq:34}) implies that 
+\begin{equation*}
+\mathcal{B}_{t}^{L}(\mathbf{c})\leq \mathcal{R}_{t}^{L}(\mathbf{b})+o(1),
+\end{equation*}%
+and that $\zeta $ is continuously $L$-calibrated. All these hold as $%
+t\rightarrow \infty $ uniformly over all sequences $\mathbf{a}$ and $\mathbf{%
+b}$ and scoring rules $L$ in $\mathcal{L}_{1}$.
+\end{theorem}
+
+\begin{proof}
+For every continuous binning $\Pi $ the procedure of Theorem 12 in Foster
+and Hart (2026) yields (\ref{eq:34}) for the quadratic scoring rule, and
+thus uniformly for all $L$ in $\mathcal{L}$ by Proposition \ref{p:K-KS}.
+
+Consider now $\Pi ^{\ast }$, which contains a sequence $(\Pi _{n})_{n\geq 1}$
+of $\delta _{n}$-local continuous binnings with $\delta _{n}>0$ converging
+to $0.$ As shown in the proof of Theorem 12 in Foster and Hart (2026), (\ref%
+{eq:34}) for $\Pi ^{\ast }$ implies that for each $n\geq 1$ we have%
+\begin{equation*}
+\mathcal{K}_{t}(\mathbf{c};\mathbf{b}\times \Pi _{n}(\mathbf{c}))\leq o(1)
+\end{equation*}%
+(see (E1)\ there). Using the approximate decomposition of Theorem \ref%
+{th:decompose-delta} (the binning $\Pi _{n}(\mathbf{c})$ is $\delta _{n}$%
+-local with respect to $\mathbf{c}$, and thus so is its refinement $\mathbf{b%
+}\times \Pi _{n}(\mathbf{c})$) and, again, Proposition \ref{p:K-KS}, we get%
+\begin{eqnarray*}
+\mathcal{B}_{t}^{L}(\mathbf{c})-\mathcal{R}_{t}^{L}(\mathbf{b}\times \Pi
+_{n}(\mathbf{c})) &\leq &\mathcal{K}_{t}^{L}(\mathbf{c};\mathbf{b}\times \Pi
+_{n}(\mathbf{c}))+2\delta _{n} \\
+&\leq &\mathcal{K}_{t}(\mathbf{c};\mathbf{b}\times \Pi _{n}(\mathbf{c}%
+))+2\delta _{n}\leq 2\delta _{n}+o(1)
+\end{eqnarray*}%
+(uniformly for all $L$ in $\mathcal{L}$). Since $\mathcal{R}_{t}^{L}(\mathbf{%
+b}\times \Pi _{n}(\mathbf{c}))\leq \mathcal{R}_{t}^{L}(\mathbf{b})$ by
+Proposition \ref{p:refine-R}, we get%
+\begin{equation*}
+\mathcal{B}_{t}^{L}(\mathbf{c})-\mathcal{R}_{t}^{L}(\mathbf{b})\leq 2\delta
+_{n}+o(1).
+\end{equation*}%
+Therefore $\mathcal{B}_{t}^{L}(\mathbf{c})-\mathcal{R}_{t}^{L}(\mathbf{b}%
+)\leq 3\delta _{n}$ for all $t$ large enough; since $\delta _{n}\rightarrow
+0,$ this yields $\mathcal{B}_{t}^{L}(\mathbf{c})-\mathcal{R}_{t}^{L}(\mathbf{%
+b})\leq o(1).$
+\end{proof}
+
+\subsection{Proper Multicalibeating\label{s-s:multi}}
+
+Suppose that there are $N\geq 1$ forecasting sequences, $\mathbf{b}%
+^{n}=(b_{t}^{n})_{t\geq 1}$ for $n=1,2,...,N$. We assume that each $\mathbf{b%
+}^{n}$ uses only finitely many forecasts: there is a finite set $B^{n}$ such
+that $b_{t}^{n}\in B^{n}$ for all $t\geq 1$. Put $\mathbf{b=}(\mathbf{b}%
+^{1},...,\mathbf{b}^{N});$ we are looking for a $\mathbf{b}$-based
+forecasting procedure---i.e., $c_{t}$ is determined after all the $%
+b_{t}^{1},...,b_{t}^{N}$ are announced (and hence is a function of $\mathbf{a%
+}_{t-1},\mathbf{c}_{t-1},\mathbf{b}_{t}^{1},...,\mathbf{b}_{t}^{N}$---that
+simultaneously calibeats all the $\mathbf{b}^{n}$ sequences. By applying the
+results of the previous section to the joint binning $\mathbf{b}_{1}\times 
+\mathbf{b}_{2}\times ...\times \mathbf{b}_{N}$ we get the counterpart of
+Theorem 7 in Foster and Hart (2023):
+
+\begin{theorem}
+\label{th:multi}Let $B^{1},B^{2},...,B^{N}$ be finite sets. Then:
+
+\begin{description}
+\item[(i)] There exists a simple deterministic $(\mathbf{b}^{1},...,\mathbf{b%
+}^{N})$-based forecasting procedure $\zeta $ that is $B^{n}$%
+-proper-calibeating for all $n=1,...,N;$ specifically, the forecast of $%
+\zeta $ in period $t$ is $c_{t}=\bar{a}_{t-1}^{\mathbf{b}^{1},...,\mathbf{b}%
+^{N}}(b_{t}^{1},...,b_{t}^{N})$, the average of the actions in all past
+periods $s\leq t-1$ where the combination $(b_{t}^{1},...,b_{t}^{N})$ was
+used (if $t$ is the first period in which $(b_{t}^{1},...,b_{t}^{N})$ is
+used, take $c_{t}\in \Delta $ to be arbitrary).
+
+\item[(ii)] For every finite $\delta $-grid $\Delta _{\delta }$ of $\Delta $
+there exists a stochastic $(\mathbf{b}^{1},...,\mathbf{b}^{N})$-based $%
+\Delta _{\delta }$-forecasting procedure $\zeta $ that is $(\delta ,B^{n})$%
+-proper-calibeating for all $n=1,...,N$ and is $\delta $-proper-calibrated.
+Moreover, $\zeta $ may be taken to be $\delta $-almost deterministic.
+
+\item[(iii)] There exists a deterministic $(\mathbf{b}^{1},...,\mathbf{b}%
+^{N})$-based $\Delta $-forecasting procedure $\zeta $ that is $B^{n}$%
+-proper-calibeating for all $n=1,...,N$ and is continuously
+proper-calibrated.
+\end{description}
+\end{theorem}
+
+\bigskip
+
+\appendix{}
+
+\section{Scoring Rules\label{s-a:scoring rules}}
+
+A \emph{scoring rule} $L_{A}:A\times \Delta \rightarrow \mathbb{R}$
+associates to every forecast $c\in \Delta $ and every realized action $a\in A
+$ a loss\footnote{%
+There are scoring rules, such as the logarithmic scoring rule, that allow
+the loss to be infinite; as they are not Lipschitz-continuous, we will not
+deal with them here (for \textquotedblleft
+log-calibeating,\textquotedblright\ see Appendix A.9 in [FH2022]).} $%
+L_{A}(a,c)$. The function $L_{A}$ is linearly extended to $L:\Delta \times
+\Delta \rightarrow \mathbb{R}$ by $L(d,c):=\sum_{a\in A}d(a)L_{A}(a,c)$;
+thus, $L(d,c)=\mathbb{E}_{a\sim d}\left[ L_{A}(a,c)\right] $ is the expected
+loss when the realization is distributed according to\footnote{%
+For $a$ in A we thus have $L_{A}(a,c)=L(\mathbf{1}_{a},c).$} $d\in \Delta .$
+Writing $\mathbf{L}(c)$ for the vector $(L_{A}(a,c))_{a\in A}$ in $\mathbb{R}%
+^{A}$, we thus have%
+\begin{equation*}
+L(d,c)=d\cdot \mathbf{L}(c)
+\end{equation*}%
+for every $c,d\in \Delta .$
+
+A scoring rule $L$ is \emph{proper} if $L(d,c)\geq L(d,d)$ for every $c,d\in
+\Delta $; i.e., forecasting the correct distribution minimizes the expected
+loss. If $L(d,c)>L(d,d)$ for all $c\neq d$ then $L$ is \emph{strictly proper.%
+}
+
+The following is well known (see ...).
+
+\begin{proposition}
+\label{p:proper}A scoring rule $L$ is proper if and only if there exists a
+concave function $H:\Delta \rightarrow \mathbb{R}$ and a supergradient
+selection $\mathbf{G}:\Delta \rightarrow \mathbb{R}^{A}$ (i.e., for every $%
+c\in \Delta $ the vector $\mathbf{G}(c)$ is a supergradient of $H$ at%
+\footnote{%
+I.e., $H(d)\leq H(c)+(d-c)\cdot \mathbf{G}(c)$ for every $d\in \Delta .$} $c$%
+) such that%
+\begin{equation}
+L(d,c)=H(c)+(d-c)\cdot \mathbf{G}(c)  \label{eq:S from H}
+\end{equation}%
+for every $c,d\in \Delta .$
+\end{proposition}
+
+\begin{proof}
+Assume that $L$ is proper. Then $H(d):=L(d,d)=\min_{c\in \Delta
+}L(d,c)=\min_{c\in \Delta }d\cdot \mathbf{L}(c)$ is the minimum of linear
+functions of $d$, and thus $H$ is concave. The vector $\mathbf{L}(c)$ is a
+supergradient of $H$ at $c,$ because $H(d)-H(c)=L(d,d)-L(c,c)\leq
+L(d,c)-L(c,c)=d\cdot \mathbf{L}(c)-c\cdot \mathbf{L}(c)=(d-c)\cdot \mathbf{L}%
+(c),$ where the inequality is by properness.
+
+Conversely, given a concave $H$ with a supergradient selection $\mathbf{G}$,
+the supergradient inequality $H(d)\leq H(c)+(d-c)\cdot \mathbf{G}(c)$
+becomes $L(d,d)\leq L(d,c)$ for the function $L$ that is defined by (\ref%
+{eq:S from H}), and so $L$ is proper.
+\end{proof}
+
+\bigskip
+
+The concave function $H\equiv H^{L}$ given by $H(c):=L(c,c)$ for a proper
+scoring rule $L$ is usually referred to as the $L$-\emph{entropy}.
+
+\bigskip
+
+\noindent \textbf{Remark. }To resolve some confusion here: in the second
+part of the proof the supergradient $\mathbf{G}(c)$ need \emph{not} be the
+vector $\mathbf{L}(c)$ that was used in the first part. The reason is that
+if $\mathbf{G}(c)$ is a supergradient then so is $\mathbf{G}(c)+\lambda e$
+for any real $\lambda $ (where $e=(1,...,1)\in \mathbb{R}^{A}$), because on
+the domain $\Delta $ we have $(d-c)\cdot \lambda e=0$ for every $c,d\in
+\Delta $ (and so formula (\ref{eq:S from H}) is not affected by adding $%
+\lambda e$ to $\mathbf{G}(c)$).\footnote{%
+Even if $H$ is differentiable on the entire space $\mathbb{R}^{A}$, the
+vector $\mathbf{G}(c)$ may well be different from the gradient $\nabla H(c)$%
+; however, we always have $(d-c)\cdot \mathbf{G}(c)=(d-c)\cdot \nabla H(c)$
+for $c,d$ in $\Delta .$}
+
+\bigskip
+
+Define the $L$\emph{-divergence}\footnote{%
+At times this is written $D(d||c)$ (as is the case for the Kullback-Leibler
+divergence).} $D\equiv D^{L}:\Delta \times \Delta \rightarrow \mathbb{R}$ by%
+\begin{equation*}
+D(d,c)\,:=\,L(d,c)-L(d,d).
+\end{equation*}%
+Then $L$ is proper if and only if $D$ is always $\geq 0.$ Geometrically, in
+this case we have $D(d,c)=H(c)+(d-c)\cdot \mathbf{G}(c)-H(d)$ by (\ref{eq:S
+from H}), and so the divergence $D(d,c)$ is equal to how much the tangent to
+the concave function $H$ at $c$ (with slope $\mathbf{G}(c)$) is above $H$ at
+the point $d$ (the \textquotedblleft Bregman divergence\textquotedblright ).
+
+A scoring rule $L$ is \emph{Lipschitz }continuous if the functions $%
+L_{A}(a,\cdot )$ for all $a\in A,$ and thus $L(d,\cdot )$ for all $d\in
+\Delta ,$ are Lipschitz;\footnote{%
+This obtains when the entropy $H$ is a so-called \textquotedblleft
+L-smooth\textquotedblright\ function, which means that it is differentiable
+and its gradient is Lipschitz.} it is convenient to require this directly on
+the vector function $\mathbf{L}$: we say that $L$ is $M$\emph{-Lipschitz}
+for some finite $M$ if%
+\begin{equation*}
+\left\Vert \mathbf{L}(c)-\mathbf{L}(c^{\prime })\right\Vert \leq M\left\Vert
+c-c^{\prime }\right\Vert
+\end{equation*}%
+for all $c,c^{\prime }\in \Delta $, where $\left\Vert \cdot \right\Vert $
+denotes the standard Euclidean norm.\footnote{%
+Requiring instead that each $L_{A}(a,\cdot )$ be $M$-Lipschitz would add an
+unwieldy factor of $\sqrt{\left\vert A\right\vert }$ throughout.} We record
+two immediate but useful implications of the Lipschitz condition.
+
+\begin{lemma}
+\label{l:O(diff^2)}Let $L$ be an $M$-Lipschitz scoring rule. Then
+
+\begin{description}
+\item[(i)] For every $c,c^{\prime },d$ in $\Delta $ we have%
+\begin{equation*}
+\left\vert D(d,c)-D(d,c^{\prime })\right\vert =\left\vert
+L(d,c)-L(d,c^{\prime })\right\vert \leq M\left\Vert c-c^{\prime }\right\Vert
+.
+\end{equation*}
+
+\item[(ii)] For every $c,d$ in $\Delta $ we have%
+\begin{equation*}
+D(d,c)+D(c,d)\leq M\left\Vert c-d\right\Vert ^{2},
+\end{equation*}%
+and so, if $L$ is proper then%
+\begin{equation*}
+0\leq D(d,c)\leq M\left\Vert c-d\right\Vert ^{2}.
+\end{equation*}
+\end{description}
+\end{lemma}
+
+\begin{proof}
+Using (\ref{eq:d*Lambda(c)}), the definition of $D$, and $\left\Vert
+d\right\Vert \leq 1$ for $d\in D$, gives:%
+\begin{eqnarray*}
+\left\vert D(d,c)-D(d,c^{\prime })\right\vert &=&\left\vert
+L(d,c)-L(d,c^{\prime })\right\vert =\left\vert d\cdot (\mathbf{L}(c)-\mathbf{%
+L}(c^{\prime }))\right\vert \\
+&\leq &\left\Vert d\right\Vert \left\Vert \mathbf{L}(c)-\mathbf{L}(c^{\prime
+})\right\Vert \leq M\left\Vert c-c^{\prime }\right\Vert
+\end{eqnarray*}
+
+and%
+\begin{eqnarray*}
+D(d,c)+D(c,d) &=&d\cdot \mathbf{L}(c)-d\cdot \mathbf{L}(d)+c\cdot \mathbf{L}%
+(d)-c\cdot \mathbf{L}(c) \\
+&=&(c-d)\cdot (\mathbf{L}(d)-\mathbf{L}(c)) \\
+&\leq &\left\Vert c-d\right\Vert \left\Vert \mathbf{L}(d)-\mathbf{L}%
+(c)\right\Vert \leq M\left\Vert c-d\right\Vert ^{2}.
+\end{eqnarray*}
+\end{proof}
+
+\subsection{Examples of Proper Lipschitz Scoring Rules\label{s-s-a:scoring
+examples}}
+
+We provide a number of classical examples of proper scoring rules; they are
+all Lipschitz, and strictly proper.
+
+\bigskip
+
+\begin{itemize}
+\item \emph{Quadratic} (Brier): 
+\begin{eqnarray*}
+L_{A}(a,c) &=&-2c(a)+\left\Vert c\right\Vert ^{2}, \\
+L(d,c) &=&-2c\cdot d+\left\Vert c\right\Vert ^{2}, \\
+H(c) &=&-\left\Vert c\right\Vert ^{2}, \\
+D(d,c) &=&\left\Vert c-d\right\Vert ^{2}.
+\end{eqnarray*}
+
+\item $\alpha $-\emph{Spherical} for $\alpha \geq 2$: 
+\begin{eqnarray*}
+L_{A}(a,c) &=&-\frac{c(a)^{\alpha -1}}{\left( \sum_{a}c(a)^{\alpha }\right)
+^{\frac{\alpha -1}{\alpha }}}, \\
+L(d,c) &=&-\frac{\sum_{a}d(a)c(a)^{\alpha -1}}{\left( \sum_{a}c(a)^{\alpha
+}\right) ^{\frac{\alpha -1}{\alpha }}}, \\
+H(c) &=&-\left( \sum_{a}c(a)^{\alpha }\right) ^{\frac{1}{\alpha }%
+}=-\left\Vert c\right\Vert _{\alpha } \\
+D(d,c) &=&-\frac{\sum_{a}d(a)c(a)^{\alpha -1}}{\left( \sum_{a}c(a)^{\alpha
+}\right) ^{\frac{\alpha -1}{\alpha }}}+\left( \sum_{a}d(a)^{\alpha }\right)
+^{\frac{1}{\alpha }}.
+\end{eqnarray*}%
+(for $1<\alpha <2$ the scoring rule is proper but not Lipschitz).
+
+\item $\alpha $-\emph{Power} (\emph{Tsallis}) for $\alpha \geq 2$:%
+\begin{eqnarray*}
+L_{A}(a,c) &=&-\frac{1}{\alpha -1}c(a)^{\alpha -1}+\frac{1}{\alpha }%
+\sum_{a}c(a)^{\alpha }, \\
+L(d,c) &=&-\frac{1}{\alpha -1}\sum_{a}d(a)c(a)^{\alpha -1}+\frac{1}{\alpha }%
+\sum_{a}c(a)^{\alpha }, \\
+H(c) &=&-\frac{1}{\alpha (\alpha -1)}\sum_{a}c(a)^{\alpha }=-\frac{1}{\alpha
+(\alpha -1)}\left( \left\Vert c\right\Vert _{\alpha }\right) ^{\alpha } \\
+D(d,c) &=&\frac{1}{\alpha }\sum_{a}c(a)^{\alpha }+\frac{1}{\alpha (\alpha -1)%
+}\sum_{a}d(a)^{\alpha }-\frac{1}{\alpha -1}\sum_{a}d(a)c(a)^{\alpha -1}
+\end{eqnarray*}%
+(for $\alpha =2$ this gives the quadratic score divided by $2$; the rule is
+proper for all $\alpha \neq 0,1$, and Lipschitz only for $a\geq 2$).
+\end{itemize}
+
+\section{Towards a Natural Proof of Proper Calibeating by a Calibrated
+Procedure\label{s-a:bxc}}
+
+We show here that our line of proof of proper-calibeating by a
+proper-calibrated procedure, which assumes calibeating the joint binning,
+may well be necessary. This is suggested by keeping all the bin averages
+fixed, and allowing the relative frequencies of the various bins to vary. We
+strat with a general result, and then apply it to our setup.
+
+\subsection{A General Result\label{s-s-a:bxc general}}
+
+Let $I$ and $J$ be finite sets, $X=(x_{ij})_{i\in I,j\in J}$ a matrix whose
+entries are $m$-dimensional real vectors, i.e., $x_{ij}\in \mathbb{R}^{m}$,
+and let $W=(w_{ij})_{i\in I,j\in J}$ be a weight matrix, i.e., $w_{ij}\geq 0$
+for all $i,j,$ and $\sum_{i\in I}\sum_{j\in J}w_{ij}=1$. Define%
+\begin{eqnarray*}
+w_{i\cdot } &%
+%TCIMACRO{\TeXButton{:=}{{\;:=\;}}}%
+%BeginExpansion
+{\;:=\;}%
+%EndExpansion
+&\sum_{j\in J}w_{ij} \\
+w_{\cdot j} &%
+%TCIMACRO{\TeXButton{:=}{{\;:=\;}}}%
+%BeginExpansion
+{\;:=\;}%
+%EndExpansion
+&\sum_{i\in I}w_{ij} \\
+r_{i} &%
+%TCIMACRO{\TeXButton{:=}{{\;:=\;}}}%
+%BeginExpansion
+{\;:=\;}%
+%EndExpansion
+&\bar{x}_{i\cdot }=\sum_{j\in J}\frac{w_{ij}}{w_{i\cdot }}x_{ij} \\
+c_{j} &%
+%TCIMACRO{\TeXButton{:=}{{\;:=\;}}}%
+%BeginExpansion
+{\;:=\;}%
+%EndExpansion
+&\bar{x}_{\cdot j}=\sum_{i\in I}\frac{w_{ij}}{w_{\cdot j}}x_{ij}
+\end{eqnarray*}%
+(thus, $w_{i\cdot }$ and $w_{\cdot j}$ are the marginals, and $r_{i}$ and $%
+c_{j}$ the row and column averages; the values of $r_{i}$ and $c_{j}$ for
+rows and columns with zero weight will not matter).
+
+For every concave function $F:\mathbb{R}^{m}\rightarrow \mathbb{R}$ (it
+suffices for $F$ to be defined on the compact convex set $\mathrm{conv}%
+\{x_{ij}:i\in I,j\in J\}$) let%
+\begin{eqnarray*}
+E_{W}(F) &%
+%TCIMACRO{\TeXButton{:=}{{\;:=\;}}}%
+%BeginExpansion
+{\;:=\;}%
+%EndExpansion
+&\sum_{i\in I}\sum_{j\in J}w_{ij}F(x_{ij}) \\
+R_{W}(F) &%
+%TCIMACRO{\TeXButton{:=}{{\;:=\;}}}%
+%BeginExpansion
+{\;:=\;}%
+%EndExpansion
+&\sum_{i\in I}w_{i\cdot }F(r_{i}) \\
+C_{W}(F) &%
+%TCIMACRO{\TeXButton{:=}{{\;:=\;}}}%
+%BeginExpansion
+{\;:=\;}%
+%EndExpansion
+&\sum_{j\in J}w_{\cdot j}F(c_{j})
+\end{eqnarray*}%
+(these are the overall average, average by rows, and average by columns,
+respectively). We are interested in the inequalities $C\leq R$; more
+precisely, when does the inequality $C(Q)\leq R(Q)$ for a quadratic concave
+function $Q$ imply $C(F)\leq R(F)$ for all concave functions $F$.
+
+The matrix $X$ is $W$\emph{-column-constant}\footnote{%
+Interpreting $W$ as a probability measure, this means that $X$ is $W$%
+-a.s.~column-constant.} if the restriction of $X$ to the support of $W$ has
+constant columns, i.e., $x_{ij}=x_{i^{\prime }j}$ whenever $w_{ij}>0$ and $%
+w_{i^{\prime }j}>0$; the matrix $X$ is \emph{column-constant }if it has
+constant columns, i.e., $x_{ij}=x_{i^{\prime }j}$ for every $i,i^{\prime
+}\in I$ and $j\in J$ (thus, $X$ is column-constant if and only if it is $W$%
+-column-constant for every $W$). Similarly for $W$\emph{-row-constant} ($%
+x_{ij}=x_{ij^{\prime }}$ whenever $w_{ij}>0$ and $w_{ij^{\prime }}>0$) and 
+\emph{row-constant} ($x_{ij}=x_{ij^{\prime }}$ for every $i\in I$ and $%
+j,j^{\prime }\in J$). For instance, if $W$ is a diagonal matrix then every $%
+X $ is both $W$-column-constant and $W$-row-constant.
+
+\begin{proposition}
+\label{p:0}Let $W$ be a weight matrix. Then:
+
+\begin{description}
+\item[(a)] $C_{W}(F)\geq E_{W}(F)$ and $R_{W}(F)\geq E_{W}(F)$ for every
+concave $F.$
+
+\item[(b1)] If $X$ is $W$-column-constant then $C_{W}(F)=E_{W}(F)$ for every
+concave $F$.
+
+\item[(b2)] If $X$ is $W$-row-constant then $R_{W}(F)=E_{W}(F)$ for every
+concave $F.$
+
+\item[(c1)] $C_{W}(G)=E_{W}(G)$ for some \emph{strictly} concave function $G$
+if and only if $X$ is $W$-column-constant (and then $C_{W}(F)=E_{W}(F)$ for
+every concave $F$ by (b1)).
+
+\item[(c2)] $R_{W}(G)=E_{W}(G)$ for some \emph{strictly} concave function $G$
+if and only if $X$ is $W$-row-constant (and then $R_{W}(F)=E_{W}(F)$ for
+every concave $F$ by (b2)).
+\end{description}
+\end{proposition}
+
+\begin{proof}
+(a) The concavity of $F$ yields%
+\begin{equation}
+F(c_{j})\geq \sum_{i}\frac{w_{ij}}{w_{\cdot j}}F(x_{ij})  \label{eq:concave}
+\end{equation}%
+for every $j$; multiplying by $w_{\cdot j}$ and summing over $j$ then gives%
+\begin{equation}
+C_{W}(F)=\sum_{j}w_{\cdot j}F(c_{j})\geq
+\sum_{j}\sum_{i}w_{ij}F(x_{ij})=E_{W}(F).  \label{eq:R>=E}
+\end{equation}
+
+(b) If $X$ is $W$-column-constant then $x_{ij}=c_{j}$ for every $i,j$ with $%
+w_{ij}>0$, and so we get equality in (\ref{eq:concave}), and thus in (\ref%
+{eq:R>=E}). Similarly for (b2).
+
+(c) Equality in (\ref{eq:R>=E}), and thus in (\ref{eq:concave}) for every $j$
+with $w_{\cdot j}>0$, holds for a strictly concave $G$ if and only if all
+the entries $x_{ij}$ in column $j$ that have a positive weight $w_{ij}>0$
+must be equal; that is, $X$ is $W$-column-constant. Similarly for (c2).
+\end{proof}
+
+\bigskip
+
+A useful strictly concave function $F$ is the quadratic $Q(z)=-\left\Vert
+z\right\Vert ^{2}$; in fact, any other concave quadratic function works just
+as well.\footnote{\label{ft:Q}Any inequality between $C_{W}(F)$ and $%
+R_{W}(F) $ that holds for $F=Q$ holds also for every other concave quadratic
+function $F$. Indeed, such an $F$ can be expressed as $F=\lambda Q+G$ for $%
+\lambda >0$ and $G$ affine; since $C_{W}$ and $R_{W}$ are linear in $F$,
+and, for affine $G$, we have $C_{W}(G)=E_{W}(G)=R_{W}(G)$, it follows that $%
+C_{W}(\lambda Q+G)-R_{W}(\lambda Q+G)=\lambda (C_{W}(Q)-R_{W}(Q))$.}
+
+We will say that a matrix $X$ is \emph{non-degenerate} if it has more than 2
+distinct entries.
+
+\begin{theorem}
+\label{th:1}Let $X$ be a non-degenerate matrix. Then the following four
+statements are equivalent.
+
+\begin{description}
+\item[(i)] For every weight matrix $W$, if $C_{W}(Q)\leq R_{W}(Q)$ then $%
+C_{W}(F)\leq R_{W}(F)$ for every concave function $F$.
+
+\item[(ii)] For every weight matrix $W$, if $C_{W}(Q)\leq R_{W}(Q)$ then $%
+C_{W}(Q)=E_{W}(Q)$.
+
+\item[(iii)] For every weight matrix $W$, if $C_{W}(Q)\leq R_{W}(Q)$ then $%
+C_{W}(F)=E_{W}(F)\leq R_{W}(F)$ for every concave function $F$.
+
+\item[(iv)] The matrix $X$ is column-constant or row-constant.
+\end{description}
+
+\noindent Moreover, when $X$ is column-constant, $C_{W}(F)=E_{W}(F)\leq
+R_{W}(F)$ (for every concave $F$), and thus $C_{W}(Q)\leq R_{W}(Q)$, hold
+for every $W$. When $X$ is row-constant, $C_{W}(Q)\leq R_{W}(Q)$ holds if
+and only if $W$ is such that $X$ is also $W$-column-constant, and then $%
+C_{W}(Q)=R_{W}(Q)$ and $C_{W}(F)=E_{W}(F)=R_{W}(F)$ (for every concave $F$).
+\end{theorem}
+
+\begin{proof}
+The substantial part of the proof consists of showing that (i) implies (iv);
+the rest then follows easily by using Proposition \ref{p:0}.
+
+\textbf{(i) implies (iv). }Assume (i), i.e., for every $W$ for which $%
+C_{W}(Q)\leq R_{W}(Q)$, it holds that $C_{W}(F)\leq R_{W}(F)$ for every
+concave function $F$.
+
+$\bullet $ \emph{Claim 1}$.$ For every $W$ such that $C_{W}(Q)\leq R_{W}(Q)$%
+, the row averages $r_{i}$ must lie in the convex hull of the column
+averages $c_{j}$; i.e., letting $I_{0}:=\{i\in I:w_{i\cdot }>0\}$ and $%
+J_{0}:=\{j\in J:w_{\cdot j}>0\}$, we have $r_{i}\in \mathrm{conv}%
+\{c_{j}:j\in J_{0}\}$ for every $i\in I_{0}$.
+
+\emph{Proof. }Let $\Gamma :=\mathrm{conv}\{c_{j}:j\in J_{0}\}$ and assume
+that $r_{i}\notin \Gamma $ for some $i$ with $w_{i\cdot }>0.$ Since $\Gamma $
+is a closed convex set, by the Separating Hyperplane Theorem there are $v\in 
+\mathbb{R}^{m}$ and $\alpha \in \mathbb{R}$ such that $v\cdot r_{i}>\alpha
+\geq v\cdot c_{j}$ for every $j\in J_{0}$. For every $n$ let $F_{n}$ be the
+following function: $F_{n}(z):=Q(z)-n(\max \{v\cdot z-\alpha ,0\})^{2}$; the
+function $F_{n}$ is concave (as the sum of two concave functions) and
+continuously differentiable.\footnote{\label{ft:smooth}The continuous
+differentiability is needed for our application below to calibeating.} Now $%
+C_{W}(F_{n})=C_{W}(Q)$ for all $n$ (because $F_{n}(c_{j})=Q(c_{j})$ for all $%
+j$ with $w_{\cdot j}>0$), whereas $R_{W}(F_{n})\rightarrow -\infty $ as $%
+n\rightarrow \infty $ (because $v\cdot r_{i}-\alpha >0$ and so $%
+F_{n}(r_{i})\rightarrow -\infty $); therefore, for $n$ large enough the
+inequality $C_{W}(F_{n})\leq R_{W}(F_{n})$ fails---contradicting (i).~$%
+\square $
+
+$\bullet $ \emph{Claim 2. }Every $2\times 2$ submatrix of $X$ has at most $2$
+distinct entries.
+
+\emph{Proof}. Let $X^{0}=\left[ 
+\begin{array}{cc}
+a & b \\ 
+d & \cdot%
+\end{array}%
+\right] $ be a $2\times 2$ submatrix of $X$ with $a,b,d$ distinct (the
+fourth entry will get weight $0$ and so will not matter). We distinguish two
+cases, according to whether or not $d$ lies in the open interval $(a,b)$
+(i.e., on the straight line through $a$ and $b$, between $a$ and $b$).
+
+Case A: $d\notin (a,b).$ Let $W=\left[ 
+\begin{array}{cc}
+(1-\varepsilon )/2 & (1-\varepsilon )/2 \\ 
+\varepsilon & 0%
+\end{array}%
+\right] $ for $\varepsilon >0$. As $\varepsilon \rightarrow 0$ we get $%
+R_{W}(Q)\rightarrow -\left\Vert (a+b)/2\right\Vert ^{2}$ and $%
+C_{W}(Q)\rightarrow -\left\Vert a\right\Vert ^{2}/2-\left\Vert b\right\Vert
+^{2}/2,$ and so $a\neq b$ yields $C_{W}(Q)<R_{W}(Q)$ for small enough $%
+\varepsilon >0$; but $c_{1}\rightarrow a,$ $c_{2}=b$, and $r_{2}=d$, and so $%
+r_{2}\notin \mathrm{conv}\{c_{1},c_{2}\}$ for small enough $\varepsilon >0$,
+a contradiction to Claim 1.
+
+Case B: $d\in (a,b)$. Restricting to the $1$-dimensional space (the line)
+that contains $a,b,$ and $d$ and using the coordinate system $\lambda
+a+(1-\lambda )b\mapsto \lambda $ yields the matrix\footnote{%
+The change of coordinates has no effect on the sign of $R(Q)-C(Q)$; it
+amounts to using the quadratic $Q_{1}(z)=-\left\Vert z-b\right\Vert
+^{2}/\left\Vert a-b\right\Vert ^{2}$ instead of $Q(z)=-\left\Vert
+z\right\Vert ^{2}$ (cf. footnote \ref{ft:Q}).} $\left[ 
+\begin{array}{cc}
+1 & 0 \\ 
+\delta & \cdot%
+\end{array}%
+\right] $ with $0<\delta <1.$ Let $W=\frac{1}{3(1+\delta )}\left[ 
+\begin{array}{cc}
+1+2\delta & 1-\delta \\ 
+1+2\delta & 0%
+\end{array}%
+\right] ,$ then a straightforward computation yields $R_{W}(Q)-C_{W}(Q)=%
+\delta (1-\delta )(1+2\delta )/(6(2+\delta ))>0$, but $c_{1}=(1+\delta )/2,$ 
+$c_{2}=0$, and $r_{1}=(1+2\delta )/(2+\delta )>c_{1}>c_{2}$, and so $%
+r_{1}\notin \mathrm{conv}\{c_{1},c_{2}\}$, a contradiction to Claim 1.
+
+This completes the proof of Claim 2.~$\square $
+
+$\bullet $ \emph{Claim 3.} $X$ is column-constant or row-constant (i.e.,
+(iv)).
+
+\emph{Proof}. Assume that $X$ is not column-constant; let $a\neq b$ be two
+distinct entries in, say, column 1. Then Claim 2 implies that every row that
+has $a$ or $b$ in column 1 must contain only $a$ and $b$. If column 1 were
+to contain only $a$ and $b,$ then the entire matrix would contain only $a$
+and $b$, a contradiction to the non-degeneracy of $X$. Therefore column 1
+must contain another distinct entry $d$. But then each row with $a$ in
+column 1 cannot contain $b$ (again by Claim 2, using the two rows with $a$
+and $d$ in column 1), and so the row is a constant $a$ row; similarly, each
+row with $b$ in column 1 cannot contain $a$, and so it is a constant $b$
+row. Carrying out the same argument, but now with the pair of distinct
+entries $a$ and $d$, shows that every row with $d$ in column 1 must be a
+constant $d$ row; this holds for every $d$, and so all rows are constant
+rows.~$\square $
+
+\textbf{(iv) implies (iii) and the \textquotedblleft
+moreover\textquotedblright\ statement.}
+
+If $X$ is column-constant then $C_{W}(F)=E_{W}(F)\leq R_{W}(F)$ for every $W$
+and every concave $F$ by Proposition \ref{p:0} (a) and (b1).
+
+If $X$ is row-constant then $C_{W}(Q)\geq E_{W}(Q)=R_{W}(Q)$ for all $W$ by
+Proposition \ref{p:0} (a) and (b2), and so if $W$ is such that $C_{W}(Q)\leq
+R_{W}(Q)$ then we have equality $C_{W}(Q)=E_{W}(Q)=R_{W}(Q)$; since $Q$ is
+strictly concave, by Proposition \ref{p:0} (b1), $X$ is (also) $W$%
+-column-constant, and then $C_{W}(F)=E_{W}(F)=R_{W}(F)$ for every concave $F$
+by Proposition \ref{p:0} (b1) and (b2).
+
+Altogether, we have shown (iii), and also the \textquotedblleft
+moreover\textquotedblright\ statement. $\square $
+
+\textbf{(iii) implies (ii).} Immediate, since $Q$ is concave.~$\square $
+
+\textbf{(ii) implies (i).} Use Proposition \ref{p:0} (c1): since $Q$ is
+strictly concave, $C_{W}(Q)=E_{W}(Q)$ implies that $X$ is $W$%
+-column-constant and then $C_{W}(F)=E_{W}(F)\leq R_{W}(F)$ for every concave 
+$F$.
+\end{proof}
+
+\bigskip
+
+\noindent \textbf{Remarks. }\emph{(a) }The result continues to hold even if
+we restrict the concave functions $F$ to have Lipschitz-continuous gradients
+in the relevant domain (namely, the compact convex set that contains all $%
+x_{ij}$); indeed, our construction uses only such functions $F_{n}$ (see
+Footnote \ref{ft:smooth}; continuous differentiability on a compact set
+implies that the gradient is Lipschitz-continuous there).
+
+\emph{(b)} The result is false when $X$ has only two distinct entries. For
+example, let $X=\left[ 
+\begin{array}{cc}
+1 & 0 \\ 
+0 & 1%
+\end{array}%
+\right] $. For every weight matrix $W$ we have $r_{1}\geq c_{1}$ iff $%
+w_{11}/(w_{11}+w_{12})\geq w_{11}/(w_{11}+w_{21})$ iff $w_{12}\leq w_{21}$
+iff $w_{22}/(w_{22}+w_{12})\geq w_{22}/(w_{22}+w_{21})$ iff $c_{2}\geq r_{2}$%
+, and so $r_{1},r_{2}$ are either both inside the interval $c_{1},c_{2}$, or
+both strictly outside. Because the average of the $r_{i}$ equals the average
+of the $c_{j}$, in the first case we have $C_{W}(F)\leq R_{W}(F)$ for every
+concave $F$, and in the second case we have $C_{W}(F)>R_{W}(F)$ for all
+strictly concave $F.$ Therefore, (i) holds. However, (ii) does not hold:
+take for instance all weights to be $1/4$, then $C_{W}(Q)=R_{W}(Q)=-1/4,$
+whereas $E_{W}(Q)=-1/2$.
+
+\subsection{Application to Proper Calibeating\label{s-s-a:bxc calibeating}}
+
+Let $\mathbf{a}$ be an action sequence, and $\mathbf{b}$ and $\mathbf{c}$
+two forecasting sequences. Ignoring for simplicity the horizon and the $o(1)$
+errors, $\mathbf{c}$ \emph{calibeats} $\mathbf{b}$ if $\mathcal{B}(\mathbf{c}%
+)\leq \mathcal{R}(\mathbf{b})$, and $\mathbf{c}$ \emph{proper-calibeats} $%
+\mathbf{b}$ if $\mathcal{B}^{L}(\mathbf{c})\leq \mathcal{R}^{L}(\mathbf{b})$
+for every proper -Lipschitz scoring rule $L$ (i.e., $L$ in $\mathcal{L}_{1}$%
+).
+
+Let $B$ and $C$ be the finite sets of bins of $\mathbf{b}$ and $\mathbf{c}$,
+respectively, and let $\lambda (b,c)$ be the relative frequency of the $(b,c)
+$-bin, and $\bar{a}(b,c)$ the average action there. Then\footnote{%
+Let $\lambda (b,\cdot ):=\sum_{c}\lambda (b,c)$ and $\lambda (\cdot
+,c):=\sum_{b}\lambda (b,c)$ denote the marginal frequencies, and $\bar{a}%
+(b,\cdot )$ and $\bar{a}(\cdot ,c)$ the action averages, for the $b$-bins
+and the $c$-bins, respectively.}%
+\begin{eqnarray*}
+\mathcal{R}^{L}(\mathbf{b}) &=&\sum_{b\in B}\lambda (b,\cdot )H^{L}(\bar{a}%
+(b,\cdot ))-\mathcal{H}^{L} \\
+\mathcal{R}^{L}(\mathbf{c}) &=&\sum_{c\in C}\lambda (\cdot ,c)H^{L}(\bar{a}%
+(\cdot ,c))-\mathcal{H}^{L}
+\end{eqnarray*}%
+where $H^{L}$ is the corresponding $L$-entropy function, which is a concave
+function, and $\mathcal{H}^{L}$ is the average $L$-entropy of the actions.
+For the standard quadratic scoring rule, $H(z)=Q(z)=-\left\Vert z\right\Vert
+^{2}.$
+
+For the result below, we fix the action averages $\bar{a}(b,c)$, while
+allowing the relative frequencies $\lambda (b,c)$ to vary. Since this
+changes the $c$-bin averages, namely, $\bar{a}(\cdot ,c)=\sum_{b\in
+B}\lambda (b,c)\bar{a}(b,c)/\sum_{b\in B}\lambda (b,c)$, in order for the
+forecasting sequence $\mathbf{c}\equiv \mathbf{c}_{\lambda }$ to be
+calibrated we replace each label $c$ with the corresponding $\bar{a}(\cdot
+,c)$. While bin labels do not matter for refinement scores, the above
+relabeling may change the binning itself, when two different $c$ bins get
+the same new label. If, say, $\bar{a}(.,c)=\bar{a}(\cdot ,c^{\prime })$,
+then we need to merge the overall $c$ and $c^{\prime }$ bins, and also the $%
+(b,c)$ and $(b,c^{\prime })$ bins for every $b\in B$. Using the notation $%
+\mathcal{R}^{L}(B),$ $\mathcal{R}^{L}(C),$ and $\mathcal{R}^{L}(B\times C)$
+for the original refinement scores (i.e., before the above merging), we have 
+$\mathcal{R}^{L}(\mathbf{b})=\mathcal{R}^{L}(B)$ (because the merging has no
+effect on the overall $b$-bins), $\mathcal{R}^{L}(\mathbf{c})=\mathcal{R}%
+^{L}(C)$ (because we merge total $c$-bins that have the same action
+average), and $\mathcal{R}^{L}(\mathbf{b}\times \mathbf{c})\geq \mathcal{R}%
+^{L}(B\times C)$ (because the $B\times C$ binning can only be finer).
+
+\begin{theorem}
+\label{th:bxc}Assume that the matrix $(\bar{a}(b,c))_{b\in B,c\in C}$ of
+action averages is non-degenerate. Then the following statements are
+equivalent:
+
+\begin{description}
+\item[(i)] For every bin-frequency matrix $\lambda $ and corresponding
+calibrated forecasting sequence $\mathbf{c}\equiv \mathbf{c}_{\lambda }$, if 
+$\mathbf{c}$ calibeats $\mathbf{b}$ then $\mathbf{c}$ proper-calibeats $%
+\mathbf{b}$.
+
+\item[(ii)] For every bin-frequency matrix $\lambda $ and corresponding
+calibrated forecasting sequence $\mathbf{c}\equiv \mathbf{c}_{\lambda }$, if 
+$\mathbf{c}$ calibeats $\mathbf{b}$ then $\mathbf{c}$ calibeats $\mathbf{%
+b\times c}$ (and thus $\mathbf{c}$ is proper-calibrated, and
+proper-calibeats $\mathbf{b\times c}$).
+\end{description}
+\end{theorem}
+
+\begin{proof}
+We use Theorem \ref{th:1}. Let $X=(\bar{a}(b,c))_{b\in B,c\in C}$ be the
+matrix of action averages, and $W=\lambda \equiv (\lambda (b,c))_{b\in
+B,c\in C}$ the matrix of bin frequencies. Then $\mathcal{R}^{L}(\mathbf{b})=%
+\mathcal{R}^{L}(B)=R_{W}(H^{L})-\mathcal{H}^{L}$, $\mathcal{R}^{L}(\mathbf{c}%
+)=\mathcal{R}^{L}(C)=C_{W}(H^{L})-\mathcal{H}^{L}$, and $\mathcal{R}^{L}(%
+\mathbf{b}\times \mathbf{c})\geq \mathcal{R}^{L}(B\times C)=E_{W}(H^{L})-%
+\mathcal{H}^{L}$ (for every $L$). Statement (i) of Theorem \ref{th:1}
+translates to: for every $\lambda $, if $\mathcal{R}(\mathbf{c})\leq 
+\mathcal{R}(\mathbf{b})$ then $\mathcal{R}^{L}(\mathbf{c})\leq \mathcal{R}%
+^{L}(\mathbf{b})$ for every\footnote{%
+See Remark (a) above: the restriction to Lipschitz $L$ does not matter for
+the result.} $L$ in $\mathcal{L}$; this is statement (i) here. Statement
+(ii) of Theorem \ref{th:1} translates to: for every $\lambda $, if $\mathcal{%
+R}(\mathbf{c})\leq \mathcal{R}(\mathbf{b})$ then $\mathcal{R}(\mathbf{c})=%
+\mathcal{R}(B\times C)\leq \mathcal{R}(\mathbf{b}\times \mathbf{c})$; this
+is statement (ii) here (use (J1) in the Remark following Theorem \ref%
+{th:beat-by-calib S}).
+\end{proof}
+
+\bigskip 
+
+\textbf{[TO BE REWRITTEN] }One way to interpret this is as follows: if, for
+some bin frequencies, a calibrated $\mathbf{c}$ calibeating $\mathbf{b}$
+entails that it proper-calibeats $\mathbf{b}$, but it does not calibeat the
+joint $\mathbf{b}\times \mathbf{c}$, then one can change the frequencies
+such that the resulting calibrated $\mathbf{c}^{\prime }$ calibeats $\mathbf{%
+b}$ but does \emph{not} proper-calibeat $\mathbf{b}$.
+
+\begin{thebibliography}{99}
+\bibitem{} \textbf{[NEEDS\ UPDATING]}
+
+\bibitem{} Azoury, K. S. and M. K. Warmuth (2001), \textquotedblleft
+Relative Loss Bounds for On-Line Density Estimation with the Exponential
+Family of Distributions,\textquotedblright\ \emph{Machine Learning} 43,
+211--246.
+
+\bibitem{} Blackwell, D. (1956), \textquotedblleft An Analog of the Minimax
+Theorem for Vector Payoffs,\textquotedblright\ \emph{Pacific Journal of
+Mathematics} 6, 1--8.
+
+\bibitem{} Brier, G. W. (1950), \textquotedblleft Verification of Forecasts
+Expressed in Terms of Probability,\textquotedblright\ \emph{Monthly Weather
+Review} 78, 1--3.
+
+\bibitem{} Brouwer, L. E. J. (1912), \textquotedblleft \"{U}ber Abbildung
+von Mannigfaltigkeiten,\textquotedblright\ \emph{Mathematische Annalen} 71,
+97--115.
+
+\bibitem{} Cesa-Bianchi, N. and G. Lugosi (2006), \emph{Prediction,
+Learning, and Games}, Cambridge University Press.
+
+\bibitem{} Chen, Y., Z. Huang, M. I. Jordan, and H. Luo, \textquotedblleft
+Calibeating Made Simple,\textquotedblright\ (2026), \texttt{arXiv}%
+:2603.22167.
+
+\bibitem{} Dawid, A. (1982), \textquotedblleft The Well-Calibrated
+Bayesian,\textquotedblright\ \emph{Journal of the American Statistical
+Association} 77, 605--613.
+
+\bibitem{} Forster, J. (1999), \textquotedblleft On Relative Loss Bounds in
+Generalized Linear Regression,\textquotedblright\ in \emph{12th
+International Symposium on Fundamentals of Computation Theory (FCT '99)},
+269--280.
+
+\bibitem{} Foster, D. P. (1991), \textquotedblleft Prediction in the Worst
+Case,\textquotedblright\ \emph{The Annals of Statistics} 19, 1084--1090.
+
+\bibitem{} Foster, D. P. (1999), \textquotedblleft A Proof of Calibration
+via Blackwell's Approachability Theorem,\textquotedblright\ \emph{Games and
+Economic Behavior }29, 73--78.
+
+\bibitem{} Foster, D. P. and S. Hart (2018), \textquotedblleft Smooth
+Calibration, Leaky Forecasts, Finite Recall, and Nash
+Dynamics,\textquotedblright\ \emph{Games and Economic Behavior }109,
+271--293.
+
+\bibitem{} Foster, D. P. and S. Hart (2021), \textquotedblleft Forecast
+Hedging and Calibration,\textquotedblright\ \emph{Journal of Political
+Economy} 129, 3447--3490. doi.org/10.1086/716559. \texttt{%
+http://www.ma.huji.ac.il/hart/publ.html\#calib-int}
+
+\bibitem{} Foster, D. P. and S. Hart (2023), \textquotedblleft\
+`Calibeating': Beating Forecasters at Their Own Game,\textquotedblright\ 
+\emph{Theoretical Economics }18, 1441--1474.
+
+\bibitem{} Foster, D. P. and S. Hart (2026), \textquotedblleft Errata:\
+`Calibeating': Beating Forecasters at Their Own Game,\textquotedblright\ 
+\texttt{http://www.ma.huji.ac.il/hart/papers/calib-beat-errata.pdf}
+
+\bibitem{} Foster, D. P. and R. V. Vohra (1998), \textquotedblleft
+Asymptotic Calibration,\textquotedblright\ \emph{Biometrika} 85, 379--390.
+
+\bibitem{} Hart, S. (1992), \textquotedblleft Games in Extensive and
+Strategic Forms,\textquotedblright\ in \emph{Handbook of Game Theory, with
+Economic Applications}, R. J. Aumann and S. Hart (editors), North-Holland,
+Vol. 1, Chapter 2, 19--40.
+
+\bibitem{} Hart, S. (2021), \textquotedblleft Calibrated Forecasts: The
+Minimax Proof,\textquotedblright\ Center for Rationality DP-744, The Hebrew
+University of Jerusalem. \texttt{http://www.ma.huji.ac.il/hart/publ.html%
+\#calib-minmax}
+
+\bibitem{} Johnson, N. L., A. W. Kemp, and S. Kotz (2005), \emph{Univariate
+Discrete Distributions}, 3rd edition, Wiley.
+
+\bibitem{} Jung, H. (1901), \textquotedblleft Ueber die kleinste Kugel, die
+eine r\"{a}umliche Figur einschliesst,\textquotedblright\ \emph{Journal f%
+\"{u}r die Reine und Angewandte Mathematik} 123, 241--257.
+
+\bibitem{} Kuhn, H. W. (1953), \textquotedblleft Extensive Games and the
+Problem of Information,\textquotedblright\ in \emph{Contributions to the
+Theory of Games, Vol. II}, H. W. Kuhn and A. W. Tucker (editors), \emph{%
+Annals of Mathematics Studies} 28, Princeton University Press, 193--216.
+
+\bibitem{} Lee, D., Noarov, G., Pai, M., and Roth, A. (2022),
+\textquotedblleft Online Minimax Multiobjective Optimization:
+Multicalibeating and Other Applications,\textquotedblright\ in: \emph{%
+Advances in Neural Information Processing Systems}, 29051--29063. \texttt{%
+https://proceedings.neurips.cc/paper%
+\_files/paper/2022/file/ba942323c447c9bbb9d4b638eadefab9-Paper-Conference.pdf%
+}
+
+\bibitem{} Lo\`{e}ve, M. (1978), \emph{Probability Theory, Vol. II}, 4th
+edition, Springer.
+
+\bibitem{} Murphy, A. H. (1972), \textquotedblleft Scalar and Vector
+Partitions of the Probability Score. Part I: Two-State
+Situation,\textquotedblright\ \emph{Journal of Applied Meteorology} 11,
+273--282.
+
+\bibitem{} Oakes, D. (1985), \textquotedblleft Self-Calibrating Priors Do
+Not Exist,\textquotedblright\ \emph{Journal of the American Statistical
+Association} 80, 339.
+
+\bibitem{} Olszewski, W. (2015), \textquotedblleft Calibration and Expert
+Testing,\textquotedblright\ in \emph{Handbook of Game Theory, Vol. 4}, H. P.
+Young and S. Zamir (editors), Springer, 949--984.
+
+\bibitem{} Olszewski, W. and A. Sandroni (2008), \textquotedblleft
+Manipulability of Future-Independent Tests,\textquotedblright\ \emph{%
+Econometrica} 76, 1437--1466.
+
+\bibitem{} Sanders, F. (1963), \textquotedblleft On Subjective Probability
+Forecasting,\textquotedblright\ \emph{Journal of Applied Meteorology} 2,
+191--201.
+
+\bibitem{} Sandroni, A. (2003), \textquotedblleft The Reproducible
+Properties of Correct Forecasts,\textquotedblright\ \emph{International
+Journal of Game Theory} 32, 151--159.
+
+\bibitem{} Shmaya, E. (2008), \textquotedblleft Many Inspections are
+Manipulable,\textquotedblright\ \emph{Theoretical Economics} 3, 367--382.
+
+\bibitem{} Welford, B. P. (1962), \textquotedblleft Note on a Method for
+Calculating Corrected Sums of Squares and Products,\textquotedblright\ \emph{%
+Technometrics} 4, 419--420.
+
+\bibitem{} Vovk, V. (2001), \textquotedblleft Competitive On-Line
+Statistics,\textquotedblright\ \emph{International Statistical Review} 69,
+213--248.
+
+\bibitem{} von Neumann, J. (1928), \textquotedblleft Zur Theorie der
+Gesellschaftsspiele, \textquotedblright\ \emph{Mathematische Annalen} 100,
+295--320.
+\end{thebibliography}
+
+\end{document}
