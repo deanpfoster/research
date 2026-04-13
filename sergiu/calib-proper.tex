@@ -283,6 +283,17 @@ functions (omniprediction). Our universality result is analogous but in a
 different setting: we show calibration implies universality over
 \emph{evaluation rules} (scoring rules), not over decision-making losses.
 
+Dimitriadis, Gneiting, and Jordan (2023) decompose the continuous ranked
+probability score (CRPS) into miscalibration, discrimination, and
+uncertainty components, and relate these to a hierarchy of calibration
+notions. Popordanoska, Uria, and Blundell (2023) show that every proper
+score decomposes into a proper calibration error and a refinement term via a
+Bregman divergence, and provide consistent estimators for these quantities.
+Both study the calibration--refinement decomposition for general proper
+rules from a statistical perspective; our work provides the game-theoretic
+counterpart, establishing when such decompositions yield uniform guarantees
+across all proper Lipschitz rules.
+
 Blasiok, Gopalan, Hu, and Nakkiran (2023) prove the converse direction:
 local optimality of a proper loss implies smooth calibration. Luo,
 Senapati, and Sharan (2025) achieve simultaneous swap regret minimization
