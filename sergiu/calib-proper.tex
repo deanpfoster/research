@@ -79,8 +79,10 @@ quadratic (Brier) scoring rule, but there are infinitely many proper scoring
 rules. We ask whether these guarantees persist when the Brier score is
 replaced by an arbitrary proper Lipschitz scoring rule, and find a
 surprising asymmetry: calibration transfers for free---every calibrated
-procedure is automatically \textquotedblleft proper-calibrated%
-\textquotedblright ---but calibeating does not, as a concrete counterexample
+procedure is automatically \textquotedblleft proper-calibrated,%
+\textquotedblright\ and every continuously calibrated procedure is
+continuously proper-calibrated---but calibeating does not, as a concrete
+counterexample
 shows. We then provide three ways to achieve \textquotedblleft
 proper-calibeating\textquotedblright\ (calibeating simultaneously under all
 proper Lipschitz scoring rules): the simple deterministic procedure of
@@ -157,7 +159,7 @@ Section \ref{s-s:sequences} for the precise setup.}%
 where $\mathcal{K}$ is the \emph{calibration} score---measuring how close
 the forecasts are to the realized frequencies---and $\mathcal{R}$ is the
 \emph{refinement} score---measuring how well the forecaster sorts outcomes
-into informative bins. Foster and Vohra (1998) showed
+into informative bins. A surprising result of Foster and Vohra (1998) is
 that one can generate forecasts that are \emph{guaranteed} to be calibrated
 (i.e., $\mathcal{K}$ converges to zero), no matter what the outcomes turn
 out to be (see also Foster 1999, Foster and Hart 2021, and the survey of
@@ -173,8 +175,8 @@ deterministic continuously calibrated procedures. All these results,
 however, were stated exclusively for the Brier score.
 
 But there are infinitely many proper scoring rules, and it would be
-desirable that a forecaster's guarantees not depend on the evaluator's
-choice of proper loss. This raises the question:%
+disturbing if a forecaster's guarantees evaporated merely because the
+evaluator chose a different proper loss. This raises the question:%
 \begin{quote}
 \emph{If a procedure is calibrated (or calibeats) under the Brier score, do
 these guarantees persist under every other proper scoring rule?}
@@ -190,6 +192,10 @@ restrict attention to Lipschitz scoring rules; this excludes rules, such as
 the logarithmic scoring rule, that may take the value $+\infty $ on the
 boundary of the simplex. The restriction is natural for our purpose, because
 we seek guarantees that hold uniformly over a class of scoring rules.
+
+It turns out that the answer is surprisingly asymmetric: calibration
+transfers automatically, but calibeating does not, and new ideas are needed
+to restore it.
 
 \subsection{Calibration transfers for free\label{s-s:intro-calibration}}
 
@@ -211,7 +217,7 @@ and the deterministic continuously calibrated procedures of Foster and Hart
 
 \subsection{Calibeating does not transfer\label{s-s:intro-not-transfer}}
 
-Our second result is that, unlike calibration, calibeating
+Our second result is perhaps a surprise: unlike calibration, calibeating
 does \emph{not} transfer. We exhibit a concrete example (Section \ref%
 {s-s:example}) in which a forecasting sequence $\mathbf{c}$ calibeats a
 reference $\mathbf{b}$ under the quadratic scoring rule, yet \emph{fails}
@@ -219,7 +225,7 @@ to calibeat $\mathbf{b}$ under the $2$-spherical scoring rule---which is
 also proper and Lipschitz. Both sequences are perfectly calibrated; the
 failure is purely in the refinement comparison.
 
-The reason is the following. Calibration involves only $%
+The reason for the asymmetry is instructive. Calibration involves only $%
 \mathcal{K}^{L}$, which is controlled by $\mathcal{K}$ via the bound (\ref%
 {eq:KL-K-intro}). Calibeating involves $\mathcal{B}^{L}-\mathcal{R}^{L}$,
 and there is no analogous inequality relating $\mathcal{R}^{L}$ to $%
