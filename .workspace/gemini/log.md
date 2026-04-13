@@ -13,3 +13,5 @@
 - Moved annotated bibliography to the 'papers' directory.
 
 - Attempted to fetch missing abstracts for older foundational papers, but encountered rate-limits and lack of digital abstracts on CrossRef/Semantic Scholar.
+
+- Extracted missing abstracts directly from the recently downloaded PDFs (Laeven et al., Kakade & Foster) and Crossref (Hart 2022).
