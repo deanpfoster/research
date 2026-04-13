@@ -147,9 +147,15 @@ scoring rules, their characterization, and the subgradient/divergence
 structure.
 Schervish (1989)---proper scoring rules as a complete class for comparing
 probability assessors.
+Jose, Nau, and Winkler (2008)---scoring rules, generalized entropy, and
+utility maximization; connects proper scoring rules to information theory.
 DeGroot and Fienberg (1983)---introduced the calibration--refinement
 decomposition of the Brier score (the $\mathcal{B}=\mathcal{K}+\mathcal{R}$
 identity that we generalize).
+Gneiting, Balabdaoui, and Raftery (2007)---the calibration--sharpness
+paradigm for probabilistic forecasts (the companion to Gneiting and Raftery
+2007, emphasizing that calibration is necessary but refinement/sharpness is
+the goal).
 
 \subsubsection*{2. The question: do guarantees transfer across scoring
 rules?}
@@ -165,6 +171,12 @@ Gneiting and Raftery (2007)---for the class of proper scoring rules under
 consideration.
 Foster and Hart (2023)---the existing calibeating results, stated only for
 the quadratic rule, that motivate the question.
+Kleinberg, Leme, Schneider, and Teng (2023)---U-calibration: evaluating
+forecasts for an \emph{unknown} agent under all bounded scoring rules.
+Shows calibration guarantees low regret for all agents, but is not
+necessary; introduces U-calibration as the tight criterion. Our work is
+complementary: we show that existing calibration/calibeating procedures
+already achieve universality over proper Lipschitz rules.
 
 \subsubsection*{3. Main result 1 (the good news): calibration is
 automatically proper-calibration}
@@ -187,6 +199,7 @@ proofs.
 Dawid (1982)---the concept of calibration itself.
 Kakade and Foster (2008)---deterministic (weak) calibration and its
 connection to Nash equilibrium.
+Hart (2022)---calibrated forecasts: the minimax proof.
 Mannor and Stoltz (2010)---geometric proof of calibration via
 approachability.
 
@@ -266,15 +279,17 @@ via online multiobjective optimization.
 \noindent\textbf{Calibeating:}
 Foster and Hart (2023); also (2022, arXiv), (2024, addendum), (2026,
 errata).
-Lee, Noarov, Pai, and Roth (2022).
+Lee, Noarov, Pai, and Roth (2022)---multicalibeating via online
+multiobjective optimization.
 Chen, Huang, Jordan, and Luo (2026)---\textquotedblleft Calibeating Made
 Simple\textquotedblright ; reduces calibeating to online learning; obtains
 results for general proper losses (the most directly related concurrent
-work).
+work; they work loss-by-loss, we get uniformity).
 Gupta and Ramdas (2023)---Online Platt Scaling with calibeating (applied
 calibeating).
 
 \medskip\noindent\textbf{Calibration:}
+Hart (2022)---calibrated forecasts: the minimax proof.
 Hart and Mas-Colell (2000)---regret matching and correlated equilibrium.
 Foster and Hart (2018)---smooth calibration, leaky forecasts, Nash
 dynamics.
@@ -282,10 +297,30 @@ Perchet (2011)---equivalences between calibration, internal regret, and
 approachability.
 Rakhlin, Sridharan, and Tewari (2011)---unified framework for online
 learning, approachability, and calibration.
+Marx, Kuleshov, and Ermon (2024)---calibrated probabilistic forecasts for
+arbitrary sequences via Blackwell approachability; extends calibration to
+outcomes in any compact space.
+Jain and Perchet (2024)---calibrated forecasting and persuasion; reduces
+the dynamic calibration game to a static persuasion problem.
+Olszewski (2015)---calibration and expert testing (handbook chapter
+surveying the area).
+
+\medskip\noindent\textbf{Universality across scoring rules:}
+Kleinberg, Leme, Schneider, and Teng (2023)---U-calibration: forecasting
+for an unknown agent. Shows calibration gives sublinear regret for all
+agents/scoring rules, introduces U-calibration as the tight criterion
+achieving $O(\sqrt{T})$ rates. Complementary to our work: they ask what
+criterion suffices for all scoring rules; we show existing calibeating
+procedures already achieve it.
+Luo, Senapati, and Sharan (2025)---simultaneous swap regret minimization
+via KL-calibration; achieves $O(T^{1/3})$ swap regret for all proper
+losses with smooth univariate form. Another route to universality over
+scoring rules, via the swap-regret/calibration connection.
 
 \medskip\noindent\textbf{Proper scoring rules and calibration:}
 Blasiok, Gopalan, Hu, and Nakkiran (2023)---optimizing a proper loss
-yields smooth calibration (the converse direction).
+yields smooth calibration (the converse direction: from proper loss to
+calibration).
 Vovk (2009)---prediction with expert advice for the Brier game
 (mixability of the Brier score).
 
@@ -296,12 +331,16 @@ Gupta, Jung, Noarov, Pai, and Roth (2021)---online multivalid learning.
 Gopalan, Kalai, Reingold, Sharan, and Wieder (2022)---omnipredictors
 (multicalibration implies omniprediction for all convex Lipschitz
 losses---the closest conceptual relative to our universality result).
+Hu, Luo, Senapati, and Sharan (2025)---efficient swap multicalibration of
+elicitable properties; generalizes multicalibration beyond the mean.
 Kleinberg, Mullainathan, and Raghavan (2016)---fairness trade-offs
 involving calibration.
 
 \medskip\noindent\textbf{Calibration complexity:}
 Qiao and Valiant (2021)---super-$\sqrt{T}$ lower bounds on calibration
 error.
+Okoroafor, Kleinberg, and Sun (2023)---faster recalibration via
+approachability.
 
 \section{The Setup\label{s:setup}}
 
