@@ -132,7 +132,9 @@ minimizes expected loss by reporting truthfully; the standard choice is the
 1989, and the comprehensive treatment in Gneiting and Raftery 2007).
 
 A classic result of DeGroot and Fienberg (1983) is that the Brier score
-decomposes as%
+decomposes as\footnote{%
+For forecasts that are sorted into bins by their announced values; see
+Section \ref{s-s:sequences} for the precise setup.}%
 \begin{equation}
 \mathcal{B}=\mathcal{K}+\mathcal{R}\text{,}  \label{eq:BKR-intro}
 \end{equation}%
@@ -161,13 +163,17 @@ evaluator chose a different proper loss. This raises the question:%
 \emph{If a procedure is calibrated (or calibeats) under the Brier score, do
 these guarantees persist under every other proper scoring rule?}
 \end{quote}
+This paper answers that question for proper Lipschitz scoring rules. The
+answer is positive for calibration and negative for calibeating.
+
 We will call a procedure \emph{proper-calibrated} (respectively, \emph{%
 proper-calibeating}) if the corresponding guarantee holds simultaneously
-for all proper Lipschitz scoring rules (after normalizing by the Lipschitz
-constant; see Section \ref{s:proper} for the precise definitions). Scoring
-rules with infinite losses, such as the logarithmic rule, are excluded.
-
-It turns out that the answer is surprisingly asymmetric.
+for all proper Lipschitz scoring rules, after normalizing by the Lipschitz
+constant (see Section \ref{s:proper} for the precise definitions). We
+restrict attention to Lipschitz scoring rules; this excludes rules, such as
+the logarithmic scoring rule, that may take the value $+\infty $ on the
+boundary of the simplex. The restriction is natural for our purpose, because
+we seek guarantees that hold uniformly over a class of scoring rules.
 
 \subsection{Calibration transfers for free\label{s-s:intro-calibration}}
 
@@ -206,44 +212,45 @@ comparable in general.
 
 \subsection{Proper calibeating\label{s-s:intro-proper-calibeating}}
 
-We provide three ways to achieve proper calibeating (i.e., calibeating
-simultaneously under all proper Lipschitz scoring rules).
+We then provide three positive results on proper calibeating (i.e.,
+calibeating simultaneously under all proper Lipschitz scoring rules).
 
-\medskip \noindent \textbf{(a) The simple procedure works.} The
-deterministic procedure of Theorem 3 of Foster and Hart (2023)---which
-forecasts the running average action in the reference forecaster's
-bin---turns out to be proper-calibeating. The proof relies on a new bound
-showing that online refinement $\widetilde{\mathcal{R}}^{L}$ converges to
-offline refinement $\mathcal{R}^{L}$ at rate $O((\ln t)/t)$ for every
-proper $M$-Lipschitz $L$, generalizing the quadratic-case result of Foster
-and Hart (2023, Proposition 2).
+First, the simple deterministic procedure of Theorem 3 of Foster and Hart
+(2023)---which forecasts the running average action in the reference
+forecaster's bin---turns out to be proper-calibeating. The proof relies on
+a new bound showing that online refinement $\widetilde{\mathcal{R}}^{L}$
+converges to offline refinement $\mathcal{R}^{L}$ at rate $O((\ln t)/t)$
+for every proper $M$-Lipschitz $L$, generalizing the quadratic-case result
+of Foster and Hart (2023, Proposition 2).
 
-\medskip \noindent \textbf{(b) Calibeating the joint binning.} The
-counterexample shows that calibeating plus calibration is \emph{not}
-sufficient for proper calibeating. What goes wrong is that the bins may mix
-different forecasts, destroying the refinement structure. What restores
-it is calibeating the \emph{joint} binning $\mathbf{b}\times \mathbf{c}$,
-which always refines the forecast partition. A stochastic procedure that
-calibeats the joint binning is both $(\delta ,B)$-proper-calibeating and $%
-\delta $-proper-calibrated, by chaining the decomposition $\mathcal{B}^{L}=%
+Second, a stochastic procedure that calibeats the \emph{joint} binning $%
+\mathbf{b}\times \mathbf{c}$ is both $(\delta ,B)$-proper-calibeating and $%
+\delta $-proper-calibrated. This identifies the right structural condition:
+it is not enough to calibeat the reference forecaster and to be calibrated;
+what matters is calibeating the \emph{joint} binning, which always refines
+the forecast partition and thereby restores the refinement structure needed
+for the argument. The proof chains the decomposition $\mathcal{B}^{L}=%
 \mathcal{K}^{L}(\mathbf{c};\mathbf{b}\times \mathbf{c})+\mathcal{R}^{L}(%
 \mathbf{b}\times \mathbf{c})$ with the bound (\ref{eq:KL-K-intro}).
 
-\medskip \noindent \textbf{(c) Deterministic continuous version.} A
-deterministic continuously proper-calibrated procedure that
-proper-calibeats. Since fractional binnings do not refine the
+Third, there exists a deterministic continuously proper-calibrated procedure
+that proper-calibeats. Since fractional binnings do not refine the
 forecast-binning, the exact decomposition $\mathcal{B}^{L}=\mathcal{K}%
-^{L}+\mathcal{R}^{L}$ breaks down. We prove an approximate version:
-$|\mathcal{B}^{L}-(\mathcal{K}^{L}+\mathcal{R}^{L})|<2M\delta $ for any $%
-\delta $-local fractional binning under an $M$-Lipschitz rule. This
-generalizes the quadratic approximate decomposition from the errata (Foster
-and Hart 2026), and is the key technical tool for this result.
+^{L}+\mathcal{R}^{L}$ breaks down. We prove an approximate version:%
+\begin{equation*}
+\left\vert \mathcal{B}_{t}^{L}(\mathbf{c})-\left( \mathcal{K}_{t}^{L}(%
+\mathbf{c};\mathbf{f})+\mathcal{R}_{t}^{L}(\mathbf{f})\right) \right\vert
+<2M\delta
+\end{equation*}%
+for any $\delta $-local fractional binning under an $M$-Lipschitz rule.
+This generalizes the quadratic approximate decomposition from the errata
+(Foster and Hart 2026), and is the key technical tool for this result.
 
-\medskip \noindent \textbf{(d) Multicalibeating.} All three results extend
-to simultaneously proper-calibeating $N$ reference forecasters, by applying
-(a)--(c) to the product binning $\mathbf{b}^{1}\times \cdots \times
-\mathbf{b}^{N}$ (cf.\ Lee, Noarov, Pai, and Roth 2022, who independently
-study multicalibeating via online multiobjective optimization).
+All three results extend to simultaneously proper-calibeating $N$ reference
+forecasters, by applying the above to the product binning $\mathbf{b}%
+^{1}\times \cdots \times \mathbf{b}^{N}$ (cf.\ Lee, Noarov, Pai, and Roth
+2022, who independently study multicalibeating via online multiobjective
+optimization).
 
 \subsection{Related work\label{s-s:intro-related}}
 
@@ -299,7 +306,9 @@ introduces the \textquotedblleft proper\textquotedblright\ concepts
 calibration} proves that calibration is automatically proper-calibration.
 Section \ref{s:proper calibeating} presents the counterexample showing that
 calibeating does not imply proper calibeating, establishes the three routes
-to proper calibeating, and extends the results to multicalibeating.
+to proper calibeating, and extends the results to multicalibeating. The
+appendices collect the background on scoring rules and the analysis of the
+joint-binning condition.
 
 \section{The Setup\label{s:setup}}
 
