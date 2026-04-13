@@ -48,10 +48,20 @@ FH2024A_URL = https://ma.huji.ac.il/hart/papers/calib-beat-add.pdf
 GR2007 = gneiting-raftery-2007-proper-scoring-rules.pdf
 GR2007_URL = https://sites.stat.washington.edu/raftery/Research/PDF/Gneiting2007jasa.pdf
 
+# Gneiting, Balabdaoui & Raftery (2007). "Probabilistic Forecasts,
+#   Calibration and Sharpness." JRSSB 69, 243–268.
+GBR2007 = gneiting-balabdaoui-raftery-2007-calibration-sharpness.pdf
+GBR2007_URL = https://sites.stat.washington.edu/raftery/Research/PDF/Gneiting2007jrssb.pdf
+
 # Schervish (1989). "A General Method for Comparing Probability
 #   Assessors." Annals of Statistics 17, 1856–1879.
 SCHERV = schervish-1989-comparing-assessors.pdf
 SCHERV_URL = https://deanfoster.net/teaching/data_mining/schervish.pdf
+
+# Jose, Nau & Winkler (2008). "Scoring Rules, Generalized Entropy,
+#   and Utility Maximization." Working paper.
+JNW2008 = jose-nau-winkler-2008-scoring-rules-generalized-entropy.pdf
+JNW2008_URL = https://people.duke.edu/~rnau/scoring_rules_and_generalized_entropy.pdf
 
 # Paywalled — add manually if needed:
 #   Savage (1971). "Elicitation of Personal Probabilities and
@@ -82,6 +92,11 @@ FV1998_URL = https://deanfoster.net/research/calibration.pdf
 #   Approachability Theorem." Games & Economic Behavior 29, 73–78.
 F1999 = foster-1999-calibration-blackwell.pdf
 F1999_URL = https://deanfoster.net/research/calibration_via_blackwell.pdf
+
+# Olszewski (2015). "Calibration and Expert Testing." Handbook of
+#   Game Theory with Economic Applications 4, 949–984.
+OLS2015 = olszewski-2015-calibration-expert-testing.pdf
+OLS2015_URL = https://faculty.wcas.northwestern.edu/wol737/Hand.pdf
 
 # Blackwell (1956). "An Analog of the Minimax Theorem for Vector
 #   Payoffs." Pacific Journal of Mathematics 6, 1–8.
@@ -185,8 +200,8 @@ BGHN2023_URL = https://arxiv.org/pdf/2305.18764
 
 ALL_PDFS = \
 	$(FH2018) $(FH2021) $(FH2023) $(FH2026E) $(FH2024A) \
-	$(GR2007) $(SCHERV) \
-	$(DAWID) $(FV1998) $(F1999) $(BLACKWELL) \
+	$(GR2007) $(GBR2007) $(SCHERV) $(JNW2008) \
+	$(DAWID) $(FV1998) $(F1999) $(OLS2015) $(BLACKWELL) \
 	$(HMC2000) $(KF2008) $(MS2010) $(PERCHET) $(RST2011) $(VOVK) \
 	$(LNPR2022) $(CHJL2026) $(GR2023) \
 	$(HJKRR2018) $(GJNPR2021) $(GKRSW2022) $(KMR2016) \
@@ -216,10 +231,13 @@ $(FH2023):  ; $(call FETCH,$(FH2023_URL))
 $(FH2026E): ; $(call FETCH,$(FH2026E_URL))
 $(FH2024A): ; $(call FETCH,$(FH2024A_URL))
 $(GR2007):  ; $(call FETCH,$(GR2007_URL))
+$(GBR2007): ; $(call FETCH,$(GBR2007_URL))
 $(SCHERV):  ; $(call FETCH,$(SCHERV_URL))
+$(JNW2008): ; $(call FETCH,$(JNW2008_URL))
 $(DAWID):   ; $(call FETCH,$(DAWID_URL))
 $(FV1998):  ; $(call FETCH,$(FV1998_URL))
 $(F1999):   ; $(call FETCH,$(F1999_URL))
+$(OLS2015): ; $(call FETCH,$(OLS2015_URL))
 $(BLACKWELL): ; $(call FETCH,$(BLACKWELL_URL))
 $(HMC2000): ; $(call FETCH,$(HMC2000_URL))
 $(KF2008):  ; $(call FETCH,$(KF2008_URL))

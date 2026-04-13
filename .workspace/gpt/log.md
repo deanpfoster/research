@@ -18,3 +18,9 @@
 - Merged the first-paper reframing around combinatorial global intractability and progressive discoverability to master.
 - Author asked me to freshen from master after moving the regularizer outside the bump sum, and to update the first paper's introduction/discussion if that changed the story.
 - Merged the first-paper framing update for the separated global regularizer to master.
+
+## 2026-04-13
+
+- Author asked me to read the proper-calibeating paper in `sergiu/`, outline the introduction, and do a literature search for citations that should be added.
+- Author asked me to read `WORKFLOW.md`, freshen from master, and add the literature-search papers to `sergiu/papers/Makefile` while keeping downloaded PDFs git-ignored for local reference use.
+- Author asked me to freshen master after the `sergiu/papers` updates.
