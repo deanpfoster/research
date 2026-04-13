@@ -1,1 +1,0 @@
-.workspace/gemini/annotated_bibliography.md

@@ -9,3 +9,5 @@
 - Created an `ANNOTATED_BIBLIOGRAPHY.md` with all abstracts (where available) mapped from the new Makefile.
 
 - Checked 'master' for any new updates. Branch is fully up to date.
+
+- Moved annotated bibliography to the 'papers' directory.
