@@ -74,6 +74,21 @@ http://www.ma.huji.ac.il/hart}}}
 \maketitle
 
 \begin{abstract}
+All existing results on calibration and calibeating are stated for the
+quadratic (Brier) scoring rule, but there are infinitely many proper scoring
+rules. We ask whether these guarantees persist when the Brier score is
+replaced by an arbitrary proper Lipschitz scoring rule, and find a
+surprising asymmetry: calibration transfers for free---every calibrated
+procedure is automatically \textquotedblleft proper-calibrated%
+\textquotedblright ---but calibeating does not, as a concrete counterexample
+shows. We then provide three ways to achieve \textquotedblleft
+proper-calibeating\textquotedblright\ (calibeating simultaneously under all
+proper Lipschitz scoring rules): the simple deterministic procedure of
+Foster and Hart (2023) turns out to already be proper-calibeating; a
+stochastic procedure that calibeats the joint binning is both
+proper-calibeating and proper-calibrated; and a deterministic continuously
+proper-calibrated procedure that proper-calibeats. All results extend to
+simultaneously proper-calibeating multiple reference forecasters.
 \end{abstract}
 
 \tableofcontents
