@@ -30,8 +30,18 @@
 
 **Abstract:** *(Not automatically fetched; non-arXiv or fetch failed)*
 
+### Gneiting, Balabdaoui & Raftery (2007). "Probabilistic Forecasts,
+**URL:** https://sites.stat.washington.edu/raftery/Research/PDF/Gneiting2007jrssb.pdf
+
+**Abstract:** *(Not automatically fetched; non-arXiv or fetch failed)*
+
 ### Schervish (1989). "A General Method for Comparing Probability
 **URL:** https://deanfoster.net/teaching/data_mining/schervish.pdf
+
+**Abstract:** *(Not automatically fetched; non-arXiv or fetch failed)*
+
+### Jose, Nau & Winkler (2008). "Scoring Rules, Generalized Entropy,
+**URL:** https://people.duke.edu/~rnau/scoring_rules_and_generalized_entropy.pdf
 
 **Abstract:** *(Not automatically fetched; non-arXiv or fetch failed)*
 
@@ -47,6 +57,11 @@
 
 ### Foster (1999). "A Proof of Calibration via Blackwell's
 **URL:** https://deanfoster.net/research/calibration_via_blackwell.pdf
+
+**Abstract:** *(Not automatically fetched; non-arXiv or fetch failed)*
+
+### Olszewski (2015). "Calibration and Expert Testing." Handbook of
+**URL:** https://faculty.wcas.northwestern.edu/wol737/Hand.pdf
 
 **Abstract:** *(Not automatically fetched; non-arXiv or fetch failed)*
 
