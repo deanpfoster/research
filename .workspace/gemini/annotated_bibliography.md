@@ -33,7 +33,7 @@
 ### Gneiting, Balabdaoui & Raftery (2007). "Probabilistic Forecasts,
 **URL:** https://sites.stat.washington.edu/raftery/Research/PDF/Gneiting2007jrssb.pdf
 
-**Abstract:** *(Not automatically fetched; non-arXiv or fetch failed)*
+**Abstract:** SummaryProbabilistic forecasts of continuous variables take the form of predictive densities or predictive cumulative distribution functions. We propose a diagnostic approach to the evaluation of predictive performance that is based on the paradigm of maximizing the sharpness of the predictive distributions subject to calibration. Calibration refers to the statistical consistency between the distributional forecasts and the observations and is a joint property of the predictions and the events that materialize. Sharpness refers to the concentration of the predictive distributions and is a property of the forecasts only. A simple theoretical framework allows us to distinguish between probabilistic calibration, exceedance calibration and marginal calibration. We propose and study tools for checking calibration and sharpness, among them the probability integral transform histogram, marginal calibration plots, the sharpness diagram and proper scoring rules. The diagnostic approach is illustrated by an assessment and ranking of probabilistic forecasts of wind speed at the Stateline wind energy centre in the US Pacific Northwest. In combination with cross-validation or in the time series context, our proposal provides very general, nonparametric alternatives to the use of information criteria for model diagnostics and model selection.
 
 ### Schervish (1989). "A General Method for Comparing Probability
 **URL:** https://deanfoster.net/teaching/data_mining/schervish.pdf
@@ -43,7 +43,12 @@
 ### Jose, Nau & Winkler (2008). "Scoring Rules, Generalized Entropy,
 **URL:** https://people.duke.edu/~rnau/scoring_rules_and_generalized_entropy.pdf
 
-**Abstract:** *(Not automatically fetched; non-arXiv or fetch failed)*
+**Abstract:** Information measures arise in many disciplines, including forecasting (where scoring rules are used to provide incentives for probability estimation), signal processing (where information gain is measured in physical units of relative entropy), decision analysis (where new information can lead to improved decisions), and finance (where investors optimize portfolios based on their private information and risk preferences). In this paper, we generalize the two most commonly used parametric families of scoring rules and demonstrate their relation to well-known generalized entropies and utility functions, shedding new light on the characteristics of alternative scoring rules as well as duality relationships between utility maximization and entropy minimization. In particular, we show that weighted forms of the pseudospherical and power scoring rules correspond exactly to measures of relative entropy (divergence) with convenient properties, and they also correspond exactly to the solutions of expected utility maximization problems in which a risk-averse decision maker whose utility function belongs to the linear-risk-tolerance family interacts with a risk-neutral betting opponent or a complete market for contingent claims in either a one-period or a two-period setting. When the market is incomplete, the corresponding problems of maximizing linear-risk-tolerance utility with the risk-tolerance coefficient β are the duals of the problems of minimizing the pseudospherical or power divergence of order β between the decision maker's subjective probability distribution and the set of risk-neutral distributions that support asset prices.
+
+### Waghmare & Ziegel (2025). "Proper Scoring Rules for Estimation and
+**URL:** https://arxiv.org/pdf/2504.01781
+
+**Abstract:** Proper scoring rules have been a subject of growing interest in recent years, not only as tools for evaluation of probabilistic forecasts but also as methods for estimating probability distributions. In this article, we review the mathematical foundations of proper scoring rules including general characterization results and important families of scoring rules. We discuss their role in statistics and machine learning for estimation and forecast evaluation. Furthermore, we comment on interesting developments of their usage in applications.
 
 ### Dawid (1982). "The Well-Calibrated Bayesian." JASA 77, 605–613.
 **URL:** https://fitelson.org/seminar/dawid.pdf
@@ -67,6 +72,21 @@
 
 ### Blackwell (1956). "An Analog of the Minimax Theorem for Vector
 **URL:** https://msp.org/pjm/1956/6-1/pjm-v6-n1-p01-s.pdf
+
+**Abstract:** *(Not automatically fetched; non-arXiv or fetch failed)*
+
+### Allen, Koh, Segers & Ziegel (2024/2025). "Tail Calibration of
+**URL:** https://arxiv.org/pdf/2407.03167
+
+**Abstract:** Probabilistic forecasts comprehensively describe the uncertainty in the unknown future outcome, making them essential for decision making and risk management. While several methods have been introduced to evaluate probabilistic forecasts, existing evaluation techniques are ill-suited to the evaluation of tail properties of such forecasts. However, these tail properties are often of particular interest to forecast users due to the severe impacts caused by extreme outcomes. In this work, we introduce a general notion of tail calibration for probabilistic forecasts, which allows forecasters to assess the reliability of their predictions for extreme outcomes. We study the relationships between tail calibration and standard notions of forecast calibration, and discuss connections to peaks-over-threshold models in extreme value theory. Diagnostic tools are introduced and applied in a case study on European precipitation forecasts
+
+### Wessel et al. (2025). "Enforcing Tail Calibration When Training
+**URL:** https://arxiv.org/pdf/2506.13687
+
+**Abstract:** Probabilistic forecasts are typically obtained using state-of-the-art statistical and machine learning models, with model parameters estimated by optimizing a proper scoring rule over a set of training data. If the model class is not correctly specified, then the learned model will not necessarily issue forecasts that are calibrated. Calibrated forecasts allow users to appropriately balance risks in decision making, and it is particularly important that forecast models issue calibrated predictions for extreme events, since such outcomes often generate large socio-economic impacts. In this work, we study how the loss function used to train probabilistic forecast models can be adapted to improve the reliability of forecasts made for extreme events. We investigate loss functions based on weighted scoring rules, and additionally propose regularizing loss functions using a measure of tail miscalibration. We apply these approaches to a hierarchy of increasingly flexible forecast models for UK wind speeds, including simple parametric models, distributional regression networks, and conditional generative models. We demonstrate that state-of-the-art models do not issue calibrated forecasts for extreme wind speeds, and that the calibration of forecasts for extreme events can be improved by suitable adaptations to the loss function during model training. This, however, introduces a trade-off between calibrated forecasts for extreme events and calibrated forecasts for more common outcomes.
+
+### Laeven et al. (2026). "Localizing Strictly Proper Scoring Rules."
+**URL:** https://www.rogerlaeven.nl/gallery/LSPS_JASA_main-accepted.pdf
 
 **Abstract:** *(Not automatically fetched; non-arXiv or fetch failed)*
 
