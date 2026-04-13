@@ -224,21 +224,22 @@ First, the simple deterministic procedure of Theorem 3 of Foster and Hart
 (2023)---which forecasts the running average action in the reference
 forecaster's bin---turns out to be already proper-calibeating.
 
-Second, a stochastic procedure that calibeats the \emph{joint} binning $%
-\mathbf{b}\times \mathbf{c}$ is both proper-calibeating and
-proper-calibrated. The key structural insight is that
-what matters is calibeating the \emph{joint} binning, not just the
-reference forecaster.
+Second, a stochastic procedure that calibeats a finer binning---one
+that cross-classifies forecasts by the bins of both the reference
+forecaster and the procedure itself---is both proper-calibeating and
+proper-calibrated. The key structural insight is that it is not enough
+to calibeat the reference forecaster and to be calibrated separately;
+what matters is calibeating this joint binning, which keeps track of
+how the two sets of bins interact.
 
 Third, there exists a deterministic continuously proper-calibrated procedure
 that proper-calibeats, via an approximate decomposition that generalizes the
 quadratic case (Foster and Hart 2026).
 
-All three results extend to simultaneously proper-calibeating $N$ reference
-forecasters, by applying these constructions to the product binning $\mathbf{b}%
-^{1}\times \cdots \times \mathbf{b}^{N}$ (cf.\ Lee, Noarov, Pai, and Roth
-2022, who independently study multicalibeating via online multiobjective
-optimization).
+All three results extend to simultaneously proper-calibeating multiple
+reference forecasters, by cross-classifying across all of their bins
+(cf.\ Lee, Noarov, Pai, and Roth 2022, who independently study
+multicalibeating via online multiobjective optimization).
 
 \subsection{Related work\label{s-s:intro-related}}
 
