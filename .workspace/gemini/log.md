@@ -7,3 +7,5 @@
 - Found 8 recent papers citing 'Calibeating' using Semantic Scholar and arXiv APIs.
 - Added them to `papers/Makefile`.
 - Created an `ANNOTATED_BIBLIOGRAPHY.md` with all abstracts (where available) mapped from the new Makefile.
+
+- Checked 'master' for any new updates. Branch is fully up to date.
