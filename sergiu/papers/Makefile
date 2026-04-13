@@ -195,8 +195,53 @@ BGHN2023 = blasiok-etal-2023-proper-loss-calibration.pdf
 BGHN2023_URL = https://arxiv.org/pdf/2305.18764
 
 # ═══════════════════════════════════════════════════════════════════════
+#  RECENT CALIBEATING CITATIONS (2023-2026)
+# ═══════════════════════════════════════════════════════════════════════
+
+# Hu, Luo, Senapati & Sharan (2025). "Efficient Swap Multicalibration of Elicitable Properties."
+#   arXiv:2511.04907.
+HLSS2025 = hu-etal-2025-swap-multicalibration.pdf
+HLSS2025_URL = https://arxiv.org/pdf/2511.04907
+
+# Luo, Senapati & Sharan (2025). "Simultaneous Swap Regret Minimization via KL-Calibration."
+#   arXiv:2502.16387.
+LSS2025 = luo-etal-2025-kl-calibration.pdf
+LSS2025_URL = https://arxiv.org/pdf/2502.16387
+
+# Marx, Kuleshov & Ermon (2024). "Calibrated Probabilistic Forecasts for Arbitrary Sequences."
+#   arXiv:2409.19157.
+MKE2024 = marx-etal-2024-arbitrary-sequences.pdf
+MKE2024_URL = https://arxiv.org/pdf/2409.19157
+
+# Jain & Perchet (2024). "Calibrated Forecasting and Persuasion."
+#   arXiv:2406.15680.
+JP2024 = jain-perchet-2024-persuasion.pdf
+JP2024_URL = https://arxiv.org/pdf/2406.15680
+
+# Kleinberg, Leme, Schneider & Teng (2023). "U-Calibration: Forecasting for an Unknown Agent."
+#   arXiv:2307.00168.
+KLST2023 = kleinberg-etal-2023-u-calibration.pdf
+KLST2023_URL = https://arxiv.org/pdf/2307.00168
+
+# Berta, Bach & Jordan (2023). "Classifier Calibration with ROC-Regularized Isotonic Regression."
+#   arXiv:2311.12436.
+BBJ2023 = berta-etal-2023-roc-isotonic.pdf
+BBJ2023_URL = https://arxiv.org/pdf/2311.12436
+
+# Okoroafor, Kleinberg & Sun (2023). "Faster Recalibration of an Online Predictor via Approachability."
+#   NeurIPS 2023.
+OKS2023 = okoroafor-etal-2023-faster-recalibration.pdf
+OKS2023_URL = https://proceedings.neurips.cc/paper_files/paper/2023/file/0668d27557adf80f2c5552f14cc2047c9baae155-Paper-Conference.pdf
+
+# Hart (2022). "Calibrated Forecasts: The Minimax Proof."
+#   SSRN 3986064.
+HART2022 = hart-2022-minimax-proof.pdf
+HART2022_URL = https://papers.ssrn.com/sol3/Delivery.cfm/SSRN_ID3986064_code154562.pdf?abstractid=3986064&mirid=1
+
+# ═══════════════════════════════════════════════════════════════════════
 #  TARGETS
 # ═══════════════════════════════════════════════════════════════════════
+
 
 ALL_PDFS = \
 	$(FH2018) $(FH2021) $(FH2023) $(FH2026E) $(FH2024A) \
@@ -205,7 +250,8 @@ ALL_PDFS = \
 	$(HMC2000) $(KF2008) $(MS2010) $(PERCHET) $(RST2011) $(VOVK) \
 	$(LNPR2022) $(CHJL2026) $(GR2023) \
 	$(HJKRR2018) $(GJNPR2021) $(GKRSW2022) $(KMR2016) \
-	$(QV2021) $(BGHN2023)
+	$(QV2021) $(BGHN2023) \
+	$(HLSS2025) $(LSS2025) $(MKE2024) $(JP2024) $(KLST2023) $(BBJ2023) $(OKS2023) $(HART2022)
 
 .PHONY: all clean list
 
@@ -254,3 +300,13 @@ $(GKRSW2022): ; $(call FETCH,$(GKRSW2022_URL))
 $(KMR2016):   ; $(call FETCH,$(KMR2016_URL))
 $(QV2021):    ; $(call FETCH,$(QV2021_URL))
 $(BGHN2023):  ; $(call FETCH,$(BGHN2023_URL))
+
+
+$(HLSS2025):  ; $(call FETCH,$(HLSS2025_URL))
+$(LSS2025):   ; $(call FETCH,$(LSS2025_URL))
+$(MKE2024):   ; $(call FETCH,$(MKE2024_URL))
+$(JP2024):    ; $(call FETCH,$(JP2024_URL))
+$(KLST2023):  ; $(call FETCH,$(KLST2023_URL))
+$(BBJ2023):   ; $(call FETCH,$(BBJ2023_URL))
+$(OKS2023):   ; $(call FETCH,$(OKS2023_URL))
+$(HART2022):  ; $(call FETCH,$(HART2022_URL))
