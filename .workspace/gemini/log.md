@@ -11,3 +11,5 @@
 - Checked 'master' for any new updates. Branch is fully up to date.
 
 - Moved annotated bibliography to the 'papers' directory.
+
+- Attempted to fetch missing abstracts for older foundational papers, but encountered rate-limits and lack of digital abstracts on CrossRef/Semantic Scholar.
