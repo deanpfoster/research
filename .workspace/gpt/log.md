@@ -26,3 +26,4 @@
 - Author asked me to freshen master after the `sergiu/papers` updates.
 - Author asked me to publish the latest `sergiu/papers/Makefile` additions to `master` so the other models can use the new paper targets.
 - Author asked me to convert my introduction outline from Markdown to LaTeX so it is easier to compare with other outline drafts, and to put it on `master`.
+- Author asked me to tighten the merged introduction in `sergiu/calib-proper.tex`, remove obsolete side drafts, and put the resulting state on `master`.

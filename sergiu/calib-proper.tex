@@ -134,6 +134,7 @@ simultaneously proper-calibeating multiple reference forecasters.
 \newcommand\T{\rule{0pt}{2.6ex}}
 \newcommand\B{\rule[-1.2ex]{0pt}{0pt}}%
 %EndExpansion
+\newcommand{\notcitedflag}{\textbf{[not cited]} }
 
 \section{Introduction\label{s:intro}}
 
@@ -156,7 +157,7 @@ Section \ref{s-s:sequences} for the precise setup.}%
 where $\mathcal{K}$ is the \emph{calibration} score---measuring how close
 the forecasts are to the realized frequencies---and $\mathcal{R}$ is the
 \emph{refinement} score---measuring how well the forecaster sorts outcomes
-into informative bins. A surprising result of Foster and Vohra (1998) is
+into informative bins. Foster and Vohra (1998) showed
 that one can generate forecasts that are \emph{guaranteed} to be calibrated
 (i.e., $\mathcal{K}$ converges to zero), no matter what the outcomes turn
 out to be (see also Foster 1999, Foster and Hart 2021, and the survey of
@@ -172,8 +173,8 @@ deterministic continuously calibrated procedures. All these results,
 however, were stated exclusively for the Brier score.
 
 But there are infinitely many proper scoring rules, and it would be
-disturbing if a forecaster's guarantees evaporated merely because the
-evaluator chose a different proper loss. This raises the question:%
+desirable that a forecaster's guarantees not depend on the evaluator's
+choice of proper loss. This raises the question:%
 \begin{quote}
 \emph{If a procedure is calibrated (or calibeats) under the Brier score, do
 these guarantees persist under every other proper scoring rule?}
@@ -210,7 +211,7 @@ and the deterministic continuously calibrated procedures of Foster and Hart
 
 \subsection{Calibeating does not transfer\label{s-s:intro-not-transfer}}
 
-Our second result is perhaps a surprise: unlike calibration, calibeating
+Our second result is that, unlike calibration, calibeating
 does \emph{not} transfer. We exhibit a concrete example (Section \ref%
 {s-s:example}) in which a forecasting sequence $\mathbf{c}$ calibeats a
 reference $\mathbf{b}$ under the quadratic scoring rule, yet \emph{fails}
@@ -218,7 +219,7 @@ to calibeat $\mathbf{b}$ under the $2$-spherical scoring rule---which is
 also proper and Lipschitz. Both sequences are perfectly calibrated; the
 failure is purely in the refinement comparison.
 
-The reason for the asymmetry is instructive. Calibration involves only $%
+The reason is the following. Calibration involves only $%
 \mathcal{K}^{L}$, which is controlled by $\mathcal{K}$ via the bound (\ref%
 {eq:KL-K-intro}). Calibeating involves $\mathcal{B}^{L}-\mathcal{R}^{L}$,
 and there is no analogous inequality relating $\mathcal{R}^{L}$ to $%
@@ -235,7 +236,7 @@ First, the simple deterministic procedure of Theorem 3 of Foster and Hart
 forecaster's bin---turns out to be proper-calibeating. The proof relies on
 a new bound showing that online refinement $\widetilde{\mathcal{R}}^{L}$
 converges to offline refinement $\mathcal{R}^{L}$ at rate $O((\ln t)/t)$
-for every proper $M$-Lipschitz $L$, generalizing the quadratic-case result
+for every proper $M$-Lipschitz $L$, extending the quadratic-case result
 of Foster and Hart (2023, Proposition 2).
 
 Second, a stochastic procedure that calibeats the \emph{joint} binning $%
@@ -243,7 +244,7 @@ Second, a stochastic procedure that calibeats the \emph{joint} binning $%
 \delta $-proper-calibrated. This identifies the right structural condition:
 it is not enough to calibeat the reference forecaster and to be calibrated;
 what matters is calibeating the \emph{joint} binning, which always refines
-the forecast partition and thereby restores the refinement structure needed
+the forecast partition and restores the refinement structure needed
 for the argument. The proof chains the decomposition $\mathcal{B}^{L}=%
 \mathcal{K}^{L}(\mathbf{c};\mathbf{b}\times \mathbf{c})+\mathcal{R}^{L}(%
 \mathbf{b}\times \mathbf{c})$ with the bound (\ref{eq:KL-K-intro}).
@@ -262,7 +263,7 @@ This generalizes the quadratic approximate decomposition from the errata
 (Foster and Hart 2026), and is the key technical tool for this result.
 
 All three results extend to simultaneously proper-calibeating $N$ reference
-forecasters, by applying the above to the product binning $\mathbf{b}%
+forecasters, by applying these constructions to the product binning $\mathbf{b}%
 ^{1}\times \cdots \times \mathbf{b}^{N}$ (cf.\ Lee, Noarov, Pai, and Roth
 2022, who independently study multicalibeating via online multiobjective
 optimization).
@@ -277,7 +278,7 @@ who reduce calibeating to regret minimization and obtain calibeating rates
 for general proper losses (including Brier, log, and mixable losses). Their
 approach works loss by loss: for each proper loss $L$, they build a
 procedure achieving $\mathcal{B}^{L}\leq \mathcal{R}^{L}+O((\log T)/T)$.
-Our approach is different: we show that a \emph{single} procedure (the
+Here we show that a \emph{single} procedure (the
 existing Brier-score procedures) achieves proper calibeating \emph{%
 simultaneously} for all proper $1$-Lipschitz rules $L$. The uniformity
 is a consequence of the bound (\ref{eq:KL-K-intro}), which has no analogue
@@ -289,7 +290,7 @@ Kleinberg, Leme, Schneider, and Teng (2023) introduce
 criterion guarantees low regret for an unknown agent who may use any bounded
 scoring rule. They show that calibration suffices but is not necessary, and
 achieve $O(\sqrt{T})$ U-calibration error. Our work is complementary: we
-are not introducing a new criterion but showing that existing
+do not introduce a new criterion, but show that existing
 calibration and calibeating procedures already provide uniform guarantees
 over all proper Lipschitz rules. Gopalan, Kalai, Reingold, Sharan, and
 Wieder (2022) show that multicalibration implies good performance for all
@@ -2026,6 +2027,11 @@ b}$ but does \emph{not} proper-calibeat $\mathbf{b}$.
 \begin{thebibliography}{99}
 \bibitem{} \textbf{[NEEDS\ UPDATING]}
 
+\bibitem{} Allen, J., J. Koh, J. Segers, and J. F. Ziegel (2025),
+\notcitedflag \textquotedblleft Tail Calibration of Probabilistic
+Forecasts,\textquotedblright\ \emph{Journal of the American Statistical
+Association}, forthcoming. \texttt{arXiv:2407.03167}
+
 \bibitem{} Azoury, K. S. and M. K. Warmuth (2001), \textquotedblleft
 Relative Loss Bounds for On-Line Density Estimation with the Exponential
 Family of Distributions,\textquotedblright\ \emph{Machine Learning} 43,
@@ -2038,6 +2044,11 @@ Mathematics} 6, 1--8.
 \bibitem{} Brier, G. W. (1950), \textquotedblleft Verification of Forecasts
 Expressed in Terms of Probability,\textquotedblright\ \emph{Monthly Weather
 Review} 78, 1--3.
+
+\bibitem{} Blasiok, J., P. Gopalan, Y. Hu, and P. Nakkiran (2023),
+\textquotedblleft When Does Optimizing a Proper Loss Yield Calibration?
+\textquotedblright\ in \emph{Advances in Neural Information Processing
+Systems} 36, 42386--42413.
 
 \bibitem{} Brouwer, L. E. J. (1912), \textquotedblleft \"{U}ber Abbildung
 von Mannigfaltigkeiten,\textquotedblright\ \emph{Mathematische Annalen} 71,
@@ -2053,6 +2064,10 @@ Calibeating Made Simple,\textquotedblright\ (2026), \texttt{arXiv}%
 \bibitem{} Dawid, A. (1982), \textquotedblleft The Well-Calibrated
 Bayesian,\textquotedblright\ \emph{Journal of the American Statistical
 Association} 77, 605--613.
+
+\bibitem{} DeGroot, M. H. and S. E. Fienberg (1983),
+\textquotedblleft The Comparison and Evaluation of Forecasters,
+\textquotedblright\ \emph{The Statistician} 32, 12--22.
 
 \bibitem{} Forster, J. (1999), \textquotedblleft On Relative Loss Bounds in
 Generalized Linear Regression,\textquotedblright\ in \emph{12th
@@ -2080,12 +2095,39 @@ http://www.ma.huji.ac.il/hart/publ.html\#calib-int}
 `Calibeating': Beating Forecasters at Their Own Game,\textquotedblright\ 
 \emph{Theoretical Economics }18, 1441--1474.
 
+\bibitem{} Foster, D. P. and S. Hart (2024), \textquotedblleft Addendum
+to `Calibeating': Beating Forecasters at Their Own Game,\textquotedblright\ 
+\texttt{http://www.ma.huji.ac.il/hart/papers/calib-beat-add.pdf}
+
 \bibitem{} Foster, D. P. and S. Hart (2026), \textquotedblleft Errata:\
 `Calibeating': Beating Forecasters at Their Own Game,\textquotedblright\ 
 \texttt{http://www.ma.huji.ac.il/hart/papers/calib-beat-errata.pdf}
 
 \bibitem{} Foster, D. P. and R. V. Vohra (1998), \textquotedblleft
 Asymptotic Calibration,\textquotedblright\ \emph{Biometrika} 85, 379--390.
+
+\bibitem{} Gneiting, T., F. Balabdaoui, and A. E. Raftery (2007),
+\textquotedblleft Probabilistic Forecasts, Calibration and
+Sharpness,\textquotedblright\ \emph{Journal of the Royal Statistical
+Society, Series B} 69, 243--268.
+
+\bibitem{} Gneiting, T. and A. E. Raftery (2007), \textquotedblleft
+Strictly Proper Scoring Rules, Prediction, and Estimation,
+\textquotedblright\ \emph{Journal of the American Statistical
+Association} 102, 359--378.
+
+\bibitem{} Gopalan, P., A. T. Kalai, O. Reingold, V. Sharan, and U. Wieder
+(2022), \textquotedblleft Omnipredictors,\textquotedblright\ in \emph{%
+Innovations in Theoretical Computer Science Conference (ITCS)}, 79:1--79:21.
+
+\bibitem{} Gupta, C. and A. Ramdas (2023), \textquotedblleft Online Platt
+Scaling with Calibeating,\textquotedblright\ in \emph{International
+Conference on Machine Learning (ICML)}, 11924--11961.
+
+\bibitem{} Gupta, P., C. Jung, G. Noarov, M. Pai, and A. Roth (2022),
+\textquotedblleft Online Multivalid Learning: Means, Moments, and
+Prediction Intervals,\textquotedblright\ in \emph{Innovations in
+Theoretical Computer Science Conference (ITCS)}, 70:1--70:24.
 
 \bibitem{} Hart, S. (1992), \textquotedblleft Games in Extensive and
 Strategic Forms,\textquotedblright\ in \emph{Handbook of Game Theory, with
@@ -2097,17 +2139,55 @@ Minimax Proof,\textquotedblright\ Center for Rationality DP-744, The Hebrew
 University of Jerusalem. \texttt{http://www.ma.huji.ac.il/hart/publ.html%
 \#calib-minmax}
 
+\bibitem{} Hart, S. and A. Mas-Colell (2000), \textquotedblleft A Simple
+Adaptive Procedure Leading to Correlated Equilibrium,\textquotedblright\ 
+\emph{Econometrica} 68, 1127--1150.
+
+\bibitem{} H\'{e}bert-Johnson, U., M. P. Kim, O. Reingold, and G. N.
+Rothblum (2018), \textquotedblleft Multicalibration: Calibration for the
+(Computationally-Identifiable) Masses,\textquotedblright\ in \emph{%
+International Conference on Machine Learning (ICML)}, 1939--1948.
+
+\bibitem{} Hu, L., H. Luo, S. Senapati, and V. Sharan (2025),
+\textquotedblleft Efficient Swap Multicalibration of Elicitable
+Properties,\textquotedblright\ \texttt{arXiv:2511.04907}
+
 \bibitem{} Johnson, N. L., A. W. Kemp, and S. Kotz (2005), \emph{Univariate
 Discrete Distributions}, 3rd edition, Wiley.
+
+\bibitem{} Jain, R. and V. Perchet (2024), \textquotedblleft Calibrated
+Forecasting and Persuasion,\textquotedblright\ \texttt{arXiv:2406.15680}
+
+\bibitem{} Jose, V. R. R., R. F. Nau, and R. L. Winkler (2008),
+\textquotedblleft Scoring Rules, Generalized Entropy, and Utility
+Maximization,\textquotedblright\ working paper.
 
 \bibitem{} Jung, H. (1901), \textquotedblleft Ueber die kleinste Kugel, die
 eine r\"{a}umliche Figur einschliesst,\textquotedblright\ \emph{Journal f%
 \"{u}r die Reine und Angewandte Mathematik} 123, 241--257.
 
+\bibitem{} Kakade, S. M. and D. P. Foster (2008), \textquotedblleft
+Deterministic Calibration and Nash Equilibrium,\textquotedblright\ 
+\emph{Journal of Computer and System Sciences} 74, 115--130.
+
+\bibitem{} Kleinberg, J., R. Leme, J. Schneider, and S.-H. Teng (2023),
+\textquotedblleft U-Calibration: Forecasting for an Unknown Agent,
+\textquotedblright\ \texttt{arXiv:2307.00168}
+
+\bibitem{} Kleinberg, J., S. Mullainathan, and M. Raghavan (2017),
+\textquotedblleft Inherent Trade-Offs in the Fair Determination of Risk
+Scores,\textquotedblright\ in \emph{Innovations in Theoretical Computer
+Science Conference (ITCS)}, 43:1--43:23.
+
 \bibitem{} Kuhn, H. W. (1953), \textquotedblleft Extensive Games and the
 Problem of Information,\textquotedblright\ in \emph{Contributions to the
 Theory of Games, Vol. II}, H. W. Kuhn and A. W. Tucker (editors), \emph{%
 Annals of Mathematics Studies} 28, Princeton University Press, 193--216.
+
+\bibitem{} Laeven, R. J. A., A. Tsyplakov, J. F. Ziegel, and M.
+Ziegelmann (2026), \notcitedflag \textquotedblleft Localizing Strictly
+Proper Scoring Rules,\textquotedblright\ \emph{Journal of the American
+Statistical Association}, forthcoming.
 
 \bibitem{} Lee, D., Noarov, G., Pai, M., and Roth, A. (2022),
 \textquotedblleft Online Minimax Multiobjective Optimization:
@@ -2117,8 +2197,24 @@ https://proceedings.neurips.cc/paper%
 \_files/paper/2022/file/ba942323c447c9bbb9d4b638eadefab9-Paper-Conference.pdf%
 }
 
+\bibitem{} Luo, H., S. Senapati, and V. Sharan (2025),
+\textquotedblleft Simultaneous Swap Regret Minimization via
+KL-Calibration,\textquotedblright\ \texttt{arXiv:2502.16387}
+
 \bibitem{} Lo\`{e}ve, M. (1978), \emph{Probability Theory, Vol. II}, 4th
 edition, Springer.
+
+\bibitem{} Mannor, S. and G. Stoltz (2010), \textquotedblleft A Geometric
+Proof of Calibration,\textquotedblright\ \emph{Mathematics of Operations
+Research} 35, 721--727.
+
+\bibitem{} Marx, C., V. Kuleshov, and S. Ermon (2024),
+\textquotedblleft Calibrated Probabilistic Forecasts for Arbitrary
+Sequences,\textquotedblright\ \texttt{arXiv:2409.19157}
+
+\bibitem{} McCarthy, J. (1956), \textquotedblleft Measures of the Value
+of Information,\textquotedblright\ \emph{Proceedings of the National
+Academy of Sciences} 42, 654--655.
 
 \bibitem{} Murphy, A. H. (1972), \textquotedblleft Scalar and Vector
 Partitions of the Probability Score. Part I: Two-State
@@ -2129,6 +2225,11 @@ Situation,\textquotedblright\ \emph{Journal of Applied Meteorology} 11,
 Not Exist,\textquotedblright\ \emph{Journal of the American Statistical
 Association} 80, 339.
 
+\bibitem{} Okoroafor, P., J. Kleinberg, and W. Sun (2023),
+\textquotedblleft Faster Recalibration of an Online Predictor via
+Approachability,\textquotedblright\ in \emph{Advances in Neural
+Information Processing Systems} 36, 73168--73202.
+
 \bibitem{} Olszewski, W. (2015), \textquotedblleft Calibration and Expert
 Testing,\textquotedblright\ in \emph{Handbook of Game Theory, Vol. 4}, H. P.
 Young and S. Zamir (editors), Springer, 949--984.
@@ -2137,13 +2238,36 @@ Young and S. Zamir (editors), Springer, 949--984.
 Manipulability of Future-Independent Tests,\textquotedblright\ \emph{%
 Econometrica} 76, 1437--1466.
 
+\bibitem{} Perchet, V. (2011), \textquotedblleft Internal Regret with
+Partial Monitoring: Calibration-Based Optimal Algorithms,
+\textquotedblright\ \emph{Journal of Machine Learning Research} 12,
+1893--1921.
+
+\bibitem{} Qiao, M. and G. Valiant (2021), \textquotedblleft Stronger
+Calibration Lower Bounds via Sidestepping,\textquotedblright\ in \emph{%
+Proceedings of the 53rd Annual ACM SIGACT Symposium on Theory of
+Computing}, 456--466.
+
+\bibitem{} Rakhlin, A., K. Sridharan, and A. Tewari (2011),
+\textquotedblleft Online Learning: Beyond Regret,\textquotedblright\ in
+\emph{Proceedings of the 24th Annual Conference on Learning Theory},
+559--594.
+
 \bibitem{} Sanders, F. (1963), \textquotedblleft On Subjective Probability
 Forecasting,\textquotedblright\ \emph{Journal of Applied Meteorology} 2,
 191--201.
 
+\bibitem{} Savage, L. J. (1971), \textquotedblleft Elicitation of Personal
+Probabilities and Expectations,\textquotedblright\ \emph{Journal of the
+American Statistical Association} 66, 783--801.
+
 \bibitem{} Sandroni, A. (2003), \textquotedblleft The Reproducible
 Properties of Correct Forecasts,\textquotedblright\ \emph{International
 Journal of Game Theory} 32, 151--159.
+
+\bibitem{} Schervish, M. J. (1989), \textquotedblleft A General Method for
+Comparing Probability Assessors,\textquotedblright\ \emph{The Annals of
+Statistics} 17, 1856--1879.
 
 \bibitem{} Shmaya, E. (2008), \textquotedblleft Many Inspections are
 Manipulable,\textquotedblright\ \emph{Theoretical Economics} 3, 367--382.
@@ -2155,6 +2279,20 @@ Technometrics} 4, 419--420.
 \bibitem{} Vovk, V. (2001), \textquotedblleft Competitive On-Line
 Statistics,\textquotedblright\ \emph{International Statistical Review} 69,
 213--248.
+
+\bibitem{} Vovk, V. (2009), \textquotedblleft Prediction with Expert
+Advice for the Brier Game,\textquotedblright\ \emph{Journal of Machine
+Learning Research} 10, 2445--2471.
+
+\bibitem{} Waghmare, R. and J. F. Ziegel (2025), \notcitedflag
+\textquotedblleft Proper Scoring Rules for Estimation and Forecast
+Evaluation,\textquotedblright\ \emph{Annual Review of Statistics and Its
+Application} 12, 385--405.
+
+\bibitem{} Wessel, M., K. A. Lee, R. J. Allen, J. F. Ziegel, and J.
+B{\"u}nning (2025), \notcitedflag \textquotedblleft Enforcing Tail
+Calibration When Training Probabilistic Forecast Models,
+\textquotedblright\ \texttt{arXiv:2506.13687}
 
 \bibitem{} von Neumann, J. (1928), \textquotedblleft Zur Theorie der
 Gesellschaftsspiele, \textquotedblright\ \emph{Mathematische Annalen} 100,
