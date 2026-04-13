@@ -1,0 +1,90 @@
+\section*{GPT Outline for Introduction}
+
+\begin{enumerate}
+\item \textbf{Problem and Question.}
+
+Start with calibration and calibeating under the quadratic/Brier score.
+Ask the paper's central question directly: what survives if evaluation is
+by an arbitrary proper Lipschitz scoring rule instead of Brier?
+
+\item \textbf{Why This Is Nontrivial.}
+
+Explain that Brier is special because it supports the familiar
+decomposition into calibration plus refinement. Say that once we move to
+general proper scoring rules, that decomposition is not automatic,
+especially for fractional or continuous binning schemes.
+
+\item \textbf{What the Paper Introduces.}
+
+Introduce the notions of uniformly proper-calibrated and uniformly
+proper-calibeating procedures over normalized $1$-Lipschitz proper
+scoring rules. Briefly justify the Lipschitz restriction as the way to
+make uniform comparison meaningful.
+
+\item \textbf{Main Message: An Asymmetry.}
+
+State the two headline facts early: calibration does lift to proper
+calibration, whereas calibeating does not in general lift to proper
+calibeating. This should be the conceptual center of the introduction.
+
+\item \textbf{Background Literature.}
+
+Use three short paragraphs:
+
+\begin{itemize}
+\item one on proper scoring rules: Savage, Schervish, Gneiting-Raftery,
+and related entropy/divergence interpretations;
+\item one on adversarial calibration: Dawid, Foster-Vohra, Foster,
+smooth/continuous calibration in Foster-Hart, and related
+approachability work;
+\item one on calibeating and neighboring work: Foster-Hart,
+Lee-Noarov-Pai-Roth, Chen-Huang-Jordan-Luo, and possibly Gupta-Ramdas
+as an applied extension.
+\end{itemize}
+
+\item \textbf{Main Contributions.}
+
+State the contributions in theorem order:
+
+\begin{itemize}
+\item exact decomposition for proper scoring rules when the binning
+refines the forecast partition;
+\item approximate decomposition for $\delta$-local fractional binnings;
+\item every calibrated procedure is proper-calibrated;
+\item an explicit counterexample showing that calibeating need not imply
+proper calibeating;
+\item positive proper-calibeating results for the simple online
+averaging rule, for joint-binning stochastic procedures, and for
+deterministic continuously proper-calibrated procedures.
+\end{itemize}
+
+\item \textbf{Why Joint Binning Matters.}
+
+Give a short proof-level preview: the obstruction is not merely changing
+the score, but losing the refinement structure when bins mix different
+forecasts. Explain that the joint $\mathbf{b\times c}$ binning is what
+restores the right decomposition logic.
+
+\item \textbf{Relation to Broader Calibration Work.}
+
+Add one short paragraph noting that calibration is currently being
+extended in many directions, including multicalibration,
+omniprediction, tail calibration, swap/KL calibration, and
+arbitrary-sequence recalibration. Keep this brief; it is context, not
+the center of the paper.
+
+\item \textbf{Roadmap.}
+
+End with a standard section-by-section map.
+\end{enumerate}
+
+\bigskip
+
+\noindent \textbf{Editorial Recommendation.} If the introduction is kept
+short, I would organize it around one sentence:
+
+\begin{quote}
+Calibration is universally robust across proper Lipschitz scoring rules,
+but calibeating is not; this paper identifies exactly what additional
+structure restores that robustness.
+\end{quote}

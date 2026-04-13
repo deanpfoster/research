@@ -25,3 +25,4 @@
 - Author asked me to read `WORKFLOW.md`, freshen from master, and add the literature-search papers to `sergiu/papers/Makefile` while keeping downloaded PDFs git-ignored for local reference use.
 - Author asked me to freshen master after the `sergiu/papers` updates.
 - Author asked me to publish the latest `sergiu/papers/Makefile` additions to `master` so the other models can use the new paper targets.
+- Author asked me to convert my introduction outline from Markdown to LaTeX so it is easier to compare with other outline drafts, and to put it on `master`.
