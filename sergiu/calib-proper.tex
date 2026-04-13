@@ -144,9 +144,10 @@ minimizes expected loss by reporting truthfully; the standard choice is the
 1989, and the comprehensive treatment in Gneiting and Raftery 2007).
 
 A classic result of DeGroot and Fienberg (1983) is that the Brier score
-decomposes as $\mathcal{B}=\mathcal{K}+\mathcal{R}$,\footnote{%
+decomposes as\footnote{%
 For forecasts that are sorted into bins by their announced values; see
 Section \ref{sus:sequences} for the precise setup.}
+$$\mathcal{B}=\mathcal{K}+\mathcal{R}\text{,}$$
 where $\mathcal{K}$ is the \emph{calibration} score---measuring how close
 the forecasts are to the realized frequencies---and $\mathcal{R}$ is the
 \emph{refinement} score---measuring how well the forecaster sorts outcomes
@@ -189,9 +190,9 @@ to restore it.
 
 We show, first, that calibration transfers for free: every $\varepsilon $%
 -calibrated procedure is automatically $\varepsilon $-\emph{proper}%
--calibrated. The key observation is that for any proper $M$-Lipschitz
-scoring rule $L$, the $L$-calibration score is bounded by the Lipschitz constant
-times the quadratic calibration score: $\mathcal{K}^{L}\leq M\,\mathcal{K}$.
+-calibrated. The key observation is that the calibration score under any
+proper $M$-Lipschitz scoring rule is at most $M$ times the quadratic
+calibration score.
 In particular, all known calibrated
 forecasting procedures---the stochastic procedures of Foster and Vohra
 (1998), the approachability-based constructions of Blackwell (1956), Foster
@@ -209,11 +210,9 @@ to calibeat $\mathbf{b}$ under the $2$-spherical scoring rule---which is
 also proper and Lipschitz. Both sequences are perfectly calibrated; the
 failure is purely in the refinement comparison.
 
-The reason for the asymmetry is instructive. Calibration involves only $%
-\mathcal{K}^{L}$, which is controlled by $\mathcal{K}$ via the bound $\mathcal{K}^{L}\leq M\,\mathcal{K}$. Calibeating involves $\mathcal{B}^{L}-\mathcal{R}^{L}$,
-and there is no analogous inequality relating $\mathcal{R}^{L}$ to $%
-\mathcal{R}$: refinement scores under different proper rules are not
-comparable in general.
+The reason for the asymmetry is instructive. Calibration scores are
+controlled across scoring rules by the Lipschitz bound; refinement scores
+under different proper rules are not comparable in general.
 
 \subsection{Proper calibeating\label{s-s:intro-proper-calibeating}}
 
