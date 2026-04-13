@@ -63,6 +63,11 @@ SCHERV_URL = https://deanfoster.net/teaching/data_mining/schervish.pdf
 JNW2008 = jose-nau-winkler-2008-scoring-rules-generalized-entropy.pdf
 JNW2008_URL = https://people.duke.edu/~rnau/scoring_rules_and_generalized_entropy.pdf
 
+# Waghmare & Ziegel (2025). "Proper Scoring Rules for Estimation and
+#   Forecast Evaluation." Annual Review of Statistics and Its Application.
+WZ2025 = waghmare-ziegel-2025-proper-scoring-rules-estimation-forecast-evaluation.pdf
+WZ2025_URL = https://arxiv.org/pdf/2504.01781
+
 # Paywalled — add manually if needed:
 #   Savage (1971). "Elicitation of Personal Probabilities and
 #     Expectations." JASA 66, 783–801.
@@ -102,6 +107,21 @@ OLS2015_URL = https://faculty.wcas.northwestern.edu/wol737/Hand.pdf
 #   Payoffs." Pacific Journal of Mathematics 6, 1–8.
 BLACKWELL = blackwell-1956-approachability.pdf
 BLACKWELL_URL = https://msp.org/pjm/1956/6-1/pjm-v6-n1-p01-s.pdf
+
+# Allen, Koh, Segers & Ziegel (2024/2025). "Tail Calibration of
+#   Probabilistic Forecasts." JASA.
+AKSZ2025 = allen-koh-segers-ziegel-2025-tail-calibration.pdf
+AKSZ2025_URL = https://arxiv.org/pdf/2407.03167
+
+# Wessel et al. (2025). "Enforcing Tail Calibration When Training
+#   Probabilistic Forecast Models." arXiv:2506.13687.
+WESSEL2025 = wessel-etal-2025-enforcing-tail-calibration.pdf
+WESSEL2025_URL = https://arxiv.org/pdf/2506.13687
+
+# Laeven et al. (2026). "Localizing Strictly Proper Scoring Rules."
+#   JASA, early online / accepted manuscript.
+LAEVEN2026 = laeven-etal-2026-localizing-strictly-proper-scoring-rules.pdf
+LAEVEN2026_URL = https://www.rogerlaeven.nl/gallery/LSPS_JASA_main-accepted.pdf
 
 # ═══════════════════════════════════════════════════════════════════════
 #  CALIBRATION — GAME THEORY & LEARNING
@@ -245,8 +265,9 @@ HART2022_URL = https://papers.ssrn.com/sol3/Delivery.cfm/SSRN_ID3986064_code1545
 
 ALL_PDFS = \
 	$(FH2018) $(FH2021) $(FH2023) $(FH2026E) $(FH2024A) \
-	$(GR2007) $(GBR2007) $(SCHERV) $(JNW2008) \
+	$(GR2007) $(GBR2007) $(SCHERV) $(JNW2008) $(WZ2025) \
 	$(DAWID) $(FV1998) $(F1999) $(OLS2015) $(BLACKWELL) \
+	$(AKSZ2025) $(WESSEL2025) $(LAEVEN2026) \
 	$(HMC2000) $(KF2008) $(MS2010) $(PERCHET) $(RST2011) $(VOVK) \
 	$(LNPR2022) $(CHJL2026) $(GR2023) \
 	$(HJKRR2018) $(GJNPR2021) $(GKRSW2022) $(KMR2016) \
@@ -280,11 +301,15 @@ $(GR2007):  ; $(call FETCH,$(GR2007_URL))
 $(GBR2007): ; $(call FETCH,$(GBR2007_URL))
 $(SCHERV):  ; $(call FETCH,$(SCHERV_URL))
 $(JNW2008): ; $(call FETCH,$(JNW2008_URL))
+$(WZ2025):  ; $(call FETCH,$(WZ2025_URL))
 $(DAWID):   ; $(call FETCH,$(DAWID_URL))
 $(FV1998):  ; $(call FETCH,$(FV1998_URL))
 $(F1999):   ; $(call FETCH,$(F1999_URL))
 $(OLS2015): ; $(call FETCH,$(OLS2015_URL))
 $(BLACKWELL): ; $(call FETCH,$(BLACKWELL_URL))
+$(AKSZ2025): ; $(call FETCH,$(AKSZ2025_URL))
+$(WESSEL2025): ; $(call FETCH,$(WESSEL2025_URL))
+$(LAEVEN2026): ; $(call FETCH,$(LAEVEN2026_URL))
 $(HMC2000): ; $(call FETCH,$(HMC2000_URL))
 $(KF2008):  ; $(call FETCH,$(KF2008_URL))
 $(MS2010):  ; $(call FETCH,$(MS2010_URL))

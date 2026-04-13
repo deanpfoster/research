@@ -24,3 +24,4 @@
 - Author asked me to read the proper-calibeating paper in `sergiu/`, outline the introduction, and do a literature search for citations that should be added.
 - Author asked me to read `WORKFLOW.md`, freshen from master, and add the literature-search papers to `sergiu/papers/Makefile` while keeping downloaded PDFs git-ignored for local reference use.
 - Author asked me to freshen master after the `sergiu/papers` updates.
+- Author asked me to publish the latest `sergiu/papers/Makefile` additions to `master` so the other models can use the new paper targets.
