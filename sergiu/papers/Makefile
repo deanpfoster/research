@@ -272,7 +272,8 @@ ALL_PDFS = \
 	$(LNPR2022) $(CHJL2026) $(GR2023) \
 	$(HJKRR2018) $(GJNPR2021) $(GKRSW2022) $(KMR2016) \
 	$(QV2021) $(BGHN2023) \
-	$(HLSS2025) $(LSS2025) $(MKE2024) $(JP2024) $(KLST2023) $(BBJ2023) $(OKS2023) $(HART2022)
+	$(HLSS2025) $(LSS2025) $(MKE2024) $(JP2024) $(KLST2023) $(BBJ2023) $(OKS2023) $(HART2022) \
+	$(DGJ2023) $(PUB2023)
 
 .PHONY: all clean list
 
@@ -335,3 +336,23 @@ $(KLST2023):  ; $(call FETCH,$(KLST2023_URL))
 $(BBJ2023):   ; $(call FETCH,$(BBJ2023_URL))
 $(OKS2023):   ; $(call FETCH,$(OKS2023_URL))
 $(HART2022):  ; $(call FETCH,$(HART2022_URL))
+
+# ═══════════════════════════════════════════════════════════════════════
+#  ADDITIONAL RECENT CALIBRATION/SCORING RULES (2023-2026)
+# ═══════════════════════════════════════════════════════════════════════
+
+# Błasiok, Gopalan, Hu, and Nakkiran (2023). "When Does Optimizing a Proper Loss Yield Calibration?" NeurIPS.
+# (ALREADY ADDED BGHN2023)
+
+# Dimitriadis, Gneiting, and Jordan (2023). "Decompositions of the mean continuous ranked probability score."
+#   arXiv:2311.14122.
+DGJ2023 = dimitriadis-etal-2023-crps-decompositions.pdf
+DGJ2023_URL = https://arxiv.org/pdf/2311.14122
+
+# Popordanoska, Uria, and Blundell (2023). "Consistent and Asymptotically Unbiased Estimation of Proper Calibration Errors."
+#   arXiv:2312.08589.
+PUB2023 = popordanoska-etal-2023-proper-calibration-errors.pdf
+PUB2023_URL = https://arxiv.org/pdf/2312.08589
+
+$(DGJ2023):   ; $(call FETCH,$(DGJ2023_URL))
+$(PUB2023):   ; $(call FETCH,$(PUB2023_URL))
