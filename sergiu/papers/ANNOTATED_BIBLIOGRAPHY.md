@@ -88,7 +88,7 @@
 ### Laeven et al. (2026). "Localizing Strictly Proper Scoring Rules."
 **URL:** https://www.rogerlaeven.nl/gallery/LSPS_JASA_main-accepted.pdf
 
-**Abstract:** *(Not automatically fetched; non-arXiv or fetch failed)*
+**Abstract:** When comparing predictive distributions, forecasters are typically not equally interested in all regions of the outcome space. To address the demand for focused forecast evaluation, we propose a procedure to transform strictly proper scoring rules into their localized counterparts while preserving the score divergence and strict propriety. This is accomplished by applying the original scoring rule to a censored distribution. Our procedure nests the censored likelihood score as a special case. Among a multitude of others, it also implies a class of censored kernel scores that offers a (possibly multivariate) alternative to the threshold weighted Continuously Ranked Probability Score (twCRPS), extending its local propriety to more general weight functions than single tail indicators. Within this localized framework, we obtain a generalization of the Neyman Pearson lemma, establishing the censored likelihood ratio test as uniformly most powerful. For other tests of localized equal predictive performance, results of Monte Carlo simulations and empirical applications to risk management, inflation and climate data consistently emphasize the excellent power properties of censoring versus other localization methods.
 
 ### Hart & Mas-Colell (2000). "A Simple Adaptive Procedure Leading to
 **URL:** http://www.dklevine.com/archive/refs4572.pdf
@@ -98,7 +98,7 @@
 ### Kakade & Foster (2008). "Deterministic Calibration and Nash
 **URL:** https://homes.cs.washington.edu/~sham/papers/gt/calibration.pdf
 
-**Abstract:** *(Not automatically fetched; non-arXiv or fetch failed)*
+**Abstract:** We provide a natural learning process in which the joint frequency of empirical play converges into the set of convex combinations of Nash equilibria. In this process, all players rationally choose their actions using a public prediction made by a deterministic, weakly calibrated algorithm. Furthermore, the public predictions used in any given round of play are frequently close to some Nash equilibrium of the game.
 
 ### Mannor & Stoltz (2010). "A Geometric Proof of Calibration."
 **URL:** https://arxiv.org/pdf/0912.3604
@@ -203,5 +203,5 @@
 ### Hart (2022). "Calibrated Forecasts: The Minimax Proof."
 **URL:** https://papers.ssrn.com/sol3/Delivery.cfm/SSRN_ID3986064_code154562.pdf?abstractid
 
-**Abstract:** *(Not automatically fetched; non-arXiv or fetch failed)*
+**Abstract:** In meteorology, finance, and economics, predictions for the next period are regularly published for the consumer of such information. In weather prediction of temperature, rain occurrence, or rainfall amount, forecasts are made for the next day based on historical information of actual temperatures, other associated meteorological variables, and predictions already made, up to, and including, the present. Similar predictions are made in financial predictions of the Dow Jones Industrial Average (DJIA) increase or decrease, or its actual value next month, based on past predictions and historical data available up to the current period. We review the development of the concept of calibration, the long run agreement between a regular repeated prediction and the actual quantity, in the prediction of probabilities of future events and in the prediction of entire distributions of future continuous random variables. Finally, the issue of combining several forecasts, or forecasting model predictions, in both event probability and continuous distribution, is reviewed, and the use of transformations of the weighted average prediction is described. We also briefly describe more recent results pertaining to the sharpness of well-calibrated predictions.
 
