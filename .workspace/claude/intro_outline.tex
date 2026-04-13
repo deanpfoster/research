@@ -1,18 +1,22 @@
-%%% Introduction outline for "Proper Calibeating" — by Claude
-%%% Revised structure after literature survey.
+%%% Merged introduction outline for "Proper Calibeating" — by Claude
+%%% Hybrid of Claude/GPT/Gemini outlines.
 %%%
-%%% This is a standalone outline file; the actual \section{Introduction}
-%%% remains in calib-proper.tex (currently holding the earlier version).
-%%% Once the author picks a winner among Claude/GPT/Gemini drafts,
-%%% the chosen version replaces what's in the main file.
+%%% 7-section structure:
+%%%   1. Setup and the question (+ thesis sentence up front)
+%%%   2. Why this is nontrivial (stolen from GPT)
+%%%   3. Calibration transfers for free
+%%%   4. Calibeating does NOT transfer
+%%%   5. Three routes to proper calibeating (+ joint-binning insight)
+%%%   6. Comparison with concurrent work
+%%%   7. Literature and roadmap
 
 %% ====================================================================
 %% 1. SETUP AND THE QUESTION
 %% ====================================================================
 %%
-%% Merges the old "scoring rules background" and "the question" into a
-%% single brisk opening.  The audience already knows what proper scoring
-%% rules are; we set up the problem, not the field.
+%% Brisk opening: proper scoring rules, Brier decomposition, calibeating.
+%% The thesis sentence (from GPT) goes here so the reader knows
+%% where the paper lands before wading into details.
 
 \subsubsection*{1. Setup and the question}
 
@@ -40,35 +44,56 @@ score, do these guarantees persist under every other proper scoring
 rule?}
 \end{quote}
 
-\medskip
-This question is ``in the air'': Kleinberg, Leme, Schneider, and Teng
-(2023) study U-calibration, asking what forecasting criterion guarantees
-low regret for \emph{every} bounded scoring rule.  Chen, Huang, Jordan,
-and Luo (2026) reduce calibeating to online learning and obtain results
-for general proper losses, one loss at a time.  We take a different
-approach: we work uniformly over the class $\mathcal{L}_{1}$ of all
-proper $1$-Lipschitz scoring rules, and show that the existing
-Brier-score procedures already achieve this uniformity.  (We exclude
-rules with infinite losses, such as the logarithmic rule.)
+\medskip\noindent
+The answer, in one sentence:
+\emph{Calibration is universally robust across proper Lipschitz scoring
+rules, but calibeating is not; this paper identifies exactly what
+additional structure restores that robustness.}
+
+We work uniformly over $\mathcal{L}_{1}$, the class of all proper
+$1$-Lipschitz scoring rules, and exclude rules with infinite losses
+(such as the logarithmic rule).
 
 \medskip\noindent\textbf{Cite:}
 Brier (1950),
 DeGroot and Fienberg (1983),
 Foster and Vohra (1998),
 Foster and Hart (2021),
-Foster and Hart (2023),
-Kleinberg, Leme, Schneider, and Teng (2023),
-Chen, Huang, Jordan, and Luo (2026).
-Background on proper scoring rules: Savage (1971), McCarthy (1956),
-Gneiting and Raftery (2007).
-On calibration: Dawid (1982).
+Foster and Hart (2023).
+%% Background on proper scoring rules: Savage (1971), McCarthy (1956),
+%% Gneiting and Raftery (2007).  On calibration: Dawid (1982).
 
 
 %% ====================================================================
-%% 2. CALIBRATION TRANSFERS FOR FREE
+%% 2. WHY THIS IS NONTRIVIAL
+%% ====================================================================
+%%
+%% Stolen from GPT §2.  Earns the reader's attention before giving
+%% the answer: the B=K+R decomposition is special to Brier; once you
+%% leave Brier, that decomposition is not automatic.
+
+\subsubsection*{2. Why this is nontrivial}
+
+The Brier score is special.  The decomposition
+$\mathcal{B} = \mathcal{K} + \mathcal{R}$ is an \emph{exact} identity
+for the quadratic scoring rule: the Brier score equals calibration
+error plus refinement, with nothing left over.  All known proofs of
+calibeating exploit this decomposition.
+
+For a general proper scoring rule $L$, an analogous decomposition
+$\mathcal{B}^{L} = \mathcal{K}^{L} + \mathcal{R}^{L}$ holds when the
+binning refines the forecast partition, but it breaks down for
+fractional or continuous binning schemes---exactly the schemes used by
+the strongest calibration procedures.  So the transfer of
+guarantees from Brier to general proper rules is not automatic; it
+requires new inequalities and, in some cases, new procedures.
+
+
+%% ====================================================================
+%% 3. CALIBRATION TRANSFERS FOR FREE
 %% ====================================================================
 
-\subsubsection*{2. Result: calibration is automatically proper-calibration}
+\subsubsection*{3. Result: calibration is automatically proper-calibration}
 
 Our first result is good news: calibration transfers for free across all
 proper Lipschitz scoring rules.
@@ -93,7 +118,7 @@ proper-calibrated---no modification needed.
 Foster and Vohra (1998),
 Foster and Hart (2021),
 Foster (1999),
-Blackwell (1956),
+Blackwell (1956),  %% approachability — engine behind stochastic calibration
 Dawid (1982),
 Kakade and Foster (2008),
 Hart (2022),
@@ -101,10 +126,10 @@ Mannor and Stoltz (2010).
 
 
 %% ====================================================================
-%% 3. CALIBEATING DOES NOT TRANSFER
+%% 4. CALIBEATING DOES NOT TRANSFER
 %% ====================================================================
 
-\subsubsection*{3. Result: calibeating does NOT imply proper calibeating}
+\subsubsection*{4. Result: calibeating does NOT imply proper calibeating}
 
 The second result is a surprise: unlike calibration, calibeating does
 \emph{not} transfer.
@@ -124,16 +149,20 @@ inequality relating $\mathcal{R}^{L}$ to $\mathcal{R}$.
 
 \medskip\noindent\textbf{Cite:}
 Foster and Hart (2023),
-Gneiting and Raftery (2007) (for the spherical scoring rule family).
+Gneiting and Raftery (2007).  %% spherical scoring rule family
 
 
 %% ====================================================================
-%% 4. THREE ROUTES TO PROPER CALIBEATING (+ MULTICALIBEATING)
+%% 5. THREE ROUTES TO PROPER CALIBEATING
 %% ====================================================================
+%%
+%% Merged from Claude §4.  The joint-binning insight (stolen from
+%% GPT §7) is promoted to a paragraph between (a) and (b).
 
-\subsubsection*{4. Results: proper calibeating}
+\subsubsection*{5. Results: proper calibeating}
 
-We provide three ways to achieve proper calibeating.
+We provide three ways to achieve proper calibeating, plus
+multicalibeating.
 
 \medskip\noindent\textbf{(a) The simple procedure works.}
 The deterministic procedure of Theorem~3 of Foster and Hart (2023),
@@ -145,6 +174,15 @@ $\mathcal{R}^{L}$ at rate $O((\ln t)/t)$ for every proper
 $M$-Lipschitz scoring rule $L$.  This generalizes the quadratic-case
 result of Foster and Hart (2023, Proposition~2).
 
+\medskip\noindent\textbf{Why joint binning matters.}
+The obstruction in Section~4 is not merely changing the scoring rule; it
+is losing the refinement structure when bins mix different forecasts.
+Calibeating plus calibration is \emph{not} sufficient for proper
+calibeating.  What restores the decomposition logic is calibeating the
+\emph{joint} binning $\mathbf{b}\times\mathbf{c}$, because the joint
+always refines the forecast partition.  The counterexample of Section~4
+illustrates exactly this gap.
+
 \medskip\noindent\textbf{(b) Calibeating the joint binning.}
 A stochastic procedure that calibeats the joint
 $\mathbf{b}\times\mathbf{c}$ binning is both $(\delta,B)$-proper-%
@@ -154,11 +192,6 @@ the decomposition $\mathcal{B}^{L} = \mathcal{K}^{L}(\mathbf{c};
 \mathbf{c})$ with the bound $\mathcal{K}^{L} \leq M\,\mathcal{K}$,
 reducing proper calibeating of the joint to ordinary calibeating of the
 joint (Theorem~5 of FH2023).
-
-The key insight is that calibeating plus calibration is \emph{not}
-sufficient for proper calibeating; one needs calibeating of the
-\emph{joint} $\mathbf{b}\times\mathbf{c}$.  The counterexample in
-Section~3 illustrates exactly this gap.
 
 \medskip\noindent\textbf{(c) Deterministic continuous version.}
 A deterministic continuously proper-calibrated procedure that
@@ -187,10 +220,10 @@ Lee, Noarov, Pai, and Roth (2022)---multicalibeating.
 
 
 %% ====================================================================
-%% 5. COMPARISON WITH CONCURRENT AND RELATED WORK
+%% 6. COMPARISON WITH CONCURRENT AND RELATED WORK
 %% ====================================================================
 
-\subsubsection*{5. Comparison with concurrent and related work}
+\subsubsection*{6. Comparison with concurrent and related work}
 
 Three concurrent lines of work address universality across scoring
 rules, each from a different angle.  A careful comparison:
@@ -239,10 +272,10 @@ universality over scoring rules).
 
 
 %% ====================================================================
-%% 6. FURTHER LITERATURE
+%% 7. LITERATURE AND ROADMAP
 %% ====================================================================
 
-\subsubsection*{6. Literature}
+\subsubsection*{7. Literature and roadmap}
 
 \noindent\textbf{Proper scoring rules:}
 Brier (1950),
@@ -285,3 +318,9 @@ Vovk (2009),
 Qiao and Valiant (2021),
 Marx, Kuleshov, and Ermon (2024),
 Okoroafor, Kleinberg, and Sun (2023).
+
+\medskip\noindent
+Section~2 sets up the framework.  Sections~3--4 develop the proper
+decomposition.  Section~5 proves the calibration transfer.  Section~6
+gives the counterexample.  Section~7 establishes the three routes to
+proper calibeating.  Section~8 concludes.
