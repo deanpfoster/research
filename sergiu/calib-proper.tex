@@ -144,12 +144,9 @@ minimizes expected loss by reporting truthfully; the standard choice is the
 1989, and the comprehensive treatment in Gneiting and Raftery 2007).
 
 A classic result of DeGroot and Fienberg (1983) is that the Brier score
-decomposes as\footnote{%
+decomposes as $\mathcal{B}=\mathcal{K}+\mathcal{R}$,\footnote{%
 For forecasts that are sorted into bins by their announced values; see
-Section \ref{sus:sequences} for the precise setup.}%
-\begin{equation}
-\mathcal{B}=\mathcal{K}+\mathcal{R}\text{,}  \label{eq:BKR-intro}
-\end{equation}%
+Section \ref{sus:sequences} for the precise setup.}
 where $\mathcal{K}$ is the \emph{calibration} score---measuring how close
 the forecasts are to the realized frequencies---and $\mathcal{R}$ is the
 \emph{refinement} score---measuring how well the forecaster sorts outcomes
@@ -180,12 +177,9 @@ answer is positive for calibration and negative for calibeating.
 
 We will call a procedure \emph{proper-calibrated} (respectively, \emph{%
 proper-calibeating}) if the corresponding guarantee holds simultaneously
-for all proper Lipschitz scoring rules, after normalizing by the Lipschitz
-constant (see Section \ref{s:proper} for the precise definitions). We
-restrict attention to Lipschitz scoring rules; this excludes rules, such as
-the logarithmic scoring rule, that may take the value $+\infty $ on the
-boundary of the simplex. The restriction is natural for our purpose, because
-we seek guarantees that hold uniformly over a class of scoring rules.
+for all proper Lipschitz scoring rules (see Section \ref{s:proper} for the
+precise definitions). The Lipschitz restriction excludes rules such as
+the logarithmic scoring rule.
 
 It turns out that the answer is surprisingly asymmetric: calibration
 transfers automatically, but calibeating does not, and new ideas are needed
@@ -196,13 +190,9 @@ to restore it.
 We show, first, that calibration transfers for free: every $\varepsilon $%
 -calibrated procedure is automatically $\varepsilon $-\emph{proper}%
 -calibrated. The key observation is that for any proper $M$-Lipschitz
-scoring rule $L$,%
-\begin{equation}
-\mathcal{K}_{t}^{L}(\mathbf{c};\mathbf{f})\leq M\,\mathcal{K}_{t}(\mathbf{%
-c};\mathbf{f})\text{;}  \label{eq:KL-K-intro}
-\end{equation}%
-that is, the $L$-calibration score is bounded by the Lipschitz constant
-times the quadratic calibration score. In particular, all known calibrated
+scoring rule $L$, the $L$-calibration score is bounded by the Lipschitz constant
+times the quadratic calibration score: $\mathcal{K}^{L}\leq M\,\mathcal{K}$.
+In particular, all known calibrated
 forecasting procedures---the stochastic procedures of Foster and Vohra
 (1998), the approachability-based constructions of Blackwell (1956), Foster
 (1999), Kakade and Foster (2008), Hart (2021), and Mannor and Stoltz (2010),
@@ -220,8 +210,7 @@ also proper and Lipschitz. Both sequences are perfectly calibrated; the
 failure is purely in the refinement comparison.
 
 The reason for the asymmetry is instructive. Calibration involves only $%
-\mathcal{K}^{L}$, which is controlled by $\mathcal{K}$ via the bound (\ref%
-{eq:KL-K-intro}). Calibeating involves $\mathcal{B}^{L}-\mathcal{R}^{L}$,
+\mathcal{K}^{L}$, which is controlled by $\mathcal{K}$ via the bound $\mathcal{K}^{L}\leq M\,\mathcal{K}$. Calibeating involves $\mathcal{B}^{L}-\mathcal{R}^{L}$,
 and there is no analogous inequality relating $\mathcal{R}^{L}$ to $%
 \mathcal{R}$: refinement scores under different proper rules are not
 comparable in general.
@@ -233,34 +222,17 @@ calibeating simultaneously under all proper Lipschitz scoring rules).
 
 First, the simple deterministic procedure of Theorem 3 of Foster and Hart
 (2023)---which forecasts the running average action in the reference
-forecaster's bin---turns out to be proper-calibeating. The proof relies on
-a new bound showing that online refinement $\widetilde{\mathcal{R}}^{L}$
-converges to offline refinement $\mathcal{R}^{L}$ at rate $O((\ln t)/t)$
-for every proper $M$-Lipschitz $L$, extending the quadratic-case result
-of Foster and Hart (2023, Proposition 2).
+forecaster's bin---turns out to be already proper-calibeating.
 
 Second, a stochastic procedure that calibeats the \emph{joint} binning $%
-\mathbf{b}\times \mathbf{c}$ is both $(\delta ,B)$-proper-calibeating and $%
-\delta $-proper-calibrated. This identifies the right structural condition:
-it is not enough to calibeat the reference forecaster and to be calibrated;
-what matters is calibeating the \emph{joint} binning, which always refines
-the forecast partition and restores the refinement structure needed
-for the argument. The proof chains the decomposition $\mathcal{B}^{L}=%
-\mathcal{K}^{L}(\mathbf{c};\mathbf{b}\times \mathbf{c})+\mathcal{R}^{L}(%
-\mathbf{b}\times \mathbf{c})$ with the bound (\ref{eq:KL-K-intro}).
+\mathbf{b}\times \mathbf{c}$ is both proper-calibeating and
+proper-calibrated. The key structural insight is that
+what matters is calibeating the \emph{joint} binning, not just the
+reference forecaster.
 
 Third, there exists a deterministic continuously proper-calibrated procedure
-that proper-calibeats. Since fractional binnings do not refine the
-forecast-binning, the exact decomposition $\mathcal{B}^{L}=\mathcal{K}%
-^{L}+\mathcal{R}^{L}$ breaks down. We prove an approximate version:%
-\begin{equation*}
-\left\vert \mathcal{B}_{t}^{L}(\mathbf{c})-\left( \mathcal{K}_{t}^{L}(%
-\mathbf{c};\mathbf{f})+\mathcal{R}_{t}^{L}(\mathbf{f})\right) \right\vert
-<2M\delta
-\end{equation*}%
-for any $\delta $-local fractional binning under an $M$-Lipschitz rule.
-This generalizes the quadratic approximate decomposition from the errata
-(Foster and Hart 2026), and is the key technical tool for this result.
+that proper-calibeats, via an approximate decomposition that generalizes the
+quadratic case (Foster and Hart 2026).
 
 All three results extend to simultaneously proper-calibeating $N$ reference
 forecasters, by applying these constructions to the product binning $\mathbf{b}%
@@ -273,45 +245,22 @@ optimization).
 Several concurrent lines of work address---from different angles---the
 question of universality across scoring rules.
 
-The most directly related is that of Chen, Huang, Jordan, and Luo (2026),
-who reduce calibeating to regret minimization and obtain calibeating rates
-for general proper losses (including Brier, log, and mixable losses). Their
-approach works loss by loss: for each proper loss $L$, they build a
-procedure achieving $\mathcal{B}^{L}\leq \mathcal{R}^{L}+O((\log T)/T)$.
-Here we show that a \emph{single} procedure (the
-existing Brier-score procedures) achieves proper calibeating \emph{%
-simultaneously} for all proper $1$-Lipschitz rules $L$. The uniformity
-is a consequence of the bound (\ref{eq:KL-K-intro}), which has no analogue
-for refinement. They also handle the logarithmic rule, which is not
-Lipschitz and so lies outside our class $\mathcal{L}_{1}$.
-
-Kleinberg, Leme, Schneider, and Teng (2023) introduce
-\textquotedblleft U-calibration,\textquotedblright\ asking what forecasting
-criterion guarantees low regret for an unknown agent who may use any bounded
-scoring rule. They show that calibration suffices but is not necessary, and
-achieve $O(\sqrt{T})$ U-calibration error. Our work is complementary: we
-do not introduce a new criterion, but show that existing
-calibration and calibeating procedures already provide uniform guarantees
-over all proper Lipschitz rules. Gopalan, Kalai, Reingold, Sharan, and
-Wieder (2022) show that multicalibration implies good performance for all
-convex Lipschitz loss functions (\textquotedblleft
-omniprediction\textquotedblright ); our universality is analogous but
-concerns \emph{evaluation rules} (scoring rules), not decision-making
-losses.
-
-Dimitriadis, Gneiting, and Jordan (2023) decompose the continuous ranked
-probability score into miscalibration, discrimination, and uncertainty
-components; Popordanoska, Uria, and Blundell (2023) show that every proper
-score decomposes into a proper calibration error and a refinement term via a
-Bregman divergence. Both study the calibration--refinement decomposition for
-general proper rules from a statistical perspective; our work provides the
+Chen, Huang, Jordan, and Luo (2026) obtain calibeating rates for
+general proper losses by a loss-by-loss reduction to regret minimization;
+here we show that a \emph{single} procedure achieves proper calibeating
+\emph{simultaneously} for all proper Lipschitz rules.
+Kleinberg, Leme, Schneider, and Teng (2023) study
+\textquotedblleft U-calibration\textquotedblright\ and Gopalan, Kalai,
+Reingold, Sharan, and Wieder (2022) study \textquotedblleft
+omniprediction\textquotedblright ; both address universality across losses,
+but from the decision-maker's side rather than the evaluator's.
+Dimitriadis, Gneiting, and Jordan (2023) and Popordanoska, Uria, and
+Blundell (2023) study the calibration--refinement decomposition for general
+proper rules from a statistical perspective; our work provides the
 game-theoretic counterpart.
-
-Blasiok, Gopalan, Hu, and Nakkiran (2023) prove a converse direction: local
-optimality of a proper loss implies smooth calibration. Luo, Senapati, and
-Sharan (2025) achieve simultaneous swap regret minimization for all proper
-losses with smooth univariate form via KL-calibration, providing yet another
-route to universality.
+Blasiok, Gopalan, Hu, and Nakkiran (2023) and Luo, Senapati, and
+Sharan (2025) provide further connections between proper losses
+and calibration.
 
 \subsection{Outline of the paper\label{s-s:intro-outline}}
 
