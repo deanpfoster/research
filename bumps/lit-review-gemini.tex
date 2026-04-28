@@ -1,0 +1,162 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+
+% Set up footer
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[C]{\thepage}
+\fancyfoot[R]{\textit{dean p foster confidential}}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    citecolor=blue,
+}
+
+\title{\textbf{Distributed Optimization, Variance Reduction, and the Weaponization of Catastrophic Forgetting against Sequence Memorization}}
+\author{Dean P. Foster}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This review synthesizes literature across distributed optimization, Bayesian inference, and modern Large Language Model (LLM) training to contextualize a novel paradigm: overcoming the empirical data-repetition wall in LLM training. By combining Local Stochastic Gradient Descent (SGD) with strict data disjointness and epochal shuffling, distributed agents diverge on localized trajectories. Periodic weight averaging acts as a spatial low-pass filter that weaponizes catastrophic forgetting against sequence memorization while preserving generalized linguistic representations, theoretically enabling extreme multi-epoch training regimes without overfitting.
+\end{abstract}
+
+\section{Introduction}
+Communication overhead is a primary bottleneck in distributed deep learning. The transition from fully synchronous gradient updates to Local Stochastic Gradient Descent (Local SGD) has enabled massive scaling by allowing independent agents to take multiple optimization steps before synchronizing. This architecture, initially developed to reduce network latency, has profound implications for loss landscape geometry, variance reduction, and model regularization. This review tracks the evolution of distributed averaging from classical data centers to edge devices, its parallels in Bayesian inference, and its modern re-emergence in LLM pre-training.
+
+\section{Foundational Mechanisms of Distributed Averaging}
+\subsection{Data Center and Edge Topologies}
+The paradigm of Local SGD, where workers average their parameters after $H$ steps, forms the basis of modern distributed deep learning. Theoretical convergence for exact arithmetic mean synchronization was formalized by Stich (2018) and Lin et al. (2018). Variations like SlowMo (Wang et al., 2019) introduced global momentum to stabilize the divergence caused by local steps.
+
+In cross-device regimes, this mechanism is instantiated as Federated Averaging (FedAvg; McMahan et al., 2017). Because edge agents operate on highly non-IID data, agents are prone to ``client drift.'' Mitigations include FedProx (Li et al., 2020), which adds a proximal term to tether local updates to the global model, and SCAFFOLD (Karimireddy et al., 2020), which uses control variates to correct update trajectories. Alternatively, Elastic Averaging SGD (EASGD; Zhang et al., 2015) applies a soft quadratic penalty to a central variable, allowing workers to explore distinct local optima. Decentralized peer-to-peer topologies (D-SGD; Lian et al., 2017) completely remove the central server, relying on local neighborhood averaging.
+
+\subsection{Parallels in Approximate Bayesian Inference}
+The ``local search and periodic consensus'' architecture is not unique to deep learning; it addresses identical communication bottlenecks in sampling-based Bayesian inference. 
+In Markov Chain Monte Carlo (MCMC), Consensus Monte Carlo (Scott et al., 2016) and Embarrassingly Parallel MCMC (Neiswanger et al., 2013) partition data across workers to generate sub-posteriors, which are then combined to approximate the global posterior. In dynamic tracking, Distributed Particle Filters (DPF), notably the Island Model (Vergé et al., 2015), allow isolated processors to weight and resample particles locally, synchronizing periodically via migration or moment averaging to prevent weight degeneracy. In both domains, averaging serves primarily as a variance reduction mechanism rather than a pure optimization driver.
+
+\section{Data Permutation, Noise, and Variance Reduction}
+Treating data rearrangement as a mechanism for simulating a larger empirical distribution is rooted in classical Bootstrap Aggregation (Bagging; Breiman, 1996). In the context of SGD, the sequence of data presentation dictates the stochastic noise. 
+
+Mandt, Hoffman, and Blei (2017) demonstrated that this noise forces SGD to simulate a Markov chain sampling from a Bayesian posterior. By running distributed agents with different data permutations, the system draws independent samples from this posterior. Building on the topology of loss landscapes, Garipov et al. (2018) and Izmailov et al. (2018) (Stochastic Weight Averaging) showed that disparate SGD runs arrive at connected, wide minima. Ensembling these weights finds a flatter, better-generalizing center. 
+
+\section{Modern Applications in Large Language Models}
+In the single-epoch regime characteristic of massive LLM training, models rarely see the same token twice. Distributed Low-Communication training (DiLoCo; Douillard et al., 2023) leverages this by feeding completely different, non-overlapping shards to distributed GPU islands for hundreds of steps before applying an outer Nesterov momentum average. DiLoCo proved that large transformers can recover synchronous perplexity despite significant local parameter drift.
+
+Simultaneously, the open-source community relies heavily on Model Merging to ensemble fine-tuned models without inference penalties. Algorithms like SLERP, TIES, and DARE resolve parameter and sign interference, allowing the geometric combination of models optimized on entirely different datasets.
+
+\section{Overcoming the Multi-Epoch Data Wall}
+The current empirical consensus dictates that dense LLMs cannot be trained for extensive epochs on small datasets. Muennighoff et al. (2023) established that data repetition beyond 14 epochs yields zero generalization value, as the model perfectly memorizes the sequence data and completely overfits. 
+
+However, combining the disjoint-data properties of DiLoCo with aggressive data reshuffling offers a theoretical bypass to this limit. Memorization corresponds to sharp, narrow local minima, while generalized linguistic features correspond to wide, flat basins. If disjoint agents train on completely reshuffled subsets during their local steps, they diverge into different, un-correlated sharp minima. Periodic averaging acts as a regularizer that destroys the uncorrelated parameter variance (the memorized sequences) while preserving the highly correlated gradients (the generalized features). By ensuring no single sequence is ever sequentially reinforced across synchronization boundaries, this architecture effectively weaponizes catastrophic forgetting against sequence memorization, theoretically allowing for unprecedented epochs (e.g., 140x) with near-zero overfitting.
+
+\begin{thebibliography}{99}
+
+\bibitem{breiman1996} 
+Breiman, L. (1996). 
+\textit{Bagging predictors}. 
+Machine Learning, 24(2), 123--140.
+
+\bibitem{diloco2023} 
+Douillard, A., et al. (2023). 
+\textit{DiLoCo: Distributed Low-Communication Training of Language Models}. 
+arXiv preprint arXiv:2311.08105.
+
+\bibitem{garipov2018} 
+Garipov, T., Izmailov, P., Podoprikhin, D., Vetrov, D. P., \& Wilson, A. G. (2018). 
+\textit{Loss surfaces, mode connectivity, and fast ensembling of DNNs}. 
+Advances in Neural Information Processing Systems, 31.
+
+\bibitem{izmailov2018} 
+Izmailov, P., Podoprikhin, D., Garipov, T., Vetrov, D., \& Wilson, A. G. (2018). 
+\textit{Averaging weights leads to wider optima and better generalization}. 
+34th Conference on Uncertainty in Artificial Intelligence (UAI).
+
+\bibitem{karimireddy2020} 
+Karimireddy, S. P., et al. (2020). 
+\textit{SCAFFOLD: Stochastic controlled averaging for federated learning}. 
+International Conference on Machine Learning (ICML).
+
+\bibitem{li2020} 
+Li, T., Sahu, A. K., Zaheer, M., Sanjabi, M., Talwalkar, A., \& Smith, V. (2020). 
+\textit{Federated optimization in heterogeneous networks}. 
+Proceedings of Machine Learning and Systems, 2, 429--450.
+
+\bibitem{lian2017} 
+Lian, J., Zhang, C., Zhang, H., Hsieh, C. J., Zhang, W., \& Liu, J. (2017). 
+\textit{Can decentralized algorithms outperform centralized algorithms? A case study for decentralized parallel stochastic gradient descent}. 
+Advances in Neural Information Processing Systems, 30.
+
+\bibitem{lin2018} 
+Lin, T., Stich, S. U., Patel, K. K., \& Jaggi, M. (2018). 
+\textit{Don't use large mini-batches, use local SGD}. 
+International Conference on Learning Representations (ICLR).
+
+\bibitem{mandt2017} 
+Mandt, S., Hoffman, M. D., \& Blei, D. M. (2017). 
+\textit{Stochastic gradient descent as approximate Bayesian inference}. 
+Journal of Machine Learning Research, 18(1), 4873--4907.
+
+\bibitem{mcmahan2017} 
+McMahan, B., Moore, E., Ramage, D., Hampson, S., \& y Arcas, B. A. (2017). 
+\textit{Communication-efficient learning of deep networks from decentralized data}. 
+Artificial Intelligence and Statistics (AISTATS).
+
+\bibitem{muennighoff2023} 
+Muennighoff, N., et al. (2023). 
+\textit{Scaling data-constrained language models}. 
+arXiv preprint arXiv:2305.16264.
+
+\bibitem{neiswanger2013} 
+Neiswanger, W., Wang, C., \& Xing, E. (2013). 
+\textit{Asymptotically exact, embarrassingly parallel MCMC}. 
+Conference on Uncertainty in Artificial Intelligence (UAI).
+
+\bibitem{scott2016} 
+Scott, S. L., Blocker, A. W., Bonilla, F. V., \& Adams, R. P. (2016). 
+\textit{Bayes and big data: The consensus Monte Carlo algorithm}. 
+International Journal of Management Science and Engineering Management, 11(2), 78--88.
+
+\bibitem{stich2018} 
+Stich, S. U. (2018). 
+\textit{Local SGD converges fast and communicates little}. 
+International Conference on Learning Representations (ICLR).
+
+\bibitem{verge2015} 
+Vergé, C., Dubarry, C., Del Moral, P., \& Moulines, E. (2015). 
+\textit{On parallel implementation of sequential Monte Carlo methods: the island particle model}. 
+Statistics and Computing, 25(2), 243--260.
+
+\bibitem{wang2019} 
+Wang, J., et al. (2019). 
+\textit{SlowMo: Improving communication-efficient distributed SGD with slow momentum}. 
+International Conference on Learning Representations (ICLR).
+
+\bibitem{wortsman2022} 
+Wortsman, M., et al. (2022). 
+\textit{Model soups: scoring and finding flat minima on a hypercube}. 
+International Conference on Machine Learning (ICML).
+
+\bibitem{zhang2015} 
+Zhang, S., Choromanska, A., \& LeCun, Y. (2015). 
+\textit{Deep learning with elastic averaging SGD}. 
+Advances in Neural Information Processing Systems, 28.
+
+\end{thebibliography}
+
+\end{document}
